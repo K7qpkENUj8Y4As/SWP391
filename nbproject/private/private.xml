@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/duongngo21/Documents/Netbean/SWP391/web/index.html</file>
-            <file>file:/Users/duongngo21/Documents/Netbean/SWP391/web/WEB-INF/view/authentication/SignInPage.jsp</file>
+            <file>file:/C:/Users/admin/Desktop/SWP391/SWP391/Source%20Package/controller/HomeController.java</file>
+            <file>file:/C:/Users/admin/Desktop/SWP391/SWP391/web/view/common/HomePage.jsp</file>
+            <file>file:/C:/Users/admin/Desktop/SWP391/SWP391/web/layout/Header.jsp</file>
+            <file>file:/C:/Users/admin/Desktop/SWP391/SWP391/web/layout/Footer.jsp</file>
+            <file>file:/C:/Users/admin/Desktop/SWP391/SWP391/web/view/authentication/SignInPage.jsp</file>
         </group>
     </open-files>
 </project-private>
