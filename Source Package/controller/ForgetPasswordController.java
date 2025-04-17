@@ -16,7 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
  *
  * @author admin
  */
-@WebServlet(name = "ForgetPasswordController", urlPatterns = {"/forget"})
+@WebServlet(name = "ForgetPasswordController", urlPatterns = {"/forgot-password"})
 public class ForgetPasswordController extends HttpServlet {
 
     /**
@@ -57,7 +57,7 @@ public class ForgetPasswordController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("/view/authentication/ForgetPassword.jsp").forward(request, response);
     }
 
     /**
@@ -85,3 +85,6 @@ public class ForgetPasswordController extends HttpServlet {
     }// </editor-fold>
 
 }
+
+
+

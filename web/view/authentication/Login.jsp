@@ -4,6 +4,12 @@
     Author     : admin
 --%>
 
+<%-- 
+    Document   : Login
+    Created on : Apr 16, 2025, 11:54:50 PM
+    Author     : admin
+--%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
@@ -11,21 +17,33 @@
     <meta charset="UTF-8">
     <title>Login - Lotus Team</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-bg: #FFEEE8;
+            --secondary-bg: #444444;
+            --accent-light: #F2F2F2;
+            --accent-white: #FFFFFF;
+            --dark: #000000;
+            --highlight: #D291BC;
+        }
+
         body, html {
             height: 100%;
             margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--primary-bg);
         }
 
         .container-login {
             display: flex;
             height: 100vh;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
         .login-left {
             flex: 1;
-            background-color: #fff;
+            background-color: var(--accent-white);
             padding: 60px 40px;
             display: flex;
             flex-direction: column;
@@ -41,16 +59,24 @@
         .login-left h4 {
             margin-bottom: 30px;
             font-weight: bold;
+            font-family: 'Crimson Text', serif;
+            color: var(--secondary-bg);
         }
 
         .form-control {
             border-radius: 10px;
             padding: 12px;
             font-size: 16px;
+            border: 1px solid #ddd;
+        }
+
+        .form-control:focus {
+            border-color: var(--highlight);
+            box-shadow: 0 0 0 0.25rem rgba(210, 145, 188, 0.25);
         }
 
         .btn-login {
-            background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+            background: var(--highlight);
             border: none;
             color: white;
             font-weight: bold;
@@ -63,27 +89,29 @@
 
         .btn-login:hover {
             opacity: 0.9;
+            transform: translateY(-2px);
         }
 
         .login-right {
             flex: 1;
-            background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+            background-color: var(--highlight);
             color: white;
             display: flex;
             flex-direction: column;
             justify-content: center;
             padding: 60px;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
         }
 
         .login-right h4 {
             font-weight: bold;
             margin-bottom: 20px;
+            font-family: 'Crimson Text', serif;
+            font-size: 28px;
         }
 
         .login-right p {
-            font-size: 14px;
+            font-size: 16px;
+            line-height: 1.6;
         }
 
         .btn-outline-danger {
@@ -91,6 +119,33 @@
             font-weight: bold;
             padding: 8px 16px;
             border-width: 2px;
+            color: var(--highlight);
+            border-color: var(--highlight);
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-danger:hover {
+            background-color: var(--highlight);
+            color: white;
+        }
+
+        a.text-muted {
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        a.text-muted:hover {
+            color: var(--highlight) !important;
+        }
+
+        @media (max-width: 768px) {
+            .container-login {
+                flex-direction: column;
+            }
+
+            .login-right {
+                padding: 40px;
+            }
         }
     </style>
 </head>
@@ -100,9 +155,9 @@
     <!-- Left: Form -->
     <div class="login-left">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="logo">
-        <h4>We are The Lotus Team</h4>
+        <h4>We are The SWP Team</h4>
 
-        <form method="post" action="LoginServlet" style="width: 100%; max-width: 320px;">
+        <form method="post" action="login" style="width: 100%; max-width: 320px;">
             <div class="mb-3">
                 <input type="text" name="username" class="form-control" placeholder="Username" required>
             </div>
@@ -116,7 +171,7 @@
             </div>
 
             <div class="mb-3 text-center">
-                <a href="#" class="text-muted" style="font-size: 14px;">Forgot password?</a>
+                <a href="/SWP391/forgot-password" class="text-muted" style="font-size: 14px;">Forgot password?</a>
             </div>
 
             <div class="d-flex justify-content-center align-items-center mt-3">
@@ -139,4 +194,6 @@
 
 </body>
 </html>
+
+
 
