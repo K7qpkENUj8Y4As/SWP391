@@ -23,6 +23,16 @@
         <servlet-name>ForgetPasswordController</servlet-name>
         <url-pattern>/forgot-password</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>AboutUsController</servlet-name>
+        <servlet-class>controller.AboutUsController</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>AboutUsController</servlet-name>
+        <url-pattern>/aboutus</url-pattern>
+    </servlet-mapping>
 </web-app>
 
 
