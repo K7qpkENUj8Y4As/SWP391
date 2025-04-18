@@ -33,6 +33,28 @@
         <servlet-name>AboutUsController</servlet-name>
         <url-pattern>/aboutus</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>VerifyEmailController</servlet-name>
+        <servlet-class>controller.VerifyEmailController</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>VerifyEmailController</servlet-name>
+        <url-pattern>/verify</url-pattern>
+    </servlet-mapping>
+    
+     <servlet>
+        <servlet-name>ResetPasswordController</servlet-name>
+        <servlet-class>controller.ResetPasswordController</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>ResetPasswordController</servlet-name>
+        <url-pattern>/reset-password</url-pattern>
+    </servlet-mapping>
+
+
+
 </web-app>
 
 

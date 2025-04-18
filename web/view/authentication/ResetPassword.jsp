@@ -1,12 +1,6 @@
 <%-- 
-    Document   : ForgetPassword
-    Created on : Apr 16, 2025, 11:52:29 PM
-    Author     : admin
---%>
-
-<%-- 
-    Document   : ForgetPassword
-    Created on : Apr 16, 2025, 11:52:29 PM
+    Document   : ResetPassword
+    Created on : Apr 18, 2025, 10:10:26 PM
     Author     : admin
 --%>
 
@@ -15,7 +9,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Forgot Password - Lotus Team</title>
+    <title>Reset Password - Lotus Team</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
     <style>
@@ -35,12 +29,12 @@
             background-color: var(--primary-bg);
         }
 
-        .container-forgot {
+        .container-reset {
             display: flex;
             height: 100vh;
         }
 
-        .forgot-left {
+        .reset-left {
             flex: 1;
             background-color: var(--accent-white);
             padding: 60px 40px;
@@ -50,12 +44,12 @@
             align-items: center;
         }
 
-        .forgot-left img {
+        .reset-left img {
             width: 120px;
             margin-bottom: 20px;
         }
 
-        .forgot-left h4 {
+        .reset-left h4 {
             margin-bottom: 20px;
             font-weight: bold;
             font-family: 'Crimson Text', serif;
@@ -91,7 +85,7 @@
             transform: translateY(-2px);
         }
 
-        .forgot-right {
+        .reset-right {
             flex: 1;
             background-color: var(--highlight);
             color: white;
@@ -101,34 +95,24 @@
             padding: 60px;
         }
 
-        .forgot-right h4 {
+        .reset-right h4 {
             font-weight: bold;
             margin-bottom: 20px;
             font-family: 'Crimson Text', serif;
             font-size: 28px;
         }
 
-        .forgot-right p {
+        .reset-right p {
             font-size: 16px;
             line-height: 1.6;
         }
 
-        .text-muted a {
-            text-decoration: none;
-            color: #888;
-            transition: color 0.3s;
-        }
-
-        .text-muted a:hover {
-            color: var(--highlight);
-        }
-
         @media (max-width: 768px) {
-            .container-forgot {
+            .container-reset {
                 flex-direction: column;
             }
 
-            .forgot-right {
+            .reset-right {
                 padding: 40px;
             }
         }
@@ -136,20 +120,23 @@
 </head>
 <body>
 
-<div class="container-forgot">
+<div class="container-reset">
     <!-- Left: Form -->
-    <div class="forgot-left">
+    <div class="reset-left">
         <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="logo">
-        <h4>Reset Your Password</h4>
+        <h4>Create New Password</h4>
 
-        <form style="width: 100%; max-width: 320px;">
+        <form method="post" action="resetPassword" style="width: 100%; max-width: 320px;">
             <div class="mb-3">
-                <input type="email" name="email" class="form-control" placeholder="Enter your email address" required>
+                <input type="password" name="newPassword" class="form-control" placeholder="New Password" required>
             </div>
 
             <div class="mb-3">
-                                 <button type="submit" class="btn btn-reset"><a href="/SWP391/verify">SEND RESET LINK</a>-</button>
+                <input type="password" name="confirmPassword" class="form-control" placeholder="Confirm Password" required>
+            </div>
 
+            <div class="mb-3">
+                <button type="submit" class="btn btn-reset">RESET PASSWORD</button>
             </div>
 
             <div class="text-center">
@@ -159,10 +146,10 @@
     </div>
 
     <!-- Right: Info -->
-    <div class="forgot-right">
-        <h4>We’ve got you covered!</h4>
+    <div class="reset-right">
+        <h4>Set a Strong New Password</h4>
         <p>
-            Don’t worry if you forgot your password. Enter your email address and we’ll send you a link to reset it.
+            Your new password should be different from your previous password and at least 8 characters long. For best security, use a combination of letters, numbers, and special characters.
         </p>
     </div>
 </div>
