@@ -4,19 +4,16 @@
     Author     : admin
 --%>
 
-<%-- 
-    Document   : Login
-    Created on : Apr 16, 2025, 11:54:50 PM
-    Author     : admin
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login - Lotus Team</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Login page for SWP Team application">
+    <meta name="keywords" content="login, SWP Team, authentication">
+    <title>Login - SWP Team</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Crimson+Text:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -57,7 +54,7 @@
         }
 
         .login-left h4 {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             font-weight: bold;
             font-family: 'Crimson Text', serif;
             color: var(--secondary-bg);
@@ -138,6 +135,11 @@
             color: var(--highlight) !important;
         }
 
+        .alert {
+            max-width: 320px;
+            margin-bottom: 20px;
+        }
+
         @media (max-width: 768px) {
             .container-login {
                 flex-direction: column;
@@ -154,8 +156,15 @@
 <div class="container-login">
     <!-- Left: Form -->
     <div class="login-left">
-        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="logo">
+        <img src="/images/logo.png" alt="logo">
         <h4>We are The SWP Team</h4>
+
+        <%-- Hiển thị thông báo lỗi nếu có --%>
+        <% if (request.getAttribute("errorMessage") != null) { %>
+            <div class="alert alert-danger text-center" role="alert">
+                <%= request.getAttribute("errorMessage") %>
+            </div>
+        <% } %>
 
         <form method="post" action="login" style="width: 100%; max-width: 320px;">
             <div class="mb-3">
@@ -171,12 +180,12 @@
             </div>
 
             <div class="mb-3 text-center">
-                <a href="/SWP391/forgot-password" class="text-muted" style="font-size: 14px;">Forgot password?</a>
+                <a href="/forgot-password" class="text-muted" style="font-size: 14px;">Forgot password?</a>
             </div>
 
             <div class="d-flex justify-content-center align-items-center mt-3">
                 <p class="mb-0 me-2">Don't have an account?</p>
-                <a href="register.jsp" class="btn btn-outline-danger">CREATE NEW</a>
+                <a href="/register" class="btn btn-outline-danger">CREATE NEW</a>
             </div>
         </form>
     </div>
@@ -192,8 +201,10 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
 
 
 

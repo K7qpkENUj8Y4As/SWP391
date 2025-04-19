@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,6 +12,11 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import model.Account;
+import jakarta.servlet.http.HttpSession;
 
 /**
  *
@@ -71,7 +77,37 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Tạo đối tượng AccountDAO để kiểm tra đăng nhập
+        AccountDAO accountDAO = new AccountDAO();
+        try {
+            Account account = accountDAO.login(username, password);
+            if (account != null) {
+                // Đăng nhập thành công, lưu thông tin vào session
+                HttpSession session = request.getSession();
+                session.setAttribute("account", account);
+
+                String role = account.getRole();
+                switch (role) {
+                    case "ADMIN":
+                        response.sendRedirect("accountManagement");
+                        break;
+                    case "USER":
+                        response.sendRedirect("home");
+                        break;
+                    default:
+                        response.sendRedirect("home");
+                }
+            } else {
+                request.setAttribute("errorMessage", "Invalid username or password");
+                request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
+            }
+        } catch (SQLException e) {
+            request.setAttribute("errorMessage", "Database error: " + e.getMessage());
+            request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -85,6 +121,7 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
     }// </editor-fold>
 
 }
+
 
 
 

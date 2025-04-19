@@ -8,6 +8,8 @@ import dbConnection.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import model.Account;
+import java.sql.SQLException;
 /**
  *
  * @author trung
@@ -57,4 +59,35 @@ public class AccountDAO {
             return false;
         }
     }
+  
+  public Account login(String username, String password) throws SQLException {
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Account account = null;
+
+        try {
+            conn = DBConnection.getConnection();
+            String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                account = new Account();
+                account.setAccountID(rs.getInt("id"));
+                account.setUsername(rs.getString("username"));
+                account.setPassword(rs.getString("password"));
+                account.setRole(rs.getString("role"));
+            }
+        } finally {
+            if (rs != null) rs.close();
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        }
+
+        return account;
+    }
+
 }
