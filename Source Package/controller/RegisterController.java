@@ -4,6 +4,8 @@
  */
 package controller;
 
+import dao.AccountDAO;
+import dao.HashUtilDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -67,10 +69,46 @@ public class RegisterController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    String username = request.getParameter("username");
+    String email = request.getParameter("email");
+    String address = request.getParameter("address");
+    String password = request.getParameter("password");
+
+    // Validate đơn giản
+    if (username == null || username.isEmpty() ||
+        email == null || email.isEmpty() ||
+        address == null || address.isEmpty() ||
+        password == null || password.isEmpty()) {
+        
+        request.setAttribute("error", "Vui lòng điền đầy đủ thông tin!");
+        request.getRequestDispatcher("signup.jsp").forward(request, response);
+        return;
     }
+
+    AccountDAO dao = new AccountDAO();
+
+    // Kiểm tra username đã tồn tại
+//    if (dao.isEmailTaken(email)) {
+//        request.setAttribute("error", "Email đã được sử dụng!");
+//        request.getRequestDispatcher("signup.jsp").forward(request, response);
+//        return;
+//    }
+
+    // Hash password
+    String hashedPassword = HashUtilDAO.md5(password);
+
+    // Đăng ký (thêm account và customer)
+    boolean success = dao.registerCustomer(username, hashedPassword, email, address);
+
+    if (success) {
+        response.sendRedirect("login.jsp");
+    } else {
+        request.setAttribute("error", "Đăng ký thất bại. Vui lòng thử lại.");
+        request.getRequestDispatcher("signup.jsp").forward(request, response);
+    }
+}
+
 
     /**
      * Returns a short description of the servlet.

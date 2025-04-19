@@ -12,20 +12,20 @@ public class Account {
     private int accountID;
     private String username;
     private String password;
-    private int role;
-    private boolean status;
-    private Customer customer;
+    private String role;
+    private int status;
+    private int isCustomer;
 
-    public Account() {
-    }
-
-    public Account(int accountID, String username, String password, int role, boolean status, Customer customer) {
+    public Account(int accountID, String username, String password, String role, int status, int isCustomer) {
         this.accountID = accountID;
         this.username = username;
         this.password = password;
         this.role = role;
         this.status = status;
-        this.customer = customer;
+        this.isCustomer = isCustomer;
+    }
+
+    public Account() {
     }
 
     public int getAccountID() {
@@ -52,28 +52,30 @@ public class Account {
         this.password = password;
     }
 
-    public int getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(int role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
-    public boolean isStatus() {
+    public int getStatus() {
         return status;
     }
 
-    public void setStatus(boolean status) {
+    public void setStatus(int status) {
         this.status = status;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public int getIsCustomer() {
+        return isCustomer;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setIsCustomer(int isCustomer) {
+        this.isCustomer = isCustomer;
     }
+
+
     
 }
