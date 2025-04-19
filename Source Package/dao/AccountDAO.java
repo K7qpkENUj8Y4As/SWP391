@@ -21,7 +21,7 @@ public class AccountDAO {
     
   public boolean registerCustomer(String username, String password, String email, String address) {
         String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status) VALUES (?, ?, ?, ?)";
-        String insertCustomerSQL = "INSERT INTO Customer (Email, Address, Avatar, AccountID) VALUES (?, ?, ?, ?)";
+        String insertCustomerSQL = "INSERT INTO Customer (Email, Address, Avatar, Account_ID) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = new DBConnection().getConnection()) {
             conn.setAutoCommit(false);
@@ -59,7 +59,21 @@ public class AccountDAO {
             return false;
         }
     }
-  
+   public boolean isEmailExists( String email) {
+        try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM Users WHERE  email = ? ";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu số lượng > 0 thì user/email đã tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
   public Account login(String username, String password) throws SQLException {
         Connection conn = null;
         PreparedStatement stmt = null;
