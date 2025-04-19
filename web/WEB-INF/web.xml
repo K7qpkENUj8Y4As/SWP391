@@ -58,4 +58,13 @@
         <url-pattern>/cart</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>FAQController</servlet-name>
+        <servlet-class>controller.FAQController</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FAQController</servlet-name>
+        <url-pattern>/faq</url-pattern>
+    </servlet-mapping>
+    
 </web-app>
