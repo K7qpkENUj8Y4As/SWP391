@@ -8,6 +8,22 @@
         <servlet-name>RegisterController</servlet-name>
         <servlet-class>controller.RegisterController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RawController</servlet-name>
+        <servlet-class>controller.RawController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DeleteRaw</servlet-name>
+        <servlet-class>controller.DeleteRaw</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddRaw</servlet-name>
+        <servlet-class>controller.AddRaw</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>UpdateRaw</servlet-name>
+        <servlet-class>controller.UpdateRaw</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -48,7 +64,6 @@
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
     </servlet-mapping>
-    
     <servlet>
         <servlet-name>CartController</servlet-name>
         <servlet-class>controller.CartController</servlet-class>
@@ -57,7 +72,6 @@
         <servlet-name>CartController</servlet-name>
         <url-pattern>/cart</url-pattern>
     </servlet-mapping>
-    
     <servlet>
         <servlet-name>FAQController</servlet-name>
         <servlet-class>controller.FAQController</servlet-class>
@@ -66,7 +80,20 @@
         <servlet-name>FAQController</servlet-name>
         <url-pattern>/faq</url-pattern>
     </servlet-mapping>
-    
-   
-    
+    <servlet-mapping>
+        <servlet-name>RawController</servlet-name>
+        <url-pattern>/raw</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DeleteRaw</servlet-name>
+        <url-pattern>/deleteRaw</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddRaw</servlet-name>
+        <url-pattern>/addRaw</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateRaw</servlet-name>
+        <url-pattern>/updateRaw</url-pattern>
+    </servlet-mapping>
 </web-app>
