@@ -647,7 +647,7 @@
             
             <ul class="nav-links">
                 <li><a href="home.jsp" class="active">Home</a></li>
-                <li><a href="shop.jsp">Shop</a></li>
+                <li><a href="product">Shop</a></li>
                 <li><a href="category">Categories</a></li>
                 <li><a href="AboutUsPage.jsp">About Us</a></li>
                 <li><a href="contact.jsp">Contact</a></li>
@@ -850,7 +850,7 @@
                 <h3>Quick Links</h3>
                 <ul>
                     <li><a href="home.jsp">Home</a></li>
-                    <li><a href="shop.jsp">Shop</a></li>
+                    <li><a href="product">Shop</a></li>
                     <li><a href="categories.jsp">Categories</a></li>
                     <li><a href="AboutUsPage.jsp">About Us</a></li>
                     <li><a href="contact.jsp">Contact</a></li>

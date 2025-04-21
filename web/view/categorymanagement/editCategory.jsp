@@ -17,7 +17,7 @@
         <h2 class="mb-4">Chỉnh sửa danh mục</h2>
 
         <form action="category" method="post">
-            <input type="hidden" name="action" value="update">
+            <input type="hidden" name="action" value="edit">
             <input type="hidden" name="id" value="<%= ((Category) request.getAttribute("category")).getId() %>">
             <div class="mb-3">
                 <label class="form-label">Tên danh mục:</label>

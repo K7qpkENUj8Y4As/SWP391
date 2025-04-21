@@ -105,6 +105,8 @@ public class CategoryController extends HttpServlet {
         newCategory.setName(name);
 
         categoryDAO.addCategory(newCategory);
+            request.getSession().setAttribute("message", "Thêm danh mục thành công!");
+
         response.sendRedirect("category?action=list");
     }
 
@@ -118,6 +120,8 @@ public class CategoryController extends HttpServlet {
         category.setName(name);
 
         categoryDAO.updateCategory(category);
+            request.getSession().setAttribute("message", "Cập nhật danh mục thành công!");
+
         response.sendRedirect("category?action=list");
     }
 

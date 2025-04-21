@@ -21,7 +21,7 @@
         <% } %>
 
         <form action="category" method="post">
-            <input type="hidden" name="action" value="insert">
+            <input type="hidden" name="action" value="create">
             <div class="mb-3">
                 <label class="form-label">Tên danh mục:</label>
                 <input type="text" name="name" class="form-control" required>

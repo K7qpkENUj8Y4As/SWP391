@@ -27,26 +27,21 @@ public class ProductController extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         
         ProductDAO productDAO = new ProductDAO();
-       // CommentDAO commentDAO = new CommentDAO(); // Nếu bạn muốn hiển thị bình luận
         
         String action = request.getParameter("action");
         
         if (action == null || action.equals("list")) {
-            // Hiển thị tất cả sản phẩm
             List<Product> products = productDAO.getAllProducts();
             request.setAttribute("products", products);
-            request.getRequestDispatcher("product-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/productmanagement/listProduct.jsp").forward(request, response);
         } else if (action.equals("detail")) {
-            // Hiển thị chi tiết sản phẩm
+
             int productId = Integer.parseInt(request.getParameter("id"));
             Product product = productDAO.getProductById(productId);
             
-            // Lấy bình luận nếu cần
-            // List<Comment> comments = commentDAO.getCommentsByProductId(productId);
-            
+           
             request.setAttribute("product", product);
-            // request.setAttribute("comments", comments);
-            request.getRequestDispatcher("product-detail.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/productmanagement/detailProduct.jsp").forward(request, response);
         } else if (action.equals("search")) {
             // Tìm kiếm sản phẩm
             String keyword = request.getParameter("keyword");
@@ -54,7 +49,7 @@ public class ProductController extends HttpServlet {
             
             request.setAttribute("products", products);
             request.setAttribute("keyword", keyword);
-            request.getRequestDispatcher("product-list.jsp").forward(request, response);
+            request.getRequestDispatcher("/view/productmanagement/listProduct.jsp").forward(request, response);
         }
     }
 
