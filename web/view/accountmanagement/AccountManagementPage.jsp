@@ -1,212 +1,133 @@
-<%-- 
-    Document   : AccountManagementPage
-    Created on : Apr 17, 2025, 9:52:05 AM
-    Author     : trung
---%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Customer Management</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        .table-rounded {
-            border-collapse: separate;
-            border-spacing: 0;
-            border: 1px solid #dee2e6;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .table-rounded th:first-child {
-            border-top-left-radius: 12px;
-        }
-
-        .table-rounded th:last-child {
-            border-top-right-radius: 12px;
-        }
-
-        .table-rounded tr:last-child td:first-child {
-            border-bottom-left-radius: 12px;
-        }
-
-        .table-rounded tr:last-child td:last-child {
-            border-bottom-right-radius: 12px;
-        }
-
-        .pagination-rounded .page-link {
-            border-radius: 50% !important;
-            width: 40px;
-            height: 40px;
-            padding: 0;
-            line-height: 40px;
-            text-align: center;
-            color: #000;
-            background-color: transparent;
-            border: none;
-        }
-
-        .pagination-rounded .page-item.active .page-link {
-            background-color: #f2f2f2 !important;
-            font-weight: bold;
-        }
-
-        .pagination-rounded .page-link:hover {
-            background-color: #eee;
-        }
-
-        .sort-btn {
-            cursor: pointer;
-        }
-
-        .custom-th {
-            background-color: #ffeee8 !important;
-        }
-    </style>
-</head>
-
-<body>
-    <!-- Page Content -->
-    <div class="container my-5">
-        <h2 class="fw-bold mb-4">ACCOUNT</h2>
-        <!-- Search and Filter -->
-        <div class="row mb-3">
-            <div class="col-md-6">
-                <input type="text" id="searchInput" class="form-control" placeholder="Search by username...">
-            </div>
-            <div class="col-md-3">
-                <select id="roleFilter" class="form-select">
-                    <option value="">All Roles</option>
-                    <option value="Manager">Manager</option>
-                    <option value="Customer">Customer</option>
-                    <option value="Staff">Staff</option>
-                </select>
-            </div>
-            <div class="col-md-3"><button class="btn btn-outline-success w-100" data-bs-toggle="modal" data-bs-target="#addManagerModal">AddManager</button></div>      
-        </div>
-        <!-- Table -->
-        <div class="table-responsive">
-            <table class="table table-bordered text-center table-rounded">
-                <thead>
-                    <tr>
-                        <th class="custom-th sort-btn" onclick="sortTable(0)">Customer ID</th>
-                        <th class="custom-th sort-btn" onclick="sortTable(1)">Username</th>
-                        <th class="custom-th sort-btn" onclick="sortTable(2)">Role</th>
-                        <th class="custom-th">Password</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Henry32</td>
-                        <td>Manager</td>
-                        <td>123456789</td>
-                    </tr>
-                        <td>2</td>
-                        <td>Lois12</td>
-                        <td>Staff</td>
-                        <td>12345678</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Heinz34</td>
-                        <td>Customer</td>
-                        <td>12345678</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>Masney14</td>
-                        <td>Customer</td>
-                        <td>12345678</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-     <!--Pagination-->
-    <nav aria-label="Page navigation" class="d-flex justify-content-center mt-4">
-        <ul class="pagination pagination-rounded">
-            <li class="page-item disabled">
-                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">&lt;</a>
-            </li>
-            <li class="page-item active" aria-current="page">
-                <a class="page-link" href="#">1</a>
-            </li>
-            <li class="page-item" >
-                <a class="page-link" href="#">2</a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="#">&gt;</a>
-            </li>
-        </ul>
-    </nav>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!--Modal-->
-    <div class="modal fade" id="addManagerModal" tabindex="-1" aria-labelledby="addManagerModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-4">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="addManagerModalLabel">Add New Manager</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
+    <head>
+        <meta charset="UTF-8">
+        <title>Customer Management</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- DataTables Bootstrap 5 CSS -->
+        <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">      
+    </head>
+    <body>
+        <div class="container my-5">
+            <div class="card shadow-sm border rounded-4 p-3">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <select id="StatusFilter" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <select id="roleFilter" class="form-select">
+                            <option value="">All Roles</option>
+                            <option value="Manager">Manager</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Staff">Staff</option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
+                                data-bs-target="#addStaffrModal">Add Staff</button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <form id="addManagerForm">
-                        <div class="mb-3">
-                            <label for="managerUsername" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="managerUsername" required>
+                <div class="table-responsive">
+                    <table id="accountTable" class="table table-striped table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>Customer ID</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Action</th> <!-- NEW -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <c:forEach var="acc" items="${accountList}">
+                                <tr>
+                                    <td>${acc.accountID}</td>
+                                    <td>${acc.username}</td>
+                                    <td>${acc.role}</td>
+                                    <td>
+                                        <c:choose>
+                                            <c:when test="${acc.status == 1}">
+                                                <span class="text-success">Active</span>
+                                            </c:when>
+                                            <c:otherwise>
+                                                <span class="text-danger">Inactive</span>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </td>
+                                    <td>
+                                        <form action="account" method="post" style="display:inline;">
+                                            <input type="hidden" name="accountID" value="${acc.accountID}" />
+                                            <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
+                                            <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
+                                                ${acc.status == 1 ? 'Ban' : 'Unban'}
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+                        </tbody>
+                    </table>
+                </div>                
+            </div>      
+            <!-- Modal -->
+            <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content rounded-4">
+                        <div class="modal-header bg-success text-white">
+                            <h5 class="modal-title" id="addStaffModalLabel">Add New Staff</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="mb-3">
-                            <label for="managerPassword" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="managerPassword" required>
+                        <div class="modal-body">
+                            <form action="addStaff" method="post">
+                                <div class="mb-3">
+                                    <label for="staffUsername" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="staffUsername" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="staffPassword" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="staffPassword" required>
+                                </div>
+                                <button type="submit" class="btn btn-success w-100">Add Staff</button>
+                            </form>
                         </div>
-                        <button type="submit" class="btn btn-success w-100">Add Manager</button>
-                    </form>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-</body>
-<script>
-    const searchInput = document.getElementById("searchInput");
-    const roleFilter = document.getElementById("roleFilter");
-    const table = document.querySelector("table tbody");
+            </div>       
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+            <script>
+                $(document).ready(function () {
+                    var table = $('#accountTable').DataTable({
+                        pageLength: 5
+                    });
 
-    searchInput.addEventListener("input", filterTable);
-    roleFilter.addEventListener("change", filterTable);
+                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                        const role = data[2].trim();
+                        const status = $(table.row(dataIndex).node()).find('td:eq(3)').text().trim();
 
-    function filterTable() {
-    const searchText = searchInput.value.toLowerCase();
-    const selectedRole = roleFilter.value.toLowerCase();
-    const rows = table.querySelectorAll("tr");
+                        const selectedRole = $('#roleFilter').val();
+                        const selectedStatus = $('#StatusFilter').val();
 
-    rows.forEach(row => {
-        const username = row.children[1].textContent.toLowerCase();
-        const role = row.children[2].textContent.toLowerCase();
-        const matchSearch = username.includes(searchText);
-        const matchRole = !selectedRole || role === selectedRole;
-        row.style.display = (matchSearch && matchRole) ? "" : "none";
-    });
-}
+                        const roleMatch = !selectedRole || role === selectedRole;
+                        const statusMatch = !selectedStatus || status === selectedStatus;
 
+                        return roleMatch && statusMatch;
+                    });
 
-    function sortTable(columnIndex) {
-        const rows = Array.from(table.querySelectorAll("tr"));
-        const ascending = table.getAttribute("data-sort") !== "asc";
-
-        rows.sort((a, b) => {
-            const valA = a.children[columnIndex].textContent.trim().toLowerCase();
-            const valB = b.children[columnIndex].textContent.trim().toLowerCase();
-            return ascending ? valA.localeCompare(valB) : valB.localeCompare(valA);
-        });
-
-        rows.forEach(row => table.appendChild(row));
-        table.setAttribute("data-sort", ascending ? "asc" : "desc");
-    }
-</script>
-
+                    $('#roleFilter, #StatusFilter').on('change', function () {
+                        table.draw();
+                    });
+                });
+            </script>
+    </body>
 </html>
