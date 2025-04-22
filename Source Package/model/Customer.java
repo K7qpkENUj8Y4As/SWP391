@@ -8,36 +8,40 @@ package model;
  *
  * @author trung
  */
+
+
 public class Customer {
-    private int customerID;
+    private int id;
     private String fullName;
     private String email;
     private String phone;
     private String address;
     private String gender;
     private String avatar;
-    private int accountID;
+    private int accountId;
 
-    public Customer() {
-    }
+    // Constructor, getters, setters
 
-    public Customer(int customerID, String fullName, String email, String phone, String address, String gender, String avatar, int accountID) {
-        this.customerID = customerID;
+    public Customer(int id, String fullName, String email, String phone, String address, String gender, String avatar, int accountId) {
+        this.id = id;
         this.fullName = fullName;
         this.email = email;
         this.phone = phone;
         this.address = address;
         this.gender = gender;
         this.avatar = avatar;
-        this.accountID = accountID;
+        this.accountId = accountId;
     }
 
-    public int getCustomerID() {
-        return customerID;
+    public Customer() {
     }
 
-    public void setCustomerID(int customerID) {
-        this.customerID = customerID;
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getFullName() {
@@ -88,12 +92,13 @@ public class Customer {
         this.avatar = avatar;
     }
 
-    public int getAccountID() {
-        return accountID;
+    public int getAccountId() {
+        return accountId;
     }
 
-    public void setAccountID(int accountID) {
-        this.accountID = accountID;
+    public void setAccountId(int accountId) {
+        this.accountId = accountId;
     }
     
 }
+
