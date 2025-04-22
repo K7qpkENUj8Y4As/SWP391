@@ -25,9 +25,8 @@
                     <div class="col-md-4">
                         <select id="roleFilter" class="form-select">
                             <option value="">All Roles</option>
-                            <option value="Manager">Manager</option>
-                            <option value="Customer">Customer</option>
-                            <option value="Staff">Staff</option>
+                            <option value="CUSTOMER">CUSTOMER</option>
+                            <option value="STAFF">STAFF</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -86,14 +85,14 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="addStaff" method="post">
+                            <form action="AddStaff" method="post">
                                 <div class="mb-3">
                                     <label for="staffUsername" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="staffUsername" required>
+                                    <input type="text" class="form-control" id="staffUsername" name="username" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="staffPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="staffPassword" required>
+                                    <input type="password" class="form-control" id="staffPassword" name="password" required>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Add Staff</button>
                             </form>

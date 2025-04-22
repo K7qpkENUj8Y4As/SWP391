@@ -82,7 +82,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     AccountDAO account = new AccountDAO();
     account.updateAccountStatus(accountID, newStatus); // update first
 
-    List<Account> accountList = account.getAllAccount(); // then reload list
+    List<Account> accountList = account.getAllAccount1(); // then reload list
     request.setAttribute("accountList", accountList);
     request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
 }
