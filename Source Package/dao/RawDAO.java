@@ -242,4 +242,71 @@ public class RawDAO {
             return false;
         }
     }
+    
+    // Check if a Raw material has sufficient quantity
+public boolean hasEnoughQuantity(int rawId, int requiredQuantity) {
+    Raw raw = getRawById(rawId);
+    return raw != null && raw.getQuantity() >= requiredQuantity;
+}
+
+// Check if a Raw material is expired
+public boolean isExpired(int rawId) {
+    Raw raw = getRawById(rawId);
+    if (raw != null && raw.getExpriseDate() != null) {
+        return raw.getExpriseDate().before(new java.util.Date());
+    }
+    return false; // If no expiration date set, assume not expired
+}
+
+// Update Raw quantity after use
+public boolean updateRawQuantity(int rawId, int usedQuantity) {
+    Raw raw = getRawById(rawId);
+    if (raw == null || raw.getQuantity() < usedQuantity) {
+        return false;
+    }
+    
+    String query = "UPDATE Raw SET quantity = quantity - ? WHERE Id = ?";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ps.setInt(1, usedQuantity);
+        ps.setInt(2, rawId);
+        
+        int affectedRows = ps.executeUpdate();
+        return (affectedRows > 0);
+    } catch (SQLException e) {
+        System.out.println("Error in updateRawQuantity: " + e.getMessage());
+        return false;
+    }
+}
+
+// Get all soon-to-expire Raw materials (within specified days)
+public List<Raw> getSoonToExpireRaws(int days) {
+    List<Raw> list = new ArrayList<>();
+    String query = "SELECT * FROM Raw WHERE ExpriseDate BETWEEN CURRENT_TIMESTAMP AND DATE_ADD(CURRENT_TIMESTAMP, INTERVAL ? DAY)";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ps.setInt(1, days);
+        ResultSet rs = ps.executeQuery();
+        
+        while (rs.next()) {
+            Raw raw = new Raw();
+            raw.setId(rs.getInt("Id"));
+            raw.setName(rs.getString("Name"));
+            raw.setQuantity(rs.getInt("quantity"));
+            raw.setImage(rs.getString("Image"));
+            raw.setExpriseDate(rs.getTimestamp("ExpriseDate"));
+            raw.setCreateAt(rs.getTimestamp("CreateAt"));
+            
+            list.add(raw);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getSoonToExpireRaws: " + e.getMessage());
+    }
+    
+    return list;
+}
 }

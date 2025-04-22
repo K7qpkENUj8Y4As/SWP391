@@ -3,34 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package model;
-
 import java.io.Serializable;
 
-/**
- *
- * @author ADMIN
- */
 public class ProductRaw implements Serializable {
-
     private int id;
     private int productId;
     private int rawId;
+    private int quantity; // Số lượng Raw Materials cần cho 1 Product
     private Product product;
     private Raw raw;
 
     public ProductRaw() {
     }
 
-    public ProductRaw(int id, int productId, int rawId) {
+    public ProductRaw(int id, int productId, int rawId, int quantity) {
         this.id = id;
         this.productId = productId;
         this.rawId = rawId;
+        this.quantity = quantity;
     }
 
-    public ProductRaw(int id, Product product, Raw raw) {
+    public ProductRaw(int id, Product product, Raw raw, int quantity) {
         this.id = id;
         this.product = product;
         this.raw = raw;
+        this.quantity = quantity;
         this.productId = product.getId();
         this.rawId = raw.getId();
     }
@@ -59,6 +56,14 @@ public class ProductRaw implements Serializable {
         this.rawId = rawId;
     }
 
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public Product getProduct() {
         return product;
     }
@@ -83,6 +88,6 @@ public class ProductRaw implements Serializable {
 
     @Override
     public String toString() {
-        return "ProductRaw{" + "id=" + id + ", productId=" + productId + ", rawId=" + rawId + '}';
+        return "ProductRaw{" + "id=" + id + ", productId=" + productId + ", rawId=" + rawId + ", quantity=" + quantity + '}';
     }
 }
