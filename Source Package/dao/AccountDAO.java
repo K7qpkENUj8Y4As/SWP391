@@ -10,17 +10,67 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import model.Account;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 /**
  *
  * @author trung
  */
 public class AccountDAO {
- 
+     public void insertAccount(Account acc) {
+    String sql = "INSERT INTO Account (username, password, role, status,isCustomer) VALUES (?, ?, ?, ?,0)";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, acc.getUsername());
+        ps.setString(2, acc.getPassword()); // Hash nếu cần
+        ps.setString(3, acc.getRole());
+        ps.setInt(4, acc.getStatus());
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+    public void updateAccountStatus(int accountID, int status) {
+    String sql = "UPDATE Account SET status = ? WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setInt(1, status);
+        ps.setInt(2, accountID);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+ public List<Account> getAllAccount() {
+    List<Account> list = new ArrayList<>();
+    String query = "SELECT * FROM Account";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Account account = new Account();
+            account.setAccountID(rs.getInt("ID"));
+            account.setUsername(rs.getString("username"));
+            account.setPassword(rs.getString("password"));
+            account.setRole(rs.getString("role"));
+            account.setStatus(rs.getInt("status"));
+            account.setIsCustomer(rs.getInt("isCustomer"));
+            
+            list.add(account);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getAllAccount: " + e.getMessage());
+    }
+    
+    return list;
+}
 
 
     
   public boolean registerCustomer(String username, String password, String email, String address) {
-        String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status) VALUES (?, ?, ?, ?)";
+        String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status, isCustomer) VALUES (?, ?, ?, ?,1)";
         String insertCustomerSQL = "INSERT INTO Customer (Email, Address, Avatar, Account_ID) VALUES (?, ?, ?, ?)";
 
         try (Connection conn = new DBConnection().getConnection()) {
