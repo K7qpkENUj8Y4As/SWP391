@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-md-4">
                         <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
-                                data-bs-target="#addStaffrModal">Add Staff</button>
+                                data-bs-target="#addStaffModal">Add Staff</button>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -43,7 +43,6 @@
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Status</th>
-                                <th>Action</th> <!-- NEW -->
                             </tr>
                         </thead>
                         <tbody>
@@ -51,23 +50,13 @@
                                 <tr>
                                     <td>${acc.accountID}</td>
                                     <td>${acc.username}</td>
-                                    <td>${acc.role}</td>
-                                    <td>
-                                        <c:choose>
-                                            <c:when test="${acc.status == 1}">
-                                                <span class="text-success">Active</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="text-danger">Inactive</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </td>
+                                    <td>${acc.role}</td>                                 
                                     <td>
                                         <form action="account" method="post" style="display:inline;">
                                             <input type="hidden" name="accountID" value="${acc.accountID}" />
                                             <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
                                             <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
-                                                ${acc.status == 1 ? 'Ban' : 'Unban'}
+                                                ${acc.status == 1 ? 'Active' : 'Inactive'}
                                             </button>
                                         </form>
                                     </td>
@@ -89,11 +78,11 @@
                             <form action="addStaff" method="post">
                                 <div class="mb-3">
                                     <label for="staffUsername" class="form-label">Username</label>
-                                    <input type="text" class="form-control" id="staffUsername" required>
+                                    <input type="text" class="form-control" id="staffUsername" name="username" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="staffPassword" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="staffPassword" required>
+                                    <input type="password" class="form-control" id="staffPassword" name="password" required>
                                 </div>
                                 <button type="submit" class="btn btn-success w-100">Add Staff</button>
                             </form>

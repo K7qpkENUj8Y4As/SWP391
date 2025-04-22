@@ -1,4 +1,5 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <jsp:useBean id="now" class="java.util.Date" scope="page" />
 <!DOCTYPE html>
@@ -66,8 +67,8 @@
                                     <td><img src="${flower.image}" alt="${flower.name}" class="flower-img" /></td>
                                     <td>${flower.name}</td>
                                     <td>${flower.quantity}</td>
-                                    <td>${flower.expriseDate}</td>
-                                    <td>${flower.createAt}</td>
+                                    <td><fmt:formatDate value="${flower.expriseDate}" pattern="MM/dd/yyyy" /></td>
+                                    <td><fmt:formatDate value="${flower.createAt}" pattern="MM/dd/yyyy" /></td>
                                     <td>
                                         <c:choose>
                                             <c:when test="${flower.quantity == 0}">
@@ -191,56 +192,56 @@
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
-                              function confirmDelete() {
-                                  return confirm('Are you sure you want to delete this flower?');
-                              }
-                              $(document).ready(function () {
-                                  $('#updateFlowerModal').on('show.bs.modal', function (event) {
-                                      var button = $(event.relatedTarget); // Button that triggered the modal
+                                                function confirmDelete() {
+                                                    return confirm('Are you sure you want to delete this flower?');
+                                                }
+                                                $(document).ready(function () {
+                                                    $('#updateFlowerModal').on('show.bs.modal', function (event) {
+                                                        var button = $(event.relatedTarget); // Button that triggered the modal
 
-                                      // Get data from button attributes
-                                      var id = button.data('id');
-                                      var name = button.data('name');
-                                      var quantity = button.data('quantity');
-                                      var image = button.data('image');
-                                      var exprise = button.data('exprise');
-                                      var importDate = button.data('import');
+                                                        // Get data from button attributes
+                                                        var id = button.data('id');
+                                                        var name = button.data('name');
+                                                        var quantity = button.data('quantity');
+                                                        var image = button.data('image');
+                                                        var exprise = button.data('exprise');
+                                                        var importDate = button.data('import');
 
-                                      // Format date strings if necessary
-                                      const formatDate = (dateStr) => {
-                                          const date = new Date(dateStr);
-                                          return date.toISOString().split('T')[0];
-                                      };
+                                                        // Format date strings if necessary
+                                                        const formatDate = (dateStr) => {
+                                                            const date = new Date(dateStr);
+                                                            return date.toISOString().split('T')[0];
+                                                        };
 
-                                      // Update modal fields
-                                      var modal = $(this);
-                                      modal.find('#updateFlowerId').val(id);
-                                      modal.find('#updateFlowerName').val(name);
-                                      modal.find('#updateFlowerQuantity').val(quantity);
-                                      modal.find('#updateExpriseDate').val(formatDate(exprise));
-                                      modal.find('#updateCreateDate').val(formatDate(importDate));
-                                  });
-                              });
-                              $(document).ready(function () {
-                                  var table = $('#flowerTable').DataTable({
-                                      pageLength: 5
-                                  });
+                                                        // Update modal fields
+                                                        var modal = $(this);
+                                                        modal.find('#updateFlowerId').val(id);
+                                                        modal.find('#updateFlowerName').val(name);
+                                                        modal.find('#updateFlowerQuantity').val(quantity);
+                                                        modal.find('#updateExpriseDate').val(formatDate(exprise));
+                                                        modal.find('#updateCreateDate').val(formatDate(importDate));
+                                                    });
+                                                });
+                                                $(document).ready(function () {
+                                                    var table = $('#flowerTable').DataTable({
+                                                        pageLength: 5
+                                                    });
 
-                                  // Custom search filter by Import Date
-                                  $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                      const importDate = new Date(data[5]).toISOString().split('T')[0]; // Column index 5 = Import Date
-                                      const selectedDate = $('#createDate').val();
+                                                    // Custom search filter by Import Date
+                                                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                                                        const importDate = new Date(data[5]).toISOString().split('T')[0]; // Column index 5 = Import Date
+                                                        const selectedDate = $('#createDate').val();
 
-                                      if (!selectedDate)
-                                          return true; // No filter applied
-                                      return importDate === selectedDate; // Match exact date
-                                  });
+                                                        if (!selectedDate)
+                                                            return true; // No filter applied
+                                                        return importDate === selectedDate; // Match exact date
+                                                    });
 
-                                  // Trigger table redraw on date change
-                                  $('#createDate').on('change', function () {
-                                      table.draw();
-                                  });
-                              });
+                                                    // Trigger table redraw on date change
+                                                    $('#createDate').on('change', function () {
+                                                        table.draw();
+                                                    });
+                                                });
 
         </script>
 

@@ -75,10 +75,7 @@ public class RawController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RawDAO raw=new RawDAO();
-        List<Raw> rawList=raw.getAllRaws();
-        request.setAttribute("flowerList", rawList);
-        request.getRequestDispatcher("view/rawmanagement/RawManagementPage.jsp").forward(request, response);
+       processRequest(request, response);
     }
 
     /**

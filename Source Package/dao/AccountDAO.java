@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class AccountDAO {
     public void insertAccount(Account acc) {
-    String sql = "INSERT INTO Accounts (username, password, role, status) VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO Account (username, password, role, status) VALUES (?, ?, ?, ?)";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, acc.getUsername());
@@ -31,7 +31,7 @@ public class AccountDAO {
     }
 }
     public void updateAccountStatus(int accountID, int status) {
-    String sql = "UPDATE Accounts SET status = ? WHERE accountID = ?";
+    String sql = "UPDATE Account SET status = ? WHERE Id = ?";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, status);
@@ -130,7 +130,7 @@ public class AccountDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM Account WHERE username = ? AND password = ? AND status = 1";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -151,5 +151,14 @@ public class AccountDAO {
 
         return account;
     }
-
+ public static void main(String[] args) {
+       AccountDAO dao=new AccountDAO();
+       Account newStaff=new Account();
+       newStaff.setUsername("staff2");
+        newStaff.setPassword("123456789"); // Bạn nên hash mật khẩu ở đây nếu cần
+        newStaff.setRole("Staff");
+        newStaff.setStatus(1);
+        newStaff.setIsCustomer(0);
+       dao.insertAccount(newStaff);
+    }
 }

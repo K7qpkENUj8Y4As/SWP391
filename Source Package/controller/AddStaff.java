@@ -5,6 +5,7 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.HashUtilDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -76,15 +77,16 @@ public class AddStaff extends HttpServlet {
 
         // Set role = "Staff" and status = 1 (active)
         Account newStaff = new Account();
+        HashUtilDAO hashUtil=new HashUtilDAO();
         newStaff.setUsername(username);
-        newStaff.setPassword(password); // Bạn nên hash mật khẩu ở đây nếu cần
+        newStaff.setPassword(hashUtil.md5(password)); // Bạn nên hash mật khẩu ở đây nếu cần
         newStaff.setRole("Staff");
         newStaff.setStatus(1);
-
+        newStaff.setIsCustomer(0);
         AccountDAO dao = new AccountDAO();
         dao.insertAccount(newStaff);
 
-        response.sendRedirect("account-management.jsp"); // đổi lại nếu bạn dùng tên khác
+        response.sendRedirect(request.getContextPath() +"/account"); // đổi lại nếu bạn dùng tên khác
     }
     
 

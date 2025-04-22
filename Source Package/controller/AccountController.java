@@ -11,6 +11,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Account;
 
@@ -58,8 +59,8 @@ public class AccountController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        AccountDAO account=new AccountDAO();
-        List<Account> accountList=account.getAllAccount();
+        AccountDAO account = new AccountDAO();
+        List<Account> accountList = account.getAllAccount();
         request.setAttribute("accountList", accountList);
         request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
     }
@@ -75,11 +76,12 @@ public class AccountController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-         int accountID = Integer.parseInt(request.getParameter("accountID"));
+        int accountID = Integer.parseInt(request.getParameter("accountID"));
         int newStatus = Integer.parseInt(request.getParameter("status"));
-
-        AccountDAO dao = new AccountDAO(); // Hoặc sử dụng dao bạn đã có
-        dao.updateAccountStatus(accountID, newStatus);
+        AccountDAO account = new AccountDAO();
+        List<Account> accountList = account.getAllAccount();
+        request.setAttribute("accountList", accountList);
+        account.updateAccountStatus(accountID, newStatus);
         request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
     }
 
