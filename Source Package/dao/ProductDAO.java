@@ -199,7 +199,23 @@ public boolean updateProduct(Product product) {
     }
 }
 
+  
     public boolean deleteProduct(int productId) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        String query = "DELETE FROM products WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, productId);
+
+         
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
+         } catch (Exception e) {
+            e.printStackTrace();
+           
+            return false;
+        } 
     }
 }

@@ -89,7 +89,7 @@
                 <small class="form-text text-muted">Leave empty to keep current image (if editing)</small>
             </div>
             
-            <h4 class="mt-4">Raw Materials</h4>
+<!--            <h4 class="mt-4">Raw Materials</h4>
             <p class="text-muted">Select the raw materials used in this product and specify the quantity required for each.</p>
             
             <div id="rawMaterialsContainer">
@@ -153,7 +153,72 @@
                     </div>
                 </c:forEach>
             </div>
+            -->
             
+            <h4 class="mt-4">Raw Materials</h4>
+<p class="text-muted">Select the raw materials used in this product and specify the quantity required for each.</p>
+
+<div id="rawMaterialsContainer">
+    <c:forEach items="${rawMaterials}" var="raw">
+        <c:set var="isSelected" value="false"/>
+        <c:set var="selectedQuantity" value="0"/>
+        <c:forEach items="${productRawQuantities}" var="entry">
+            <c:if test="${entry.key.id == raw.id}">
+                <c:set var="isSelected" value="true"/>
+                <c:set var="selectedQuantity" value="${entry.value}"/>
+            </c:if>
+        </c:forEach>
+
+        <div class="raw-material-row form-row align-items-center">
+            <div class="col-md-1 text-center">
+                <input type="checkbox" class="form-check-input raw-checkbox" name="rawId" value="${raw.id}"
+                       id="raw-${raw.id}" ${isSelected ? 'checked' : ''}
+                       onchange="toggleQuantityField(this, ${raw.id})">
+            </div>
+            <div class="col-md-4">
+                <label for="raw-${raw.id}">
+                    ${raw.name}
+                    <c:if test="${raw.expriseDate.time < currentDate.time}">
+                        <span class="expired">(EXPIRED)</span>
+                    </c:if>
+                    <c:if test="${raw.quantity < 10}">
+                        <span class="low-quantity">(Low Stock: ${raw.quantity} left)</span>
+                    </c:if>
+                </label>
+            </div>
+            <div class="col-md-3">
+                <input type="number" class="form-control quantity-input" name="rawQuantity"
+                       id="quantity-${raw.id}" min="0"
+                       value="${selectedQuantity}" ${!isSelected ? 'disabled' : ''}>
+            </div>
+            <div class="col-md-4">
+                <small>Available: ${raw.quantity} units</small>
+               
+                <c:if test="${raw.expriseDate != null}">
+                    <br><small>Expires: <fmt:formatDate value="${raw.expriseDate}" pattern="yyyy-MM-dd"/></small>
+                </c:if>
+         <%--    
+           <c:if test="${raw.expriseDate != null}">
+    <br>
+    <small>
+        Expires: 
+        <fmt:formatDate value="${raw.expriseDate}" pattern="yyyy-MM-dd"/>
+        
+        <!-- Hiển thị cảnh báo nếu hết hạn -->
+        <c:if test="${raw.expired}">
+            <span style="color:red; font-weight: bold;"> (Expired)</span>
+        </c:if>
+    </small>
+</c:if>
+
+--%>
+
+
+            </div>
+        </div>
+    </c:forEach>
+</div>
+
             <div class="form-group mt-4">
                 <button type="submit" class="btn btn-primary">${product != null && product.id > 0 ? 'Update' : 'Create'} Product</button>
                 <a href="${pageContext.request.contextPath}/product" class="btn btn-secondary">Cancel</a>
