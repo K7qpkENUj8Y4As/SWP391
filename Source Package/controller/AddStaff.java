@@ -4,21 +4,21 @@
  */
 package controller;
 
-import dao.RawDAO;
+import dao.AccountDAO;
+import dao.HashUtilDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.List;
-import model.Raw;
+import model.Account;
 
 /**
  *
  * @author trung
  */
-public class RawController extends HttpServlet {
+public class AddStaff extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,10 +37,10 @@ public class RawController extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet RawController</title>");
+            out.println("<title>Servlet AddStaff</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet RawController at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet AddStaff at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -58,10 +58,7 @@ public class RawController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        RawDAO raw=new RawDAO();
-        List<Raw> rawList=raw.getAllRaws();
-        request.setAttribute("flowerList", rawList);
-        request.getRequestDispatcher("view/rawmanagement/RawManagementPage.jsp").forward(request, response);
+        processRequest(request, response);
     }
 
     /**
@@ -75,8 +72,25 @@ public class RawController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-       processRequest(request, response);
+          String username = request.getParameter("username");
+        String password = request.getParameter("password");
+
+        // Set role = "Staff" and status = 1 (active)
+        Account newStaff = new Account();
+        HashUtilDAO hashUtil=new HashUtilDAO();
+        newStaff.setUsername(username);
+        newStaff.setPassword(hashUtil.md5(password)); // Bạn nên hash mật khẩu ở đây nếu cần
+
+        newStaff.setRole("Staff");
+
+        newStaff.setStatus(1);
+        newStaff.setIsCustomer(0);
+        AccountDAO dao = new AccountDAO();
+        dao.insertAccount(newStaff);
+
+        response.sendRedirect(request.getContextPath() +"/account"); // đổi lại nếu bạn dùng tên khác
     }
+    
 
     /**
      * Returns a short description of the servlet.

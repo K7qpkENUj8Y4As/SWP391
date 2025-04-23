@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.RawDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -55,7 +56,10 @@ public class DeleteRaw extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        int id = Integer.parseInt(request.getParameter("id"));
+        RawDAO dao = new RawDAO();
+        dao.deleteRaw(id);
+        response.sendRedirect(request.getContextPath() + "/raw");
     }
 
     /**
@@ -69,6 +73,7 @@ public class DeleteRaw extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // or use a controller servlet
         processRequest(request, response);
     }
 

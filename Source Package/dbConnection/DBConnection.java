@@ -12,9 +12,9 @@ import java.sql.SQLException;
  * @author Duong
  */
 public class DBConnection {
-    private static final String URL = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP39123;encrypt=true;trustServerCertificate=true";
+    private static final String URL = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP391;encrypt=true;trustServerCertificate=true";
     private static final String USER = "sa";
-    private static final String PASSWORD = "Dung1010";
+    private static final String PASSWORD = "123";
 
     public static Connection getConnection() throws SQLException {
         try {

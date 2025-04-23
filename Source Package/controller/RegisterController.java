@@ -71,22 +71,62 @@ public class RegisterController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String username = request.getParameter("username");
+        String username = request.getParameter("phone");
         String email = request.getParameter("email");
-        String address = request.getParameter("address");
+        String fullName = request.getParameter("fullname");
         String password = request.getParameter("password");
 
         // Validate đơn giản
         AccountDAO dao = new AccountDAO();
 
 //     Kiểm tra username đã tồn tại
-        if (dao.isEmailExists(email)) {
-            request.setAttribute("error", "Email already in use!");
+        if (fullName.length() < 6) {
+            request.setAttribute("error", "Full Name must be at least 8 characters");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
             request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
             return;
         }
-       if (password.length()<8) {
+        if (!fullName.matches(fullName)) {
+            request.setAttribute("error", "Full name must start with capital letters and only contain letters and spaces.");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
+            return;
+        }
+        if (dao.isPhoneExists(username)) {
+            request.setAttribute("error", "Phone already in use!");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
+            return;
+        }
+        String phonePattern = "^0\\d{9}$";
+
+        if (!username.matches(phonePattern)) {
+            request.setAttribute("error", "Phone must be 10 digits and start with 0.");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
+            return;
+        }
+        if (dao.isEmailExists(email) && !email.isEmpty()) {
+            request.setAttribute("error", "Email already in use!");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
+            request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
+            return;
+        }
+        if (password.length() < 8) {
             request.setAttribute("error", "Password must be at least 8 characters");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
             request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
             return;
         }
@@ -94,6 +134,9 @@ public class RegisterController extends HttpServlet {
 
         if (!password.matches(passwordPattern)) {
             request.setAttribute("error", "Password must including uppercase, lowercase, numbers and special characters.");
+            request.setAttribute("fullname", fullName);
+            request.setAttribute("phone", username);
+            request.setAttribute("email", email);
             request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
             return;
         }
@@ -101,12 +144,12 @@ public class RegisterController extends HttpServlet {
         String hashedPassword = HashUtilDAO.md5(password);
 
         // Đăng ký (thêm account và customer)
-        boolean success = dao.registerCustomer(username, hashedPassword, email, address);
+        boolean success = dao.registerCustomer(username, hashedPassword, email, fullName);
 
         if (success) {
             response.sendRedirect(request.getContextPath() + "/login");
         } else {
-            request.setAttribute("error", "Đăng ký thất bại. Vui lòng thử lại.");
+            request.setAttribute("error", "Register fail. Please try again.");
             request.getRequestDispatcher("view/authentication/SignUpPage.jsp").forward(request, response);
         }
     }
