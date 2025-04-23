@@ -74,6 +74,7 @@ public class AccountController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int accountID = Integer.parseInt(request.getParameter("accountID"));
@@ -84,6 +85,7 @@ public class AccountController extends HttpServlet {
         account.updateAccountStatus(accountID, newStatus);
         request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
     }
+
 
     /**
      * Returns a short description of the servlet.

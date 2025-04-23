@@ -17,8 +17,10 @@ import java.util.List;
  * @author trung
  */
 public class AccountDAO {
+
     public void insertAccount(Account acc) {
     String sql = "INSERT INTO Account (username, password, role, status) VALUES (?, ?, ?, ?)";
+
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, acc.getUsername());
@@ -66,10 +68,37 @@ public class AccountDAO {
     
     return list;
 }
+
+ public List<Account> getAllAccount1() {
+    List<Account> list = new ArrayList<>();
+    String query = "SELECT * FROM Account WHERE role IN ('STAFF', 'CUSTOMER')";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Account account = new Account();
+            account.setAccountID(rs.getInt("ID"));
+            account.setUsername(rs.getString("username"));
+            account.setPassword(rs.getString("password"));
+            account.setRole(rs.getString("role"));
+            account.setStatus(rs.getInt("status"));
+            account.setIsCustomer(rs.getInt("isCustomer"));
+            
+            list.add(account);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getAllAccount: " + e.getMessage());
+    }
     
-  public boolean registerCustomer(String username, String password, String email, String address) {
-        String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status) VALUES (?, ?, ?, ?)";
-        String insertCustomerSQL = "INSERT INTO Customer (Email, Address, Avatar, Account_ID) VALUES (?, ?, ?, ?)";
+    return list;
+}
+
+
+    
+  public boolean registerCustomer(String username, String password, String email, String fullName) {
+        String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status, isCustomer) VALUES (?, ?, ?, ?,1)";
+        String insertCustomerSQL = "INSERT INTO Customer (Email ,FullName ,Avatar ,Account_ID ,Phone ) VALUES (?, ?, ?, ?,?)";
 
         try (Connection conn = new DBConnection().getConnection()) {
             conn.setAutoCommit(false);
@@ -78,7 +107,7 @@ public class AccountDAO {
             PreparedStatement psAcc = conn.prepareStatement(insertAccountSQL, PreparedStatement.RETURN_GENERATED_KEYS);
             psAcc.setString(1, username);
             psAcc.setString(2, password); 
-            psAcc.setString(3, "customer"); 
+            psAcc.setString(3, "CUSTOMER"); 
             psAcc.setInt(4, 1); 
             psAcc.executeUpdate();
 
@@ -94,9 +123,10 @@ public class AccountDAO {
             // 2. Tạo customer
             PreparedStatement psCus = conn.prepareStatement(insertCustomerSQL);
             psCus.setString(1, email);
-            psCus.setString(2, address);
+            psCus.setString(2, fullName);
             psCus.setString(3, "default.jpg"); // Avatar mặc định
             psCus.setInt(4, accId);
+            psCus.setString(5, username);
             psCus.executeUpdate();
 
             conn.commit();
@@ -109,7 +139,7 @@ public class AccountDAO {
     }
    public boolean isEmailExists( String email) {
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT COUNT(*) FROM Users WHERE  email = ? ";
+            String sql = "SELECT COUNT(*) FROM Customer WHERE  email = ? ";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
@@ -151,6 +181,7 @@ public class AccountDAO {
 
         return account;
     }
+
  public static void main(String[] args) {
        AccountDAO dao=new AccountDAO();
        Account newStaff=new Account();
@@ -161,4 +192,22 @@ public class AccountDAO {
         newStaff.setIsCustomer(0);
        dao.insertAccount(newStaff);
     }
+
+
+    public boolean isPhoneExists(String username) {
+       try (Connection conn = DBConnection.getConnection()) {
+            String sql = "SELECT COUNT(*) FROM Account WHERE  username = ? ";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // Nếu số lượng > 0 thì user/email đã tồn tại
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
 }

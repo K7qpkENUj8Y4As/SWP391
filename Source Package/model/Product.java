@@ -17,24 +17,24 @@ import java.util.Date;
 import java.util.List;
 
 
+
 public class Product implements Serializable {
     private int id;
     private String name;
     private double price;
     private String image;
     private int categoryId;
-    private Category category;  // Đối tượng Category liên kết
+    private Category category;
     private String description;
     private Date createAt;
     private int quantity;
-    private List<Raw> rawMaterials;  // Danh sách nguyên liệu của sản phẩm
     
+    private List<ProductRaw> productRaws;
     
     public Product() {
-        this.rawMaterials = new ArrayList<>();
+        this.productRaws = new ArrayList<>();
     }
     
-   
     public Product(int id, String name, double price, String image, int categoryId, 
                    String description, Date createAt, int quantity) {
         this.id = id;
@@ -45,10 +45,9 @@ public class Product implements Serializable {
         this.description = description;
         this.createAt = createAt;
         this.quantity = quantity;
-        this.rawMaterials = new ArrayList<>();
+        this.productRaws = new ArrayList<>();
     }
     
-
     public Product(int id, String name, double price, String image, Category category, 
                    String description, Date createAt, int quantity) {
         this.id = id;
@@ -60,8 +59,10 @@ public class Product implements Serializable {
         this.description = description;
         this.createAt = createAt;
         this.quantity = quantity;
-        this.rawMaterials = new ArrayList<>();
+        this.productRaws = new ArrayList<>();
     }
+    
+    
     
  
     public int getId() {
@@ -154,23 +155,94 @@ public class Product implements Serializable {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
-  
-    public List<Raw> getRawMaterials() {
-        return rawMaterials;
+    // Cập nhật cho productRaws
+    public List<ProductRaw> getProductRaws() {
+        return productRaws;
     }
     
-  
-    public void setRawMaterials(List<Raw> rawMaterials) {
-        this.rawMaterials = rawMaterials;
+    public void setProductRaws(List<ProductRaw> productRaws) {
+        this.productRaws = productRaws;
     }
     
-  
-    public void addRawMaterial(Raw raw) {
-        if (this.rawMaterials == null) {
-            this.rawMaterials = new ArrayList<>();
+    public void addProductRaw(ProductRaw productRaw) {
+        if (this.productRaws == null) {
+            this.productRaws = new ArrayList<>();
         }
-        this.rawMaterials.add(raw);
+        this.productRaws.add(productRaw);
+    }
+    
+ 
+    public List<Raw> getRawMaterials() {
+        List<Raw> rawList = new ArrayList<>();
+        if (productRaws != null) {
+            for (ProductRaw pr : productRaws) {
+                if (pr.getRaw() != null) {
+                    rawList.add(pr.getRaw());
+                }
+            }
+        }
+        return rawList;
+    }
+    
+    
+    public boolean hasEnoughRawMaterials() {
+        if (productRaws == null || productRaws.isEmpty()) {
+            return false;
+        }
+        
+        for (ProductRaw pr : productRaws) {
+            Raw raw = pr.getRaw();
+            if (raw == null || raw.getQuantity() < pr.getQuantity()) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    // Check ExpiredRaw
+    public List<Raw> getExpiredRawMaterials() {
+        List<Raw> expiredRaws = new ArrayList<>();
+        Date currentDate = new Date();
+        
+        if (productRaws != null) {
+            for (ProductRaw pr : productRaws) {
+                Raw raw = pr.getRaw();
+                if (raw != null && raw.getExpriseDate() != null && 
+                    raw.getExpriseDate().before(currentDate)) {
+                    expiredRaws.add(raw);
+                }
+            }
+        }
+        
+        return expiredRaws;
+    }
+    
+    
+    public Product createSimilarProduct() {
+        Product newProduct = new Product();
+        newProduct.setName(this.name);
+        newProduct.setPrice(this.price);
+        newProduct.setImage(this.image);
+        newProduct.setCategoryId(this.categoryId);
+        newProduct.setCategory(this.category);
+        newProduct.setDescription(this.description);
+        newProduct.setCreateAt(new Date()); // Ngày tạo mới
+        newProduct.setQuantity(0); // Số lượng ban đầu là 0
+        
+        //copy list ProductRaw
+        if (this.productRaws != null) {
+            for (ProductRaw pr : this.productRaws) {
+                ProductRaw newPR = new ProductRaw();
+                newPR.setRaw(pr.getRaw());
+                newPR.setRawId(pr.getRawId());
+                newPR.setQuantity(pr.getQuantity());
+                // ProductId updtae after create product
+                newProduct.addProductRaw(newPR);
+            }
+        }
+        
+        return newProduct;
     }
     
     @Override
@@ -178,5 +250,9 @@ public class Product implements Serializable {
         return "Product{" + "id=" + id + ", name=" + name + ", price=" + price + 
                ", categoryId=" + categoryId + ", description=" + description + 
                ", createAt=" + createAt + ", quantity=" + quantity + '}';
+    }
+
+    public void setRawMaterials(List<Raw> rawsByProductId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

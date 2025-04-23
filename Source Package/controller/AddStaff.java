@@ -80,7 +80,9 @@ public class AddStaff extends HttpServlet {
         HashUtilDAO hashUtil=new HashUtilDAO();
         newStaff.setUsername(username);
         newStaff.setPassword(hashUtil.md5(password)); // Bạn nên hash mật khẩu ở đây nếu cần
+
         newStaff.setRole("Staff");
+
         newStaff.setStatus(1);
         newStaff.setIsCustomer(0);
         AccountDAO dao = new AccountDAO();

@@ -61,10 +61,12 @@ public class UpdateRaw extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         RawDAO dao = new RawDAO();
-         int id = Integer.parseInt(request.getParameter("id"));
-        Raw flower=dao.getRawById(id);
+
+        int id = Integer.parseInt(request.getParameter("id"));
+        Raw flower = dao.getRawById(id);
         request.setAttribute("flower", flower);
-        response.sendRedirect(request.getContextPath() +"/raw"); 
+        response.sendRedirect(request.getContextPath() + "/raw");
+
     }
 
     /**
@@ -78,16 +80,20 @@ public class UpdateRaw extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         int id = Integer.parseInt(request.getParameter("id"));
            String name = request.getParameter("name");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
+
         // Handle image upload   
         String expriseDateStr = request.getParameter("expriseDate");
         Date expriseDate = null;
         if (expriseDateStr != null && !expriseDateStr.trim().isEmpty()) {
             try {
                 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+
                expriseDate = formatter.parse(expriseDateStr);
+
             } catch (ParseException e) {
                 System.out.println("Invalid expireDate: " + expriseDateStr);
             }
@@ -125,7 +131,9 @@ public class UpdateRaw extends HttpServlet {
         newFlower.setImage("");
         dao.updateRaw(newFlower);
 
+
         response.sendRedirect(request.getContextPath() +"/raw"); 
+
     }
 
     /**

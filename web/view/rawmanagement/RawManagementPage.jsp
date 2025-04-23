@@ -24,7 +24,6 @@
             }
         </style>
     </head>
-
     <body>
 
         <div class="container my-5">
@@ -101,9 +100,12 @@
                                             </button>
 
                                             <!-- View Detail -->
-                                            <button class="btn btn-outline-warning" title="View Detail">
+
+                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                                    data-bs-target="#viewDetailModal" data-id="${acc.accountID}" title="View detail">
                                                 <i class="fas fa-eye"></i>
-                                            </button>
+                                            </button> 
+
                                         </div>
                                     </td>
                                 </tr>

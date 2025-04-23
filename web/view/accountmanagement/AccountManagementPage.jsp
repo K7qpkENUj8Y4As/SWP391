@@ -25,9 +25,11 @@
                     <div class="col-md-4">
                         <select id="roleFilter" class="form-select">
                             <option value="">All Roles</option>
+
                             <option value="Manager">Manager</option>
                             <option value="Customer">Customer</option>
                             <option value="Staff">Staff</option>
+
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -39,6 +41,7 @@
                     <table id="accountTable" class="table table-striped table-bordered text-center">
                         <thead>
                             <tr>
+
                                 <th>Customer ID</th>
                                 <th>Username</th>
                                 <th>Role</th>
@@ -59,6 +62,8 @@
                                                 ${acc.status == 1 ? 'Active' : 'Inactive'}
                                             </button>
                                         </form>
+
+       
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -75,7 +80,9 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+
                             <form action="addStaff" method="post">
+
                                 <div class="mb-3">
                                     <label for="staffUsername" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="staffUsername" name="username" required>
