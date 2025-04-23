@@ -100,10 +100,12 @@
                                             </button>
 
                                             <!-- View Detail -->
+
                                             <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
                                                     data-bs-target="#viewDetailModal" data-id="${acc.accountID}" title="View detail">
                                                 <i class="fas fa-eye"></i>
                                             </button> 
+
                                         </div>
                                     </td>
                                 </tr>

@@ -17,8 +17,10 @@ import java.util.List;
  * @author trung
  */
 public class AccountDAO {
-     public void insertAccount(Account acc) {
-    String sql = "INSERT INTO Account (username, password, role, status,isCustomer) VALUES (?, ?, ?, ?,0)";
+
+    public void insertAccount(Account acc) {
+    String sql = "INSERT INTO Account (username, password, role, status) VALUES (?, ?, ?, ?)";
+
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setString(1, acc.getUsername());
@@ -66,6 +68,7 @@ public class AccountDAO {
     
     return list;
 }
+
  public List<Account> getAllAccount1() {
     List<Account> list = new ArrayList<>();
     String query = "SELECT * FROM Account WHERE role IN ('STAFF', 'CUSTOMER')";
@@ -90,6 +93,7 @@ public class AccountDAO {
     
     return list;
 }
+
 
     
   public boolean registerCustomer(String username, String password, String email, String fullName) {
@@ -156,7 +160,7 @@ public class AccountDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM Account WHERE username = ? AND password = ? AND status = 1";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -178,6 +182,18 @@ public class AccountDAO {
         return account;
     }
 
+ public static void main(String[] args) {
+       AccountDAO dao=new AccountDAO();
+       Account newStaff=new Account();
+       newStaff.setUsername("staff2");
+        newStaff.setPassword("123456789"); // Bạn nên hash mật khẩu ở đây nếu cần
+        newStaff.setRole("Staff");
+        newStaff.setStatus(1);
+        newStaff.setIsCustomer(0);
+       dao.insertAccount(newStaff);
+    }
+
+
     public boolean isPhoneExists(String username) {
        try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT COUNT(*) FROM Account WHERE  username = ? ";
@@ -192,5 +208,6 @@ public class AccountDAO {
         }
         return false;
     }
+
 
 }

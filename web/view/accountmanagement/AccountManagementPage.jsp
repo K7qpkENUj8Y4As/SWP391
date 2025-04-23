@@ -25,8 +25,11 @@
                     <div class="col-md-4">
                         <select id="roleFilter" class="form-select">
                             <option value="">All Roles</option>
-                            <option value="CUSTOMER">CUSTOMER</option>
-                            <option value="STAFF">STAFF</option>
+
+                            <option value="Manager">Manager</option>
+                            <option value="Customer">Customer</option>
+                            <option value="Staff">Staff</option>
+
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -38,37 +41,29 @@
                     <table id="accountTable" class="table table-striped table-bordered text-center">
                         <thead>
                             <tr>
-                                <th>#</th>
+
+                                <th>Customer ID</th>
                                 <th>Username</th>
                                 <th>Role</th>
                                 <th>Status</th>
-                                <th>Action</th> <!-- NEW -->
                             </tr>
                         </thead>
                         <tbody>
-                            <c:forEach var="acc" items="${accountList}" varStatus="status">
+                            <c:forEach var="acc" items="${accountList}">
                                 <tr>
-                                    <td>${status.index + 1}</td>
+                                    <td>${acc.accountID}</td>
                                     <td>${acc.username}</td>
-                                    <td>${acc.role}</td>
+                                    <td>${acc.role}</td>                                 
                                     <td>
-                                        <c:choose>
-                                            <c:when test="${acc.status == 1}">
-                                                <span class="text-success">Active</span>
-                                            </c:when>
-                                            <c:otherwise>
-                                                <span class="text-danger">Inactive</span>
-                                            </c:otherwise>
-                                        </c:choose>
-                                    </td>
-                                    <td>                                               
-                                                <form action="account" method="post" style="display:inline;">
-                                                    <input type="hidden" name="accountID" value="${acc.accountID}" />
-                                                    <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
-                                                    <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
-                                                        ${acc.status == 1 ? 'Ban' : 'Unban'}
-                                                    </button>
-                                                </form>                                                    
+                                        <form action="account" method="post" style="display:inline;">
+                                            <input type="hidden" name="accountID" value="${acc.accountID}" />
+                                            <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
+                                            <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
+                                                ${acc.status == 1 ? 'Active' : 'Inactive'}
+                                            </button>
+                                        </form>
+
+       
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -85,7 +80,9 @@
                             <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form action="AddStaff" method="post">
+
+                            <form action="addStaff" method="post">
+
                                 <div class="mb-3">
                                     <label for="staffUsername" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="staffUsername" name="username" required>

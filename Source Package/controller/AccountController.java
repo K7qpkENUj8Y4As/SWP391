@@ -74,18 +74,17 @@ public class AccountController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     @Override
-protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    int accountID = Integer.parseInt(request.getParameter("accountID"));
-    int newStatus = Integer.parseInt(request.getParameter("status"));
-    
-    AccountDAO account = new AccountDAO();
-    account.updateAccountStatus(accountID, newStatus); // update first
 
-    List<Account> accountList = account.getAllAccount1(); // then reload list
-    request.setAttribute("accountList", accountList);
-    request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
-}
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        int accountID = Integer.parseInt(request.getParameter("accountID"));
+        int newStatus = Integer.parseInt(request.getParameter("status"));
+        AccountDAO account = new AccountDAO();
+        List<Account> accountList = account.getAllAccount();
+        request.setAttribute("accountList", accountList);
+        account.updateAccountStatus(accountID, newStatus);
+        request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
+    }
 
 
     /**
