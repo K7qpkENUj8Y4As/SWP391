@@ -1,202 +1,398 @@
-<%-- 
-    Document   : CartPage
-    Created on : Apr 18, 2025, 11:47:31 PM
-    Author     : duongngo21
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Shopping Cart</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <style>
-            body {
-                font-family: 'Roboto', sans-serif;
-                background-color: #fff;
-                padding: 40px;
-            }
+<head>
+    <meta charset="UTF-8">
+    <title>Five Blooms | Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #d6336c;
+            --secondary-color: #f06595;
+            --accent-color: #ffdeeb;
+            --bg-color: #fff8f8;
+            --text-color: #444;
+            --light-text: #777;
+            --dark-bg: #343a40;
+        }
 
-            h2 {
-                font-weight: bold;
-                margin-bottom: 30px;
-            }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
 
-            .breadcrumb {
-                background: none;
-                padding: 0;
-                margin-bottom: 20px;
-            }
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 15px 0;
+        }
 
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .active {
+            color: var(--primary-color) !important;
+        }
+
+        .active::after {
+            width: 100% !important;
+        }
+
+        .breadcrumb {
+            background-color: transparent;
+            padding: 15px 0;
+            margin-bottom: 0;
+        }
+
+        .breadcrumb-item.active {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .cart-container {
+            max-width: 800px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .cart-header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary-color);
+            font-size: 2rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .item-info {
+            flex: 1;
+            padding-left: 20px;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .item-price {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            border: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .quantity {
+            font-size: 1.1rem;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            font-size: 0.9rem;
+            margin-left: 20px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .remove-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .cart-summary {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        .total-amount {
+            color: var(--primary-color);
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn-cancel {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-cancel:hover {
+            background-color: #ffeff5;
+        }
+
+        .btn-checkout {
+            background-color: var(--primary-color);
+            color: white;
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-checkout:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .footer {
+            margin-top: 50px;
+            padding: 20px 0;
+            text-align: center;
+            color: var(--light-text);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .cart-container {
+                margin: 20px;
+                padding: 15px;
+            }
+            
             .cart-item {
-                display: flex;
-                align-items: center;
-                margin-bottom: 20px;
-                border-bottom: 1px solid #eee;
-                padding-bottom: 20px;
+                flex-direction: column;
+                align-items: flex-start;
             }
-
-            .cart-item img {
-                width: 100px;
-                height: auto;
-                margin-right: 20px;
-                border-radius: 8%
+            
+            .quantity-selector {
+                margin-top: 10px;
+                margin-bottom: 10px;
             }
-
-            .cart-item .name {
-                flex-grow: 1;
-                font-weight: 500;
+            
+            .action-buttons {
+                flex-direction: column;
             }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <span class="logo-text">Five Blooms</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto nav-links">
+                    <li class="nav-item">
+                        <a class="nav-link" href="home.jsp">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="product">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="cart.jsp">Cart</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="AboutUsPage.jsp">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="contact.jsp">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-            .quantity-box {
-                display: flex;
-                align-items: center;
-                margin-right: 20px;
-            }
-
-            .quantity-box input {
-                width: 40px;
-                text-align: center;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                margin: 0 10px;
-            }
-
-            .price {
-                font-weight: bold;
-                margin-right: 20px;
-            }
-
-            .original-price {
-                text-decoration: line-through;
-                color: gray;
-                font-size: 0.9em;
-                margin-left: 5px;
-            }
-
-            .delete-btn {
-                color: gray;
-                cursor: pointer;
-                font-size: 18px;
-            }
-
-            .promo-box {
-                display: flex;
-                margin-top: 30px;
-            }
-
-            .promo-box input {
-                flex-grow: 1;
-                border-radius: 8px 0 0 8px;
-                border: 1px solid #ccc;
-                padding: 10px;
-            }
-
-            .promo-box button {
-                background-color: #d291bc;
-                border: none;
-                color: white;
-                padding: 10px 20px;
-                border-radius: 0 8px 8px 0;
-            }
-
-            .summary {
-                margin-top: 30px;
-                text-align: right;
-            }
-
-            .summary div {
-                margin-bottom: 8px;
-            }
-
-            .summary strong {
-                font-size: 18px;
-            }
-
-            .btn-checkout {
-                margin-top: 15px;
-                background-color: #d291bc;
-                color: white;
-                border: none;
-                padding: 12px 30px;
-                border-radius: 10px;
-            }
-
-            .btn-checkout:hover {
-                opacity: 0.9;
-            }
-
-            .text-muted small {
-                color: gray;
-            }
-        </style>
-    </head>
-    <body class="container">
-
-        <nav class="breadcrumb">
-            <a class="breadcrumb-item text-muted" href="#">Home</a>
-            <span class="breadcrumb-item active">Shopping Cart</span>
+    <!-- Breadcrumb -->
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="home.jsp">Home</a></li>
+                <li class="breadcrumb-item"><a href="product">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cart</li>
+            </ol>
         </nav>
+    </div>
 
-        <h2>Shopping cart</h2>
+    <!-- Cart Content -->
+   <div class="cart-container">
+        <h1 class="cart-header">Your Cart</h1>
+        
+        <c:choose>
+            <c:when test="${empty cartItems}">
+                <div class="text-center py-5">
+                    <h4>Your cart is empty</h4>
+                    <a href="productPage" class="btn" style="background-color: #ffeff5;">Continue Shopping</a>
+                </div>
+            </c:when>
+            <c:otherwise>
+                <c:forEach items="${cartItems}" var="item">
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <div class="item-name">${item.product.name}</div>
+                            <div class="item-price">Rp. ${item.product.price}/stalk</div>
+                        </div>
+                        <form action="cart" method="post" class="quantity-selector">
+                            <input type="hidden" name="action" value="update">
+                            <input type="hidden" name="productId" value="${item.product.id}">
+                            <button type="button" class="quantity-btn minus-btn">-</button>
+                            <span class="quantity">${item.quantity}</span>
+                            <button type="button" class="quantity-btn plus-btn">+</button>
+                        </form>
+                        <form action="cart" method="post">
+                            <input type="hidden" name="action" value="remove">
+                            <input type="hidden" name="productId" value="${item.product.id}">
+                            <button type="submit" class="remove-btn">Remove</button>
+                        </form>
+                    </div>
+                </c:forEach>
+                
+                <!-- Cart Summary -->
+                <div class="cart-summary">
+                    <div class="total-row">
+                        <span>Total</span>
+                        <span class="total-amount">Rp. <fmt:formatNumber value="${total}" type="number"/></span>
+                    </div>
+                    
+                    <div class="action-buttons">
+                        <a href="productPage" class="btn btn-cancel">Cancel</a>
+                        <a href="checkout" class="btn btn-checkout">Checkout</a>
+                    </div>
+                </div>
+            </c:otherwise>
+        </c:choose>
+    </div>
 
-        <!-- Cart Items -->
-        <div class="cart-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDXYdu979dBQl2T3vQW2LPnGn1lUyXn-MMOw&s" alt="Blossom Whisper">
-            <div class="name">Blossom Whisper</div>
-            <div class="quantity-box">
-                <button class="btn btn-outline-secondary btn-sm">−</button>
-                <input type="text" value="1" readonly>
-                <button class="btn btn-outline-secondary btn-sm">+</button>
-            </div>
-            <div class="price">110$</div>
-            <div class="delete-btn">🗑️</div>
-        </div>
+    
+    <div class="footer">
+        © Natasha Devi Pramudita | All Rights Reserved
+    </div>
 
-        <div class="cart-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDXYdu979dBQl2T3vQW2LPnGn1lUyXn-MMOw&s" alt="Golden Sunrise">
-            <div class="name">Golden Sunrise</div>
-            <div class="quantity-box">
-                <button class="btn btn-outline-secondary btn-sm">−</button>
-                <input type="text" value="1" readonly>
-                <button class="btn btn-outline-secondary btn-sm">+</button>
-            </div>
-            <div class="price">135$</div>
-            <div class="delete-btn">🗑️</div>
-        </div>
-
-        <div class="cart-item">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDXYdu979dBQl2T3vQW2LPnGn1lUyXn-MMOw&s" alt="Spring Symphony">
-            <div class="name">Spring Symphony</div>
-            <div class="quantity-box">
-                <button class="btn btn-outline-secondary btn-sm">−</button>
-                <input type="text" value="1" readonly>
-                <button class="btn btn-outline-secondary btn-sm">+</button>
-            </div>
-            <div class="price">
-                120$
-                <span class="original-price">140$</span>
-            </div>
-            <div class="delete-btn">🗑️</div>
-        </div>
-
-        <!-- Promo Code -->
-        <div class="promo-box">
-            <input type="text" placeholder="Enter promo code">
-            <button>Apply</button>
-        </div>
-
-        <!-- Summary -->
-        <div class="summary">
-            <div>Total amount <strong>385$</strong></div>
-            <div>Discount <strong>20$</strong></div>
-            <div><strong>Total payable 365$</strong></div>
-            <button class="btn-checkout">Place an order</button>
-        </div>
-
-    </body>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Quantity adjustment functionality
+        document.querySelectorAll('.minus-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('form');
+                const quantityElement = form.querySelector('.quantity');
+                let quantity = parseInt(quantityElement.textContent);
+                
+                if (quantity > 1) {
+                    quantity--;
+                    quantityElement.textContent = quantity;
+                    form.submit();
+                }
+            });
+        });
+        
+        document.querySelectorAll('.plus-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const form = this.closest('form');
+                const quantityElement = form.querySelector('.quantity');
+                let quantity = parseInt(quantityElement.textContent);
+                
+                quantity++;
+                quantityElement.textContent = quantity;
+                form.submit();
+            });
+        });
+        // Update total price
+        function updateTotal() {
+            // In a real implementation, you would calculate based on actual prices
+            // This is just a placeholder for the demo
+            let total = 0;
+            document.querySelectorAll('.cart-item').forEach(item => {
+                const priceText = item.querySelector('.item-price').textContent;
+                const price = parseFloat(priceText.replace(/[^0-9.]/g, ''));
+                const quantity = parseInt(item.querySelector('.quantity').textContent);
+                total += price * quantity;
+            });
+            
+            document.querySelector('.total-amount').textContent = 'Rp ' + total.toLocaleString('id-ID');
+        }
+    </script>
+</body>
 </html>
-
-
-

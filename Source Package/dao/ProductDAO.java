@@ -1,5 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+<<<<<<< HEAD
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
@@ -142,4 +143,81 @@ public List<Product> getFeaturedProducts(int limit) {
     }
     return list;
 }
+  
+  // Add a new Product
+public boolean addProduct(Product product) {
+    String query = "INSERT INTO Product (Name, Price, Image, CategoryId, Description, CreateAt, Quantity) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
+        
+        ps.setString(1, product.getName());
+        ps.setDouble(2, product.getPrice());
+        ps.setString(3, product.getImage());
+        ps.setInt(4, product.getCategoryId());
+        ps.setString(5, product.getDescription());
+        ps.setDate(6, new java.sql.Date(product.getCreateAt().getTime()));
+        ps.setInt(7, product.getQuantity());
+        
+        int affectedRows = ps.executeUpdate();
+        
+        if (affectedRows > 0) {
+            // Get the generated product ID for potential use with raw materials
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    product.setId(generatedKeys.getInt(1));
+                }
+            }
+            return true;
+        }
+        return false;
+    } catch (Exception e) {
+        System.out.println("Error in addProduct: " + e.getMessage());
+        return false;
+    }
 }
+
+// Update an existing Product
+public boolean updateProduct(Product product) {
+    String query = "UPDATE Product SET Name = ?, Price = ?, Image = ?, CategoryId = ?, Description = ?, Quantity = ? WHERE Id = ?";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ps.setString(1, product.getName());
+        ps.setDouble(2, product.getPrice());
+        ps.setString(3, product.getImage());
+        ps.setInt(4, product.getCategoryId());
+        ps.setString(5, product.getDescription());
+        ps.setInt(6, product.getQuantity());
+        ps.setInt(7, product.getId());
+        
+        int affectedRows = ps.executeUpdate();
+        return (affectedRows > 0);
+    } catch (Exception e) {
+        System.out.println("Error in updateProduct: " + e.getMessage());
+        return false;
+    }
+}
+
+  
+    public boolean deleteProduct(int productId) {
+        String query = "DELETE FROM products WHERE id = ?";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+
+            ps.setInt(1, productId);
+
+         
+            int rowsAffected = ps.executeUpdate();
+
+            return rowsAffected > 0;
+         } catch (Exception e) {
+            e.printStackTrace();
+           
+            return false;
+        } 
+    }
+}
+

@@ -3,6 +3,8 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+
+
             <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/controller/LoginController.java</file>
             <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/model/Customer.java</file>
             <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/dao/CustomerDAO.java</file>
@@ -12,6 +14,8 @@
             <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/model/Account.java</file>
             <file>file:/C:/Users/DELL/Desktop/SWP391/web/view/profile.jsp</file>
             <file>file:/C:/Users/DELL/Desktop/SWP391/web/WEB-INF/web.xml</file>
+
+
         </group>
     </open-files>
 </project-private>

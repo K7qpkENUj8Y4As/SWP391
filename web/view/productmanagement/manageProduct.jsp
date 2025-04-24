@@ -1,9 +1,8 @@
 <%-- 
-    Document   : listProduct
-    Created on : Apr 21, 2025, 2:52:00 PM
-    Author     : ADMIN
+    Document   : manageProduct
+    Created on : 23 thg 4, 2025, 09:01:03
+    Author     : Admin
 --%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>

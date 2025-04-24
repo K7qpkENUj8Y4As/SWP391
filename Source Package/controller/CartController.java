@@ -4,6 +4,7 @@
  */
 package controller;
 
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -11,77 +12,93 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import model.CartItem;
+import model.Product;
 
 /**
  *
  * @author duongngo21
  */
-@WebServlet(name = "CartController", urlPatterns = {"/cart"})
 public class CartController extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
+    private ProductDAO productDAO = new ProductDAO();
+    
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CartController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CartController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        
+        HttpSession session = request.getSession();
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
+        
+        if (cartItems == null) {
+            cartItems = new ArrayList<>();
+            session.setAttribute("cart", cartItems);
         }
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+        
+        // Calculate total
+        double total = cartItems.stream()
+            .mapToDouble(item -> item.getQuantity() * item.getProduct().getPrice())
+            .sum();
+        
+        request.setAttribute("cartItems", cartItems);
+        request.setAttribute("total", total);
         request.getRequestDispatcher("/view/common/CartPage.jsp").forward(request, response);
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        processRequest(request, response);
+        
+        String action = request.getParameter("action");
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        HttpSession session = request.getSession();
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
+        
+        if (cartItems == null) {
+            cartItems = new ArrayList<>();
+            session.setAttribute("cart", cartItems);
+        }
+        
+        switch (action) {
+            case "add":
+                addToCart(productId, cartItems);
+                break;
+            case "update":
+                int quantity = Integer.parseInt(request.getParameter("quantity"));
+                updateCart(productId, quantity, cartItems);
+                break;
+            case "remove":
+                removeFromCart(productId, cartItems);
+                break;
+        }
+        
+        request.getRequestDispatcher("/view/common/CartPage.jsp").forward(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+    
+    private void addToCart(int productId, List<CartItem> cartItems) {
+        Optional<CartItem> existingItem = cartItems.stream()
+            .filter(item -> item.getProduct().getId() == productId)
+            .findFirst();
+        
+        if (existingItem.isPresent()) {
+            existingItem.get().setQuantity(existingItem.get().getQuantity() + 1);
+        } else {
+            Product product = productDAO.getProductById(productId);
+            cartItems.add(new CartItem(product, 1));
+        }
+    }
+    
+    private void updateCart(int productId, int quantity, List<CartItem> cartItems) {
+        cartItems.stream()
+            .filter(item -> item.getProduct().getId() == productId)
+            .findFirst()
+            .ifPresent(item -> item.setQuantity(quantity));
+    }
+    
+    private void removeFromCart(int productId, List<CartItem> cartItems) {
+        cartItems.removeIf(item -> item.getProduct().getId() == productId);
+    }
 }
+
+
