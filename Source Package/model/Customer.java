@@ -1,16 +1,6 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
-
-/**
- *
- * @author trung
- */
-
-
 public class Customer {
+
     private int id;
     private String fullName;
     private String email;
@@ -20,7 +10,8 @@ public class Customer {
     private String avatar;
     private int accountId;
 
-    // Constructor, getters, setters
+    public Customer() {
+    }
 
     public Customer(int id, String fullName, String email, String phone, String address, String gender, String avatar, int accountId) {
         this.id = id;
@@ -33,9 +24,11 @@ public class Customer {
         this.accountId = accountId;
     }
 
-    public Customer() {
+    public Customer(int id, String fullName, String email, String phone, String address, String gender) {
     }
 
+    
+    // Getters và Setters
     public int getId() {
         return id;
     }
@@ -99,6 +92,4 @@ public class Customer {
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
-    
 }
-

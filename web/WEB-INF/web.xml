@@ -97,14 +97,13 @@
         <url-pattern>/updateRaw</url-pattern>
     </servlet-mapping>
     
-    <servlet>
-    <servlet-name>CustomerProfileController</servlet-name>
-    <servlet-class>controller.CustomerProfileController</servlet-class>
+ <servlet>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <servlet-class>controller.CustomerListServlet</servlet-class>
 </servlet>
-
 <servlet-mapping>
-    <servlet-name>CustomerProfileController</servlet-name>
-    <url-pattern>/profile</url-pattern>
+    <servlet-name>CustomerListServlet</servlet-name>
+    <url-pattern>/customers</url-pattern>
 </servlet-mapping>
     
 </web-app>

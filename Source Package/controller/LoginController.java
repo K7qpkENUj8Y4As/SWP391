@@ -5,6 +5,7 @@
 package controller;
 
 import dao.AccountDAO;
+import dao.CustomerDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import model.Account;
 import jakarta.servlet.http.HttpSession;
+import model.Customer;
 
 /**
  *
@@ -88,17 +90,19 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
                 // Đăng nhập thành công, lưu thông tin vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("account", account);
-
+CustomerDAO customerDAO = new CustomerDAO();
+Customer customer = customerDAO.getCustomerByAccountId(account.getAccountID());
+session.setAttribute("customer", customer);
                 String role = account.getRole();
                 switch (role) {
                     case "ADMIN":
                         response.sendRedirect("accountManagement");
                         break;
-                    case "USER":
-                        response.sendRedirect("home");
+                    case "Customer":
+                        response.sendRedirect("view/customer/EditProfile.jsp");
                         break;
                     default:
-                        response.sendRedirect("home");
+                        response.sendRedirect("view/customer/EditProfile.jsp");
                 }
             } else {
                 request.setAttribute("errorMessage", "Invalid username or password");
