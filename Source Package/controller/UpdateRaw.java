@@ -80,11 +80,9 @@ public class UpdateRaw extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-        int id = Integer.parseInt(request.getParameter("id"));
-           String name = request.getParameter("name");
         int quantity = Integer.parseInt(request.getParameter("quantity"));
-
+        int id = Integer.parseInt(request.getParameter("id"));
+         String name = request.getParameter("name");       
         // Handle image upload   
         String expriseDateStr = request.getParameter("expriseDate");
         Date expriseDate = null;

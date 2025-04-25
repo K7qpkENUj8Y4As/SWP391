@@ -3,19 +3,40 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-
-
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/controller/LoginController.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/model/Customer.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/dao/CustomerDAO.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/controller/CustomerProfileController.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/controller/ContactPageController.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/dao/AccountDAO.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/Source%20Package/model/Account.java</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/web/view/profile.jsp</file>
-            <file>file:/C:/Users/DELL/Desktop/SWP391/web/WEB-INF/web.xml</file>
-
-
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/ForgetPasswordController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/CustomerListServlet.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/customer/listCustomer.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/ProductRaw.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Product.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/ProductDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Raw.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/OrderItem.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Customer.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/RawDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/ProductController.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/CartPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/authentication/SignUpPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/ProductPageController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/FAQController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/UpdateProfileController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddToCart.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddStaff.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddRaw.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/UpdateRaw.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/rawmanagement/RawManagementPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/HomeController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/RawController.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/ProductPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/WEB-INF/web.xml</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/authentication/Login.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/LoginController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/AccountDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/CategoryDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/CommentDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/CustomerDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/HashUtilDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/OrderItemDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Account.java</file>
         </group>
     </open-files>
 </project-private>

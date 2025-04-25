@@ -250,7 +250,7 @@ public class ProductController extends HttpServlet {
                         List<Raw> rawList = rawDAO.getAllRaws();
                         for (Raw raw : rawList) {
                             boolean expired = rawDAO.isExpired(raw.getId());
-                            raw.setExpired(expired);
+                         //   raw.setExpired(expired);
                         }
                         request.setAttribute("raws", rawList);
 

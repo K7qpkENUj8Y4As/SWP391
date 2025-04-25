@@ -84,5 +84,5 @@ public class Raw implements Serializable {
     public String toString() {
         return "Raw{" + "id=" + id + ", name=" + name + ", quantity=" + quantity
                 + ", expriseDate=" + expriseDate + ", createAt=" + createAt + '}';
-    }
+    } 
 }

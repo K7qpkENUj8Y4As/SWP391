@@ -6,6 +6,7 @@ package controller;
 
 import dao.AccountDAO;
 import dao.CustomerDAO;
+import dao.HashUtilDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -62,11 +63,11 @@ public class LoginController extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-   @Override
-protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-    request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
-}
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
+    }
 
     /**
      * Handles the HTTP <code>POST</code> method.
@@ -81,21 +82,21 @@ protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-
+        HashUtilDAO hash=new HashUtilDAO();
         // Tạo đối tượng AccountDAO để kiểm tra đăng nhập
         AccountDAO accountDAO = new AccountDAO();
         try {
-            Account account = accountDAO.login(username, password);
-            if (account != null) {
+            Account account = accountDAO.login(username,hash.md5(password));
+            if (account != null && account.getStatus()==1) {
                 // Đăng nhập thành công, lưu thông tin vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("account", account);
-CustomerDAO customerDAO = new CustomerDAO();
-Customer customer = customerDAO.getCustomerByAccountId(account.getAccountID());
-session.setAttribute("customer", customer);
+                CustomerDAO customerDAO = new CustomerDAO();
+                Customer customer = customerDAO.getCustomerByAccountId(account.getAccountID());
+                session.setAttribute("customer", customer);
                 String role = account.getRole();
                 switch (role) {
-                    case "ADMIN":
+                    case "Admin":
                         response.sendRedirect("accountManagement");
                         break;
                     case "Customer":
@@ -104,7 +105,10 @@ session.setAttribute("customer", customer);
                     default:
                         response.sendRedirect("view/customer/EditProfile.jsp");
                 }
-            } else {
+            } else if(account != null&& account.getStatus()== 0) {
+                request.setAttribute("errorMessage", "Your account have been ban");
+                request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
+            }else {
                 request.setAttribute("errorMessage", "Invalid username or password");
                 request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
             }
@@ -125,7 +129,3 @@ session.setAttribute("customer", customer);
     }// </editor-fold>
 
 }
-
-
-
-

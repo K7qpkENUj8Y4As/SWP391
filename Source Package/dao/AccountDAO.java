@@ -19,7 +19,7 @@ import java.util.List;
 public class AccountDAO {
 
     public void insertAccount(Account acc) {
-    String sql = "INSERT INTO Account (username, password, role, status) VALUES (?, ?, ?, ?)";
+    String sql = "INSERT INTO Account (username, password, role, status,isCustomer) VALUES (?, ?, ?, ?,0)";
 
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -160,7 +160,7 @@ public class AccountDAO {
 
         try {
             conn = DBConnection.getConnection();
-            String sql = "SELECT * FROM Account WHERE username = ? AND password = ? AND status = 1";
+            String sql = "SELECT * FROM Account WHERE username = ? AND password = ?";
             stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
@@ -170,6 +170,7 @@ public class AccountDAO {
                 account = new Account();
                 account.setAccountID(rs.getInt("id"));
                 account.setUsername(rs.getString("username"));
+                account.setStatus(rs.getInt("status"));
                 account.setPassword(rs.getString("password"));
                 account.setRole(rs.getString("role"));
             }
@@ -181,20 +182,7 @@ public class AccountDAO {
 
         return account;
     }
-
- public static void main(String[] args) {
-       AccountDAO dao=new AccountDAO();
-       Account newStaff=new Account();
-       newStaff.setUsername("staff2");
-        newStaff.setPassword("123456789"); // Bạn nên hash mật khẩu ở đây nếu cần
-        newStaff.setRole("Staff");
-        newStaff.setStatus(1);
-        newStaff.setIsCustomer(0);
-       dao.insertAccount(newStaff);
-    }
-
-
-    public boolean isPhoneExists(String username) {
+ public boolean isPhoneExists(String username) {
        try (Connection conn = DBConnection.getConnection()) {
             String sql = "SELECT COUNT(*) FROM Account WHERE  username = ? ";
             PreparedStatement stmt = conn.prepareStatement(sql);
@@ -209,5 +197,10 @@ public class AccountDAO {
         return false;
     }
 
-
+ public static void main(String[] args) throws SQLException {
+       AccountDAO dao=new AccountDAO();
+       HashUtilDAO hash=new HashUtilDAO();
+      Account acc =dao.login("0323456789", hash.md5("123abcABC@"));
+      System.out.println(acc.getUsername());
+      System.out.println("what");}
 }

@@ -94,7 +94,7 @@
                                             <!-- Update -->
                                             <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                                     data-bs-target="#updateFlowerModal" data-id="${flower.id}" data-name="${flower.name}"
-                                                    data-quantity="${flower.quantity}" data-image="${flower.image}" data-exprise="${flower.expriseDate}"
+                                                    data-quantity="${flower.quantity}" data-exprise="${flower.expriseDate}"
                                                     data-import="${flower.createAt}"  title="Update">
                                                 <i class="fas fa-pen"></i>
                                             </button>
@@ -157,8 +157,8 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form action="updateRaw" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" id="updateFlowerId" />
+                        <form action="updateRaw" method="post" >
+                            <input type="hidden" name="id" id="updateFlowerId" value=""/>
                             <div class="mb-3">
                                 <label for="updateFlowerName" class="form-label">Flower Name</label>
                                 <input type="text" class="form-control" name="name" id="updateFlowerName" required />
@@ -166,11 +166,7 @@
                             <div class="mb-3">
                                 <label for="updateFlowerQuantity" class="form-label">Quantity</label>
                                 <input type="number" class="form-control" name="quantity" id="updateFlowerQuantity" required />
-                            </div>
-                            <div class="mb-3">
-                                <label for="updateFlowerImage" class="form-label">Flower Image</label>
-                                <input type="file" class="form-control" name="image" id="updateFlowerImage" />
-                            </div>
+                            </div>                   
                             <div class="mb-3">
                                 <label for="updateExpriseDate" class="form-label">Expired Date</label>
                                 <input type="date" class="form-control" name="expriseDate" id="updateExpriseDate" required />
@@ -194,8 +190,8 @@
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
-                                                function confirmDelete() {
-                                                    return confirm('Are you sure you want to delete this flower?');
+                                              function confirmDelete() {
+                                                 return confirm('Are you sure you want to delete this flower?');
                                                 }
                                                 $(document).ready(function () {
                                                     $('#updateFlowerModal').on('show.bs.modal', function (event) {
@@ -205,7 +201,6 @@
                                                         var id = button.data('id');
                                                         var name = button.data('name');
                                                         var quantity = button.data('quantity');
-                                                        var image = button.data('image');
                                                         var exprise = button.data('exprise');
                                                         var importDate = button.data('import');
 
