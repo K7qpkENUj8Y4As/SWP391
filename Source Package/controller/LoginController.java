@@ -82,12 +82,12 @@ public class LoginController extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        HashUtilDAO hash=new HashUtilDAO();
+        HashUtilDAO hash = new HashUtilDAO();
         // Tạo đối tượng AccountDAO để kiểm tra đăng nhập
         AccountDAO accountDAO = new AccountDAO();
         try {
-            Account account = accountDAO.login(username,hash.md5(password));
-            if (account != null && account.getStatus()==1) {
+            Account account = accountDAO.login(username, hash.md5(password));
+            if (account != null && account.getStatus() == 1) {
                 // Đăng nhập thành công, lưu thông tin vào session
                 HttpSession session = request.getSession();
                 session.setAttribute("account", account);
@@ -95,20 +95,30 @@ public class LoginController extends HttpServlet {
                 Customer customer = customerDAO.getCustomerByAccountId(account.getAccountID());
                 session.setAttribute("customer", customer);
                 String role = account.getRole();
+
+                session.setAttribute("role", account.getRole());
+                session.setAttribute("username", account.getUsername());
+
                 switch (role) {
+
                     case "Admin":
-                        response.sendRedirect("accountManagement");
+                    case "Manager":
+                    case "Seller":
+                        response.sendRedirect("dashboard");
                         break;
+
                     case "Customer":
-                        response.sendRedirect("view/customer/EditProfile.jsp");
+//                        response.sendRedirect("view/customer/EditProfile.jsp");
+                        response.sendRedirect("home");
                         break;
                     default:
-                        response.sendRedirect("view/customer/EditProfile.jsp");
+                        response.sendRedirect("home");
+//                        response.sendRedirect("view/customer/EditProfile.jsp");
                 }
-            } else if(account != null&& account.getStatus()== 0) {
+            } else if (account != null && account.getStatus() == 0) {
                 request.setAttribute("errorMessage", "Your account have been ban");
                 request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
-            }else {
+            } else {
                 request.setAttribute("errorMessage", "Invalid username or password");
                 request.getRequestDispatcher("/view/authentication/Login.jsp").forward(request, response);
             }
@@ -118,14 +128,8 @@ public class LoginController extends HttpServlet {
         }
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
+        return "LoginController handles login logic.";
+    }
 }

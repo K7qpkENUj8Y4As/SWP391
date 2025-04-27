@@ -7,6 +7,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%
+    String role = (String) session.getAttribute("role");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -34,6 +38,7 @@
     </style>
 </head>
 <body>
+       <% if ("Admin".equals(role) || "Manager".equals(role)) { %>
     <div class="container mt-4">
         <h2>${product != null && product.id > 0 ? 'Edit' : (isSimilar ? 'Create Similar' : 'Add')} Product</h2>
         
@@ -225,7 +230,7 @@
             </div>
         </form>
     </div>
-    
+      <% } %>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

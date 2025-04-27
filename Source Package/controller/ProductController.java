@@ -1,4 +1,3 @@
-
 package controller;
 
 import dao.CategoryDAO;
@@ -14,6 +13,7 @@ import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -49,6 +49,22 @@ public class ProductController extends HttpServlet {
 
         response.setContentType("text/html;charset=UTF-8");
 
+        HttpSession session = request.getSession(false);
+
+        // Kiểm tra session và quyền truy cập
+        if (session == null || session.getAttribute("account") == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
+        String role = (String) session.getAttribute("role");
+
+        // Kiểm tra nếu không phải Manager hoặc Seller thì chuyển hướng về home
+        if (!"Seller".equalsIgnoreCase(role) && !"Manager".equalsIgnoreCase(role)) {
+            response.sendRedirect("home");
+            return;
+        
+        }
         ProductDAO productDAO = new ProductDAO();
         CategoryDAO categoryDAO = new CategoryDAO(); // Assuming you have a CategoryDAO
         RawDAO rawDAO = new RawDAO();
@@ -67,7 +83,7 @@ public class ProductController extends HttpServlet {
         } else if (action.equals("detail")) {
             // Show product details
             int productId = Integer.parseInt(request.getParameter("id"));
-            
+
             Product product = productDAO.getProductById(productId);
 
             request.setAttribute("product", product);
@@ -250,7 +266,7 @@ public class ProductController extends HttpServlet {
                         List<Raw> rawList = rawDAO.getAllRaws();
                         for (Raw raw : rawList) {
                             boolean expired = rawDAO.isExpired(raw.getId());
-                         //   raw.setExpired(expired);
+                            //   raw.setExpired(expired);
                         }
                         request.setAttribute("raws", rawList);
 

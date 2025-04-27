@@ -6,6 +6,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<%
+    String role = (String) session.getAttribute("role");
+    String username = (String) session.getAttribute("username");
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,8 +38,12 @@
     </style>
 </head>
 <body>
+    <h2>Welcome, <%= username != null ? username : "Guest" %>!</h2>
+    <h3>Role: <%= role != null ? role : "Unknown" %></h3>
+    
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
+             <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
             <h2>Product Management</h2>
             <a href="${pageContext.request.contextPath}/product?action=showAddForm" class="btn btn-primary">
                 <i class="fas fa-plus"></i> Add New Product
@@ -135,6 +144,7 @@
                     </div>
                 </div>
             </c:forEach>
+                <% } %>
         </div>
     </div>
     
