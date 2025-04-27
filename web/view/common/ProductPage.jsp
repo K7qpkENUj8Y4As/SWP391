@@ -476,7 +476,7 @@
                                     <div class="product-category">${product.category}</div>
                                     <h3 class="product-title">${product.name}</h3>
                                     <div class="product-price">Rp ${product.price}/stalk</div>
-                                   <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
+                                    <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                 </div>
                             </div>
                         </div>
@@ -616,69 +616,71 @@
         <div class="footer">
             © Natasha Devi Pramudita | All Rights Reserved
         </div>
-         <!-- Bootstrap JS -->
+        <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
+        <script>
 
-$(document).ready(function() {
-    // Initialize cart count (you might want to load this from server)
-    updateCartCount();
-    
-    $('.add-to-cart-btn').click(function() {
-        const productId = $(this).data('product-id');
-        const button = $(this);
-        
-        button.prop('disabled', true);
-        button.html('<i class="fas fa-spinner fa-spin"></i> Adding...');
-        
-        $.ajax({
-            url: '${pageContext.request.contextPath}/AddToCart',
-            type: 'POST',
-            data: { 
-                productId: productId,
-                quantity: 1 // You might want to add quantity later
-            },
-            success: function(response) {
-                if(response.success) {
-                    button.html('<i class="fas fa-check"></i> Added!');
-                    updateCartCount(response.cartCount);
-                } else {
-                    button.html('Failed!');
-                    console.error(response.message);
+            $(document).ready(function () {
+                // Initialize cart count (you might want to load this from server)
+                updateCartCount();
+
+                $('.add-to-cart-btn').click(function () {
+                    const productId = $(this).data('product-id');
+                    const button = $(this);
+
+                    button.prop('disabled', true);
+                    button.html('<i class="fas fa-spinner fa-spin"></i> Adding...');
+
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/AddToCart',
+                        type: 'POST',
+                        data: {
+                            productId: productId,
+                            quantity: 1 // You might want to add quantity later
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                button.html('<i class="fas fa-check"></i> Added!');
+                                updateCartCount(response.cartCount);
+                            } else {
+                                button.html('Failed!');
+                                console.error(response.message);
+                            }
+
+                            // Reset button after 2 seconds
+                            setTimeout(function () {
+                                button.html('Add to Cart');
+                                button.prop('disabled', false);
+                            }, 2000);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Status:', status);
+                            console.error('Error:', error);
+                            console.error('Response:', xhr.responseText); // 👈 Add this line
+                            button.html('Error! Try Again');
+                            setTimeout(function () {
+                                button.html('Add to Cart');
+                                button.prop('disabled', false);
+                            }, 2000);
+                        }
+                    });
+                });
+
+                function updateCartCount(count) {
+                    if (count !== undefined) {
+                        $('#cart-count').text(count);
+                    } else {
+                        // Load current cart count from server
+                        $.get('getCartCount', function (response) {
+                            $('#cart-count').text(response.cartCount || 0);
+                        }).fail(function () {
+                            $('#cart-count').text(0);
+                        });
+                    }
                 }
-                
-                // Reset button after 2 seconds
-                setTimeout(function() {
-                    button.html('Add to Cart');
-                    button.prop('disabled', false);
-                }, 2000);
-            },
-            error: function(xhr, status, error) {
-                button.html('Error! Try Again');
-                console.error('Error adding to cart:', error);
-                setTimeout(function() {
-                    button.html('Add to Cart');
-                    button.prop('disabled', false);
-                }, 2000);
-            }
-        });
-    });
-    
-    function updateCartCount(count) {
-        if(count !== undefined) {
-            $('#cart-count').text(count);
-        } else {
-            // Load current cart count from server
-            $.get('getCartCount', function(response) {
-                $('#cart-count').text(response.cartCount || 0);
-            }).fail(function() {
-                $('#cart-count').text(0);
             });
-        }
-    }
-});
-</script>
-       
+        </script>
+
     </body>
 </html>
