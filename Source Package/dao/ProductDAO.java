@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-<<<<<<< HEAD
+
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
@@ -123,8 +123,10 @@ public class ProductDAO {
     } catch (Exception e) {
         e.printStackTrace();
     }
+
     return null;
 }
+
 
 public List<Product> getFeaturedProducts(int limit) {
     List<Product> products = new ArrayList<>();
@@ -267,6 +269,7 @@ public boolean updateProduct(Product product) {
             return false;
         } 
     }
+
 public int getGeneratedProductId() {
     String query = "SELECT SCOPE_IDENTITY()"; // Dành cho SQL Server để lấy ID cuối cùng được chèn
     int lastInsertedId = -1; // Khởi tạo giá trị mặc định nếu không tìm thấy ID
@@ -283,6 +286,12 @@ public int getGeneratedProductId() {
     }
     
     return lastInsertedId; // Trả về ID của sản phẩm vừa được chèn
+
+     public static void main(String[] args) {
+       ProductDAO dao=new ProductDAO();
+         System.out.println(dao.getProductById(1).getName());
+}
+
 }
 
 }

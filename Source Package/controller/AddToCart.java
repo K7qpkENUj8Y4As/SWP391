@@ -24,24 +24,46 @@ import model.Product;
  */
 @WebServlet(name = "AddToCart", urlPatterns = {"/AddToCart"})
 public class AddToCart extends HttpServlet {
- private ProductDAO productDAO = new ProductDAO();
+    private ProductDAO productDAO = new ProductDAO();
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
-        
-        try {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        try (PrintWriter out = response.getWriter()) {
             // Get product ID from request
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            
+            String productIdParam = request.getParameter("productId");
+
+            if (productIdParam == null || productIdParam.isEmpty()) {
+                out.write("{\"success\":false, \"message\":\"Product ID is missing\"}");
+                return;
+            }
+
+            int productId;
+            try {
+                productId = Integer.parseInt(productIdParam);
+            } catch (NumberFormatException e) {
+                out.write("{\"success\":false, \"message\":\"Invalid product ID\"}");
+                return;
+            }
+
+            Product product = productDAO.getProductById2(productId);
+            if (product == null) {
+                out.write("{\"success\":false, \"message\":\"Product not found\"}");
+                return;
+            }
+
             // Get or create cart in session
             HttpSession session = request.getSession();
             List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
-            
+
             if (cartItems == null) {
                 cartItems = new ArrayList<>();
                 session.setAttribute("cart", cartItems);
             }
-            
+
             // Check if product already exists in cart
             boolean productExists = false;
             for (CartItem item : cartItems) {
@@ -51,25 +73,15 @@ public class AddToCart extends HttpServlet {
                     break;
                 }
             }
-            
+
             // If product not in cart, add new item
             if (!productExists) {
-                Product product = productDAO.getProductById(productId);
-                if (product != null) {
-                    cartItems.add(new CartItem(product, 1));
-                } else {
-                    throw new ServletException("Product not found");
-                }
+                cartItems.add(new CartItem(product, 1));
             }
-            
-            // Return success response
-            response.setContentType("application/json");
-            response.getWriter().write("{\"status\":\"success\", \"cartCount\":" + cartItems.size() + "}");
-            
-        } catch (NumberFormatException e) {
-            response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid product ID");
-        } catch (Exception e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
+
+            // Success JSON
+            out.write("{\"success\":true, \"cartCount\":" + cartItems.size() + "}");
         }
     }
 }
+
