@@ -320,6 +320,38 @@
                     font-size: 1rem;
                 }
             }
+             /* Category Section Styling */
+            .category {
+                position: relative;
+            }
+
+            .carousel-control-prev,
+            .carousel-control-next {
+                width: 40px;
+                height: 40px;
+                background-color: var(--primary-color);
+                border-radius: 50%;
+                opacity: 1;
+                transform: translateY(-50%);
+            }
+
+            .carousel-control-prev {
+                left: -20px;
+            }
+
+            .carousel-control-next {
+                right: -20px;
+            }
+
+            @media (max-width: 768px) {
+                .carousel-control-prev {
+                    left: 0;
+                }
+
+                .carousel-control-next {
+                    right: 0;
+                }
+            }
         </style>
     </head>
     <body>
@@ -422,41 +454,6 @@
                 </button>
             </div>
         </section>
-
-        <style>
-            /* Category Section Styling */
-            .category {
-                position: relative;
-            }
-
-            .carousel-control-prev,
-            .carousel-control-next {
-                width: 40px;
-                height: 40px;
-                background-color: var(--primary-color);
-                border-radius: 50%;
-                opacity: 1;
-                transform: translateY(-50%);
-            }
-
-            .carousel-control-prev {
-                left: -20px;
-            }
-
-            .carousel-control-next {
-                right: -20px;
-            }
-
-            @media (max-width: 768px) {
-                .carousel-control-prev {
-                    left: 0;
-                }
-
-                .carousel-control-next {
-                    right: 0;
-                }
-            }
-        </style>
         <!-- Product Section -->
         <section class="product py-5 bg-white">
             <div class="container">
@@ -507,112 +504,6 @@
                 </nav>
             </div>
         </section>
-
-        <style>
-            /* Product Section Styling */
-            .product {
-                background-color: white;
-            }
-
-            .product-card {
-                background-color: white;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-                transition: all 0.3s ease;
-                height: 100%;
-                border: 1px solid #f0f0f0;
-            }
-
-            .product-card:hover {
-                transform: translateY(-5px);
-                box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            }
-
-            .product-image {
-                height: 250px;
-                overflow: hidden;
-            }
-
-            .product-img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                transition: transform 0.5s ease;
-            }
-
-            .product-card:hover .product-img {
-                transform: scale(1.05);
-            }
-
-            .product-info {
-                padding: 20px;
-            }
-
-            .product-category {
-                color: var(--light-text);
-                font-size: 0.9rem;
-                margin-bottom: 5px;
-            }
-
-            .product-title {
-                font-size: 1.2rem;
-                margin-bottom: 10px;
-                color: var(--text-color);
-                font-weight: 600;
-            }
-
-            .product-price {
-                color: var(--primary-color);
-                font-weight: bold;
-                font-size: 1.1rem;
-                margin-bottom: 15px;
-            }
-
-            .product-button {
-                background-color: var(--primary-color);
-                color: white;
-                border: none;
-                padding: 8px 15px;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background-color 0.3s;
-                font-weight: 500;
-                width: 100%;
-            }
-
-            .product-button:hover {
-                background-color: var(--secondary-color);
-            }
-
-            /* Pagination Styling */
-            .pagination .page-item.active .page-link {
-                background-color: var(--primary-color);
-                border-color: var(--primary-color);
-            }
-
-            .pagination .page-link {
-                color: var(--primary-color);
-            }
-
-            @media (max-width: 768px) {
-                .product-image {
-                    height: 180px;
-                }
-
-                .product-info {
-                    padding: 15px;
-                }
-
-                .product-title {
-                    font-size: 1rem;
-                }
-
-                .product-price {
-                    font-size: 1rem;
-                }
-            }
-        </style>
         <div class="footer">
             © Natasha Devi Pramudita | All Rights Reserved
         </div>
