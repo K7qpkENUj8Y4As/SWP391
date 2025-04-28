@@ -1,6 +1,6 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-<<<<<<< HEAD
+
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
@@ -11,7 +11,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import model.Product;
+import model.Raw;
 
 /**
  *
@@ -67,56 +69,65 @@ public class ProductDAO {
         return list;
     }
     
+//    public Product getProductById(int id) {
+//        String query = "SELECT * FROM Product WHERE Id = ?";
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(query)) {
+//            ps.setInt(1, id);
+//            ResultSet rs = ps.executeQuery();
+//            if (rs.next()) {
+//                Product product = new Product();
+//                product.setId(rs.getInt("Id"));
+//                product.setName(rs.getString("Name"));
+//                product.setPrice(rs.getDouble("Price"));
+//                product.setImage(rs.getString("Image"));
+//                product.setCategoryId(rs.getInt("CategoryId"));
+//                product.setDescription(rs.getString("Description"));
+//                product.setCreateAt(rs.getDate("CreateAt"));
+//                product.setQuantity(rs.getInt("Quantity"));
+//                
+//                RawDAO rawDAO = new RawDAO();
+//                product.setRawMaterials(rawDAO.getRawsByProductId(id));
+//                
+//                return product;
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
     public Product getProductById(int id) {
-        String query = "SELECT * FROM Product WHERE Id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("Id"));
-                product.setName(rs.getString("Name"));
-                product.setPrice(rs.getDouble("Price"));
-                product.setImage(rs.getString("Image"));
-                product.setCategoryId(rs.getInt("CategoryId"));
-                product.setDescription(rs.getString("Description"));
-                product.setCreateAt(rs.getDate("CreateAt"));
-                product.setQuantity(rs.getInt("Quantity"));
-                
-                RawDAO rawDAO = new RawDAO();
-                product.setRawMaterials(rawDAO.getRawsByProductId(id));
-                
-                return product;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+    String query = "SELECT * FROM Product WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Product product = new Product();
+            product.setId(rs.getInt("Id"));
+            product.setName(rs.getString("Name"));
+            product.setPrice(rs.getDouble("Price"));
+            product.setImage(rs.getString("Image"));
+            product.setCategoryId(rs.getInt("CategoryId"));
+            product.setDescription(rs.getString("Description"));
+            product.setCreateAt(rs.getDate("CreateAt"));
+            product.setQuantity(rs.getInt("Quantity"));
+
+            // Lấy thông tin nguyên liệu thô và số lượng từ ProductRaw
+            ProductRawDAO productRawDAO = new ProductRawDAO();
+            Map<Raw, Integer> productRawQuantities = productRawDAO.getRawQuantitiesForProduct(id);
+            product.setRawQuantities(productRawQuantities); // Giả sử bạn đã có phương thức để set nguyên liệu thô cho sản phẩm
+
+            return product;
         }
-        return null;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    public Product getProductById2(int id) {
-        String query = "SELECT * FROM Product WHERE Id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            ps.setInt(1, id);
-            ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
-                Product product = new Product();
-                product.setId(rs.getInt("Id"));
-                product.setName(rs.getString("Name"));
-                product.setPrice(rs.getDouble("Price"));
-                product.setImage(rs.getString("Image"));
-                product.setCategoryId(rs.getInt("CategoryId"));
-                product.setDescription(rs.getString("Description"));
-                product.setCreateAt(rs.getDate("CreateAt"));
-                product.setQuantity(rs.getInt("Quantity"));
-                return product;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
+    return null;
+}
+
+
 public List<Product> getFeaturedProducts(int limit) {
     List<Product> products = new ArrayList<>();
     String query = "SELECT * FROM Product ORDER BY Id DESC LIMIT ?"; // Lấy sản phẩm mới nhất
@@ -223,7 +234,23 @@ public boolean updateProduct(Product product) {
     }
 }
 
-  
+  public boolean updateQuantity(int productId, int addedQuantity) {
+    String query = "UPDATE Product SET Quantity = Quantity + ? WHERE Id = ?";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ps.setInt(1, addedQuantity);
+        ps.setInt(2, productId);
+        
+        int affectedRows = ps.executeUpdate();
+        return (affectedRows > 0);
+    } catch (Exception e) {
+        System.out.println("Error in updateQuantity: " + e.getMessage());
+        return false;
+    }
+}
+
     public boolean deleteProduct(int productId) {
         String query = "DELETE FROM products WHERE id = ?";
 
@@ -242,9 +269,29 @@ public boolean updateProduct(Product product) {
             return false;
         } 
     }
+
+public int getGeneratedProductId() {
+    String query = "SELECT SCOPE_IDENTITY()"; // Dành cho SQL Server để lấy ID cuối cùng được chèn
+    int lastInsertedId = -1; // Khởi tạo giá trị mặc định nếu không tìm thấy ID
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+        
+        if (rs.next()) {
+            lastInsertedId = rs.getInt(1);  // Lấy giá trị của ID mới được chèn
+            System.out.println("Last inserted ID: " + lastInsertedId);
+        }
+      } catch (Exception e) {
+            e.printStackTrace();
+    }
+    
+    return lastInsertedId; // Trả về ID của sản phẩm vừa được chèn
+
      public static void main(String[] args) {
        ProductDAO dao=new ProductDAO();
-         System.out.println(dao.getProductById2(1).getName());
-}
+         System.out.println(dao.getProductById(1).getName());
 }
 
+}
+
+}

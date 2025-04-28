@@ -3,7 +3,7 @@
     Created on : 23 thg 4, 2025, 09:01:03
     Author     : Admin
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%-- <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
@@ -38,8 +38,7 @@
     </style>
 </head>
 <body>
-    <h2>Welcome, <%= username != null ? username : "Guest" %>!</h2>
-    <h3>Role: <%= role != null ? role : "Unknown" %></h3>
+
     
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
@@ -111,6 +110,9 @@
                                 <a href="${pageContext.request.contextPath}/product?action=createSimilar&id=${product.id}" class="btn btn-success btn-sm">
                                     <i class="fas fa-clone"></i> Create Similar
                                 </a>
+                                     <td>
+            <button onclick="openPopup(${p.id})">Nhập thêm hàng</button>
+        </td>
                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal${product.id}">
                                     <i class="fas fa-trash"></i> Delete
                                 </button>
@@ -160,5 +162,173 @@
             }, 5000);
         });
     </script>
+    
+    <!-- Popup nhập thêm -->
+<div id="popup" style="display:none;">
+    <form action="product" method="post">
+        <input type="hidden" name="action" value="updateQuantity" />
+        <input type="hidden" id="productId" name="productId" />
+        <label>Nhập thêm số lượng:</label>
+        <input type="number" name="addedQuantity" required />
+        <button type="submit">Xác nhận</button>
+        <button type="button" onclick="closePopup()">Hủy</button>
+    </form>
+</div>
+
+<script>
+function openPopup(productId) {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('productId').value = productId;
+}
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+}
+
+</script>
+</body>
+</html>
+--%>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    String role = (String) session.getAttribute("role");
+    String username = (String) session.getAttribute("username");
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Product Management</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        #popup {
+            display: none;
+            position: fixed;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 20px;
+            border: 2px solid #ccc;
+            z-index: 9999;
+        }
+        .overlay {
+            display: none;
+            position: fixed;
+            left: 0; top: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9998;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-4">
+    <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
+        <h2>Product Management</h2>
+        <a href="${pageContext.request.contextPath}/product?action=showAddForm" class="btn btn-primary mb-3">
+            Thêm sản phẩm mới
+        </a>
+        
+        <!-- Bảng quản lý sản phẩm -->
+        <c:if test="${empty products}">
+            <div class="alert alert-info">Không có sản phẩm nào.</div>
+        </c:if>
+
+        <table class="table table-bordered table-hover">
+            <thead class="thead-light">
+                <tr>
+                    <th>Ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng tồn</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach items="${products}" var="product">
+                    <tr>
+                        <td><img src="${pageContext.request.contextPath}/${not empty product.image ? product.image : 'images/products/default-product.jpg'}" width="80" height="80" alt="${product.name}"/></td>
+                        <td>${product.name}</td>
+                        <td>$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                        <td>${product.quantity}</td>
+                       <td>
+    <a href="${pageContext.request.contextPath}/product?action=showEditForm&id=${product.id}" class="btn btn-warning btn-sm">Sửa</a>
+
+    <button type="button" class="btn btn-success btn-sm" onclick="openPopup(${product.id})">Nhập thêm hàng</button>
+
+    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal${product.id}">Xóa</button>
+</td>
+
+                    </tr>
+
+                    <!-- Modal xác nhận xóa -->
+                    <div class="modal fade" id="deleteModal${product.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel${product.id}" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Xác nhận xóa</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    Bạn có chắc muốn xóa sản phẩm "${product.name}" không?
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="${pageContext.request.contextPath}/product" method="post">
+                                        <input type="hidden" name="action" value="delete">
+                                        <input type="hidden" name="id" value="${product.id}">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                                        <button type="submit" class="btn btn-danger">Xóa</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </c:forEach>
+            </tbody>
+        </table>
+
+    <% } %>
+</div>
+
+<!-- Popup nhập thêm hàng -->
+<div class="overlay" id="overlay" onclick="closePopup()"></div>
+<div id="popup">
+    <form action="product" method="post">
+        <input type="hidden" name="action" value="updateQuantity" />
+        <input type="hidden" id="productId" name="productId" />
+        <div class="form-group">
+            <label>Nhập thêm số lượng:</label>
+            <input type="number" name="addedQuantity" class="form-control" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Xác nhận</button>
+        <button type="button" class="btn btn-secondary" onclick="closePopup()">Hủy</button>
+    </form>
+</div>
+
+<!-- Bootstrap scripts -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+<script>
+function openPopup(productId) {
+    document.getElementById('popup').style.display = 'block';
+    document.getElementById('overlay').style.display = 'block';
+    document.getElementById('productId').value = productId;
+}
+function closePopup() {
+    document.getElementById('popup').style.display = 'none';
+    document.getElementById('overlay').style.display = 'none';
+}
+</script>
+
 </body>
 </html>

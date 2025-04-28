@@ -16,6 +16,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 
@@ -220,31 +221,7 @@ public class Product implements Serializable {
     }
     
     
-    public Product createSimilarProduct() {
-        Product newProduct = new Product();
-        newProduct.setName(this.name);
-        newProduct.setPrice(this.price);
-        newProduct.setImage(this.image);
-        newProduct.setCategoryId(this.categoryId);
-        newProduct.setCategory(this.category);
-        newProduct.setDescription(this.description);
-        newProduct.setCreateAt(new Date()); // Ngày tạo mới
-        newProduct.setQuantity(0); // Số lượng ban đầu là 0
-        
-        //copy list ProductRaw
-        if (this.productRaws != null) {
-            for (ProductRaw pr : this.productRaws) {
-                ProductRaw newPR = new ProductRaw();
-                newPR.setRaw(pr.getRaw());
-                newPR.setRawId(pr.getRawId());
-                newPR.setQuantity(pr.getQuantity());
-                // ProductId updtae after create product
-                newProduct.addProductRaw(newPR);
-            }
-        }
-        
-        return newProduct;
-    }
+  
     
     @Override
     public String toString() {
@@ -254,6 +231,14 @@ public class Product implements Serializable {
     }
 
     public void setRawMaterials(List<Raw> rawsByProductId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setUpdateAt(Date date) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void setRawQuantities(Map<Raw, Integer> productRawQuantities) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

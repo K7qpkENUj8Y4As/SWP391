@@ -43,6 +43,14 @@ public class ProductController extends HttpServlet {
     private OrderItemDAO orderItemDAO;
     private ProductRawDAO productRawDAO;
 
+    
+    
+    @Override
+    public void init() throws ServletException {
+        // Khởi tạo productDAO
+        this.productDAO = new ProductDAO();
+    }
+    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -65,6 +73,7 @@ public class ProductController extends HttpServlet {
             return;
         
         }
+        
         ProductDAO productDAO = new ProductDAO();
         CategoryDAO categoryDAO = new CategoryDAO(); // Assuming you have a CategoryDAO
         RawDAO rawDAO = new RawDAO();
@@ -80,14 +89,38 @@ public class ProductController extends HttpServlet {
 
             request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
 
-        } else if (action.equals("detail")) {
-            // Show product details
-            int productId = Integer.parseInt(request.getParameter("id"));
+            } else if (action.equals("edit")) {
+            // Lấy productId từ request
+            String productId = request.getParameter("productId");
 
-            Product product = productDAO.getProductById(productId);
+            // Kiểm tra productId và lấy thông tin sản phẩm từ cơ sở dữ liệu
+            if (productId != null && !productId.isEmpty()) {
+                // Lấy thông tin sản phẩm từ DAO
+                Product product = productDAO.getProductById(Integer.parseInt(productId));
 
-            request.setAttribute("product", product);
-            request.getRequestDispatcher("/view/productmanagement/detailProduct.jsp").forward(request, response);
+                // Kiểm tra nếu sản phẩm tồn tại, nếu không thì chuyển hướng về danh sách sản phẩm
+                if (product != null) {
+                    request.setAttribute("product", product);
+                    List<Category> categories = categoryDAO.getAllCategories();
+                    request.setAttribute("categories", categories);
+
+                    // Forward tới trang chỉnh sửa sản phẩm
+                    request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
+                } else {
+                    response.sendRedirect("product?action=list");
+                }
+            } else {
+                response.sendRedirect("product?action=list");
+            }
+        
+//        } else if (action.equals("detail")) {
+//            // Show product details
+//            int productId = Integer.parseInt(request.getParameter("id"));
+//
+//            Product product = productDAO.getProductById(productId);
+//
+//            request.setAttribute("product", product);
+//            request.getRequestDispatcher("/view/productmanagement/detailProduct.jsp").forward(request, response);
 
         } else if (action.equals("search")) {
             // Search products by name
@@ -127,39 +160,11 @@ public class ProductController extends HttpServlet {
             request.setAttribute("rawMaterials", rawMaterials);
             request.setAttribute("productRawQuantities", productRawQuantities);
             request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
+   
+            
 
-        } else if (action.equals("createSimilar")) {
-            // Create a similar product based on an existing one
-            int originalProductId = Integer.parseInt(request.getParameter("id"));
-            Product originalProduct = productDAO.getProductById(originalProductId);
-
-            // Get categories and raw materials for dropdowns
-            List<Category> categories = categoryDAO.getAllCategories();
-            List<Raw> allRawMaterials = rawDAO.getAllRaws();
-
-            // Get raw materials used in this product with quantities
-            ProductRawDAO productRawDAO = new ProductRawDAO();
-            Map<Raw, Integer> productRawQuantities = productRawDAO.getRawQuantitiesForProduct(originalProductId);
-
-            // Set original product data as template for the new product
-            // Note: We're setting ID to 0 to indicate this is a new product
-            Product templateProduct = new Product();
-            templateProduct.setId(0); // New product
-            templateProduct.setName(originalProduct.getName() + " (Copy)");
-            templateProduct.setPrice(originalProduct.getPrice());
-            templateProduct.setImage(originalProduct.getImage()); // Will be replaced if a new image is uploaded
-            templateProduct.setCategoryId(originalProduct.getCategoryId());
-            templateProduct.setDescription(originalProduct.getDescription());
-            templateProduct.setQuantity(0); // Start with 0 quantity for new product
-
-            request.setAttribute("product", templateProduct);
-            request.setAttribute("categories", categories);
-            request.setAttribute("rawMaterials", allRawMaterials);
-            request.setAttribute("productRawQuantities", productRawQuantities);
-            request.setAttribute("isSimilar", true); // Flag to indicate this is a "create similar" action
-            request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
-        }
-    }
+      }
+}
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -280,58 +285,36 @@ public class ProductController extends HttpServlet {
                     }
                 }
 
-                // Save product to get its ID
-//                if (productDAO.addProduct(product)) {
-//                    // Add raw materials to the product
-//                    for (Map.Entry<Integer, Integer> entry : rawQuantities.entrySet()) {
-//                        int rawId = entry.getKey();
-//                        int rawQuantity = entry.getValue();
-//                        
-//                        if (rawQuantity > 0) {
-//                            productRawDAO.addProductRaw(product.getId(), rawId, rawQuantity);
-//                        }
-//                    }
-//                    
-//                    // Redirect to product list with success message
-//                    response.sendRedirect(request.getContextPath() + "/product?success=Product added successfully");
-//                } else {
-//                    // If failed to save product
-//                    request.setAttribute("error", "Failed to add product. Please try again.");
-//                    request.setAttribute("product", product);
-//                    request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
-//                }
-//                
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                request.setAttribute("error", "An error occurred: " + e.getMessage());
-//                request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
-//            }
-// Lưu sản phẩm vào cơ sở dữ liệu
+
                 if (productDAO.addProduct(product)) {
+                    // Đảm bảo lấy được productId đã được sinh ra
+               int productId = productDAO.getGeneratedProductId();
+    System.out.println("Generated Product ID: " + productId);
+
+               
+            
+               
                     // Thêm nguyên liệu thô vào sản phẩm
                     for (Map.Entry<Integer, Integer> entry : rawQuantities.entrySet()) {
+                          System.out.println("Raw ID: " + entry.getKey() + ", Quantity: " + entry.getValue());
+
                         int rawId = entry.getKey();
                         int totalRawUsed = entry.getValue();
-                        //       int rawQuantity = entry.getValue();
+                   
+        boolean productRawAdded = productRawDAO.addProductRaw(productId, rawId, totalRawUsed / quantity); // Chỉ lưu định mức 1 sản phẩm
 
-//        if (rawQuantity > 0) {
-//            productRawDAO.addProductRaw(product.getId(), rawId, rawQuantity);
-//
-//            // Cập nhật số lượng nguyên liệu thô sau khi sử dụng
-//            boolean updated = rawDAO.updateRawQuantity(rawId, rawQuantity); // Cập nhật số lượng raw
-//            if (!updated) {
-//                // Nếu không thể cập nhật số lượng raw, bạn có thể hiển thị thông báo lỗi hoặc thực hiện hành động khác
-//                request.setAttribute("error", "Cập nhật số lượng nguyên liệu thô không thành công.");
-//                request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
-//                return;
-//            }
-//        }
-//    }
                         // Add product-raw relationship
                         productRawDAO.addProductRaw(product.getId(), rawId, totalRawUsed / quantity); // chỉ lưu định mức 1 sản phẩm
 
                         // Trừ nguyên liệu thật trong kho
                         rawDAO.updateRawQuantity(rawId, totalRawUsed);
+                       if (!productRawAdded) {
+            // Nếu không thể thêm vào ProductRaw, xử lý lỗi
+            request.setAttribute("error", "Failed to associate product with raw material.");
+            request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
+            return;
+        }
+                    
                     }
                     // Chuyển hướng đến danh sách sản phẩm với thông báo thành công
                     response.sendRedirect(request.getContextPath() + "/product?success=Product added successfully");
@@ -348,26 +331,28 @@ public class ProductController extends HttpServlet {
                 request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
             }
 
-        } else if (action.equals("edit")) {
-            try {
-                // Extract product information
-                int productId = Integer.parseInt(request.getParameter("id"));
+            
+             } else if (action.equals("edit")) {
+        try {
+            // Extract product ID and fetch existing product
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            Product existingProduct = productDAO.getProductById(productId);
+
+            if (existingProduct != null) {
+                // Extract updated product information
                 String name = request.getParameter("name");
                 double price = Double.parseDouble(request.getParameter("price"));
                 int categoryId = Integer.parseInt(request.getParameter("categoryId"));
                 String description = request.getParameter("description");
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
 
-                // Get the current product to get its current image path
-                Product currentProduct = productDAO.getProductById(productId);
-                String imagePath = currentProduct.getImage(); // Keep current image by default
-
-                // Handle image upload if a new image is provided
+                // Handle image upload (if new image provided)
+                String imagePath = existingProduct.getImage(); // Keep the existing image by default
                 Part filePart = request.getPart("image");
                 if (filePart != null && filePart.getSize() > 0) {
                     String fileName = getFileName(filePart);
                     if (fileName != null && !fileName.isEmpty()) {
-                        // Generate unique file name
+                        // Generate unique file name to prevent overwriting
                         String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
                         String uploadPath = getServletContext().getRealPath("/images/products/");
 
@@ -384,15 +369,28 @@ public class ProductController extends HttpServlet {
                 }
 
                 // Update product object
-                Product product = new Product();
-                product.setId(productId);
-                product.setName(name);
-                product.setPrice(price);
-                product.setImage(imagePath);
-                product.setCategoryId(categoryId);
-                product.setDescription(description);
-                product.setQuantity(quantity);
-                product.setCreateAt(currentProduct.getCreateAt()); // Keep the original creation date
+                existingProduct.setName(name);
+                existingProduct.setPrice(price);
+                existingProduct.setImage(imagePath);
+                existingProduct.setCategoryId(categoryId);
+                existingProduct.setDescription(description);
+                existingProduct.setQuantity(quantity);
+                existingProduct.setUpdateAt(new Date()); // Set update timestamp
+
+                
+//                // Create product object
+//            Product product = new Product();
+//            product.setId(productId);
+//            product.setName(name);
+//            product.setPrice(price);
+//            product.setImage(imagePath);
+//            product.setCategoryId(categoryId);
+//            product.setDescription(description);
+//            product.setCreateAt(new Date());
+//            product.setQuantity(quantity);
+
+            // Update product in the database
+          //  boolean productUpdated = productDAO.updateProduct(product);
 
                 // Get raw materials from form
                 Map<Integer, Integer> rawQuantities = new HashMap<>();
@@ -406,14 +404,12 @@ public class ProductController extends HttpServlet {
 
                     for (int i = 0; i < rawIds.length; i++) {
                         int rawId = Integer.parseInt(rawIds[i]);
-                        int rawQuantity = Integer.parseInt(rawQuantityArr[i]);
+                        int rawQuantityPerProduct = Integer.parseInt(rawQuantityArr[i]);
 
-                        // Skip if quantity is 0
-                        if (rawQuantity <= 0) {
+                        if (rawQuantityPerProduct <= 0) {
                             continue;
                         }
-
-                        // Check if the raw material exists
+                        // Check if the raw material exists and has enough quantity
                         Raw raw = rawDAO.getRawById(rawId);
                         if (raw == null) {
                             insufficientRaw = true;
@@ -428,181 +424,88 @@ public class ProductController extends HttpServlet {
                             break;
                         }
 
-                        // Add to map - for updates we don't check quantity as we're defining the formula
-                        rawQuantities.put(rawId, rawQuantity);
+                        int totalRawUsed = rawQuantityPerProduct * quantity;
+
+                        if (!rawDAO.hasEnoughQuantity(rawId, totalRawUsed)) {
+                            insufficientRaw = true;
+                            errorMessage = "Insufficient quantity of raw material '" + raw.getName() + "'. Required: " + totalRawUsed + ", Available: " + raw.getQuantity();
+                            break;
+                        }
+
+                        rawQuantities.put(rawId, totalRawUsed);
                     }
 
                     if (insufficientRaw) {
                         // Set error message and forward back to the form
                         request.setAttribute("error", errorMessage);
-                        request.setAttribute("product", product);
+                        request.setAttribute("product", existingProduct);
+
+                        // Load raw materials and categories again
+                        loadCategoriesAndRaws(request);
+
                         request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
                         return;
                     }
                 }
 
-                // Update product
-                if (productDAO.updateProduct(product)) {
-                    // Get current raw materials for this product
-//                    ProductRawDAO productRawDAO = new ProductRawDAO();
-                    Map<Raw, Integer> currentRawQuantities = productRawDAO.getRawQuantitiesForProduct(productId);
-
-                    // Remove all current raw materials from product
-                    for (Map.Entry<Raw, Integer> entry : currentRawQuantities.entrySet()) {
-                        productRawDAO.removeProductRaw(productId, entry.getKey().getId());
-                    }
-
-                    // Add new raw materials to the product
+                // Update product in the database
+                if (productDAO.updateProduct(existingProduct)) {
+                    // Update raw materials relationship
                     for (Map.Entry<Integer, Integer> entry : rawQuantities.entrySet()) {
                         int rawId = entry.getKey();
-                        int rawQuantity = entry.getValue();
+                        int totalRawUsed = entry.getValue();
 
-                        if (rawQuantity > 0) {
-                            productRawDAO.addProductRaw(productId, rawId, rawQuantity);
-                        }
+                        // Update product-raw relationship
+                        productRawDAO.updateProductRaw(existingProduct.getId(), rawId, totalRawUsed / quantity); // Update with 1 product's ratio
+
+                        // Update raw material quantity in inventory
+                        rawDAO.updateRawQuantity(rawId, totalRawUsed);
                     }
 
-                    // Redirect to product list with success message
+                    // Redirect to the list page with success message
                     response.sendRedirect(request.getContextPath() + "/product?success=Product updated successfully");
                 } else {
-                    // If failed to update product
+                    // If update failed
                     request.setAttribute("error", "Failed to update product. Please try again.");
-                    request.setAttribute("product", product);
+                    request.setAttribute("product", existingProduct);
                     request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("error", "An error occurred: " + e.getMessage());
+            } else {
+                // If product not found
+                request.setAttribute("error", "Product not found.");
                 request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
             }
 
-//        } else if (action.equals("delete")) {
-//            try {
-//                int productId = Integer.parseInt(request.getParameter("id"));
-//
-//                // First remove all raw materials associated with this product
-          ////                ProductRawDAO productRawDAO = new ProductRawDAO();
-//                Map<Raw, Integer> productRawQuantities = productRawDAO.getRawQuantitiesForProduct(productId);
-//                for (Map.Entry<Raw, Integer> entry : productRawQuantities.entrySet()) {
-//                    productRawDAO.removeProductRaw(productId, entry.getKey().getId());
-//                }
-//
-//                // Then delete the product itself
-//                // Assuming you have a deleteProduct method in ProductDAO
-//                if (productDAO.deleteProduct(productId)) {
-//                    response.sendRedirect(request.getContextPath() + "/product?success=Product deleted successfully");
-//                } else {
-//                    response.sendRedirect(request.getContextPath() + "/product?error=Failed to delete product");
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//                response.sendRedirect(request.getContextPath() + "/product?error=An error occurred: " + e.getMessage());
-//            }
-//        } 
-
-
-
-//} else if (action.equals("delete")) {
-//    try {
-//        int productId = Integer.parseInt(request.getParameter("id"));
-//
-//        // Sử dụng biến productRawDAO đã được định nghĩa từ trước
-//        Map<Raw, Integer> productRawQuantities = productRawDAO.getRawQuantitiesForProduct(productId);
-//
-//        for (Map.Entry<Raw, Integer> entry : productRawQuantities.entrySet()) {
-//            productRawDAO.removeProductRaw(productId, entry.getKey().getId());
-//        }
-//
-//        // Chỉ khởi tạo ProductDAO nếu nó chưa được định nghĩa từ trước
-//        if (productDAO == null) {
-//           productDAO = new ProductDAO();
-//        }
-//
-//        if (productDAO.deleteProduct(productId)) {
-//            response.sendRedirect(request.getContextPath() + "/product?success=Product deleted successfully");
-//        } else {
-//            response.sendRedirect(request.getContextPath() + "/product?error=Failed to delete product");
-//        }
-//    } catch (Exception e) {
-//        e.printStackTrace();
-//        response.sendRedirect(request.getContextPath() + "/product?error=An error occurred: " + e.getMessage());
-//    }
-//}
-
-
+        } catch (Exception e) {
+            e.printStackTrace();
+            request.setAttribute("error", "An error occurred: " + e.getMessage());
+            request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
+        }
     
-} else if (action.equals("delete")) {
-            try {
-                int productId = Integer.parseInt(request.getParameter("id"));
+            
+        }
+    if ("updateQuantity".equals(action)) {
+            updateQuantity(request, response);
+        }
+    }
 
-                // Xóa comment trước (nếu có FK từ Comment → Product)
-                if (commentDAO == null) {
-                    commentDAO = new CommentDAO();
-                }
-                commentDAO.deleteCommentsByProductId(productId);
+    private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        try {
+            int productId = Integer.parseInt(request.getParameter("productId"));
+            int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
 
-                // Xóa OrderItem trước (nếu có FK từ OrderItem → Product)
-                if (orderItemDAO == null) {
-                    orderItemDAO = new OrderItemDAO();
-                }
-                orderItemDAO.deleteOrderItemsByProductId(productId);
-
-                // Xóa ProductRaw (nếu có FK từ ProductRaw → Product)
-                if (productRawDAO == null) {
-                    productRawDAO = new ProductRawDAO();
-                }
-                Map<Raw, Integer> productRawQuantities = productRawDAO.getRawQuantitiesForProduct(productId);
-                for (Map.Entry<Raw, Integer> entry : productRawQuantities.entrySet()) {
-                    productRawDAO.removeProductRaw(productId, entry.getKey().getId());
-                }
-
-                // Cuối cùng, xóa Product
-                if (productDAO == null) {
-                    productDAO = new ProductDAO();
-                }
-
-                if (productDAO.deleteProduct(productId)) {
-                    response.sendRedirect(request.getContextPath() + "/product?success=Product deleted successfully");
-                } else {
-                    response.sendRedirect(request.getContextPath() + "/product?error=Failed to delete product");
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                response.sendRedirect(request.getContextPath() + "/product?error=An error occurred: " + e.getMessage());
+            boolean success = productDAO.updateQuantity(productId, addedQuantity);
+ if (success) {
+                response.sendRedirect("product"); // reload lại list
+            } else {
+                request.setAttribute("error", "Cập nhật số lượng thất bại");
+                request.getRequestDispatcher("listProduct.jsp").forward(request, response);
             }
-        } else if (action.equals("produce")) {
-            try {
-                int productId = Integer.parseInt(request.getParameter("id"));
-                int productionQuantity = Integer.parseInt(request.getParameter("productionQuantity"));
-
-//                ProductRawDAO productRawDAO = new ProductRawDAO();
-                // Check if we can produce this quantity
-                if (!productRawDAO.canMakeProduct(productId, productionQuantity)) {
-                    // Get the maximum possible quantity
-                    int maxPossible = productRawDAO.getMaxProductQuantityPossible(productId);
-
-                    request.setAttribute("error", "Cannot produce " + productionQuantity
-                            + " units. Maximum possible with current raw materials: " + maxPossible);
-                    request.getRequestDispatcher("/view/productmanagement/produceProduct.jsp").forward(request, response);
-                    return;
-                }
-
-                // Process production
-                if (productRawDAO.processProduction(productId, productionQuantity)) {
-                    response.sendRedirect(request.getContextPath() + "/product?success=Successfully produced "
-                            + productionQuantity + " units of product");
-                } else {
-                    request.setAttribute("error", "Failed to process production. Please try again.");
-                    request.getRequestDispatcher("/view/productmanagement/produceProduct.jsp").forward(request, response);
-                }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                request.setAttribute("error", "An error occurred: " + e.getMessage());
-                request.getRequestDispatcher("/view/productmanagement/produceProduct.jsp").forward(request, response);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.getWriter().write("Error: " + e.getMessage());
         }
     }
 
@@ -617,4 +520,16 @@ public class ProductController extends HttpServlet {
         }
         return "";
     }
+
+private void loadCategoriesAndRaws(HttpServletRequest request) {
+    // Load all categories
+    CategoryDAO categoryDAO = new CategoryDAO();
+    List<Category> categoryList = categoryDAO.getAllCategories();
+    request.setAttribute("categories", categoryList);
+
+    // Load all raw materials
+    RawDAO rawDAO = new RawDAO();
+    List<Raw> rawList = rawDAO.getAllRaws();
+    request.setAttribute("raws", rawList);
+}
 }

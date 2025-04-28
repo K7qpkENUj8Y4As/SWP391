@@ -23,23 +23,26 @@ import model.Raw;
 public class ProductRawDAO {
     // Link a Product with a Raw material and specify the quantity used
     public boolean addProductRaw(int productId, int rawId, int quantityUsed) {
-        String query = "INSERT INTO ProductRaw (ProductId, RawId, QuantityUsed) VALUES (?, ?, ?)";
+    String query = "INSERT INTO ProductRaw (ProductId, RawId, Quantity) VALUES (?, ?, ?)";
+    
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
         
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setInt(1, productId);
-            ps.setInt(2, rawId);
-            ps.setInt(3, quantityUsed);
-            
-            int affectedRows = ps.executeUpdate();
-            return (affectedRows > 0);
-            
-            } catch (SQLException e) {
-            System.out.println("Error in addProductRaw: " + e.getMessage());
-            return false;
-        }
+        ps.setInt(1, productId);     // gán ProductId
+        ps.setInt(2, rawId);          // gán RawId
+        ps.setInt(3, quantityUsed);   // gán Quantity
+        
+        int affectedRows = ps.executeUpdate();
+        return (affectedRows > 0);    // nếu thêm được ít nhất 1 dòng, trả về true
+        
+    } catch (SQLException e) {
+        System.out.println("Error in addProductRaw: " + e.getMessage());
+            e.printStackTrace();
+
+        return false;
     }
+}
+
     
     // Update the quantity of a Raw material used in a Product
     public boolean updateProductRawQuantity(int productId, int rawId, int quantityUsed) {
@@ -79,37 +82,59 @@ public class ProductRawDAO {
     }
     
     // Get all Raw materials used in a Product with their quantities
+//    public Map<Raw, Integer> getRawQuantitiesForProduct(int productId) {
+//        Map<Raw, Integer> rawQuantities = new HashMap<>();
+//        String query = "SELECT r.*, pr.QuantityUsed FROM Raw r " +
+//                       "JOIN ProductRaw pr ON r.Id = pr.RawId " +
+//                       "WHERE pr.ProductId = ?";
+//        
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(query)) {
+//            
+//            ps.setInt(1, productId);
+//            ResultSet rs = ps.executeQuery();
+//            
+//            while (rs.next()) {
+//                Raw raw = new Raw();
+//                raw.setId(rs.getInt("Id"));
+//                raw.setName(rs.getString("Name"));
+//                raw.setQuantity(rs.getInt("quantity"));
+//                raw.setImage(rs.getString("Image"));
+//                raw.setExpriseDate(rs.getTimestamp("ExpriseDate"));
+//                raw.setCreateAt(rs.getTimestamp("CreateAt"));
+//                
+//                int quantityUsed = rs.getInt("QuantityUsed");
+//                rawQuantities.put(raw, quantityUsed);
+//            }
+//        } catch (SQLException e) {
+//            System.out.println("Error in getRawQuantitiesForProduct: " + e.getMessage());
+//        }
+//        
+//        return rawQuantities;
+//    }
     public Map<Raw, Integer> getRawQuantitiesForProduct(int productId) {
-        Map<Raw, Integer> rawQuantities = new HashMap<>();
-        String query = "SELECT r.*, pr.QuantityUsed FROM Raw r " +
-                       "JOIN ProductRaw pr ON r.Id = pr.RawId " +
-                       "WHERE pr.ProductId = ?";
-        
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
-            
-            ps.setInt(1, productId);
-            ResultSet rs = ps.executeQuery();
-            
-            while (rs.next()) {
-                Raw raw = new Raw();
-                raw.setId(rs.getInt("Id"));
-                raw.setName(rs.getString("Name"));
-                raw.setQuantity(rs.getInt("quantity"));
-                raw.setImage(rs.getString("Image"));
-                raw.setExpriseDate(rs.getTimestamp("ExpriseDate"));
-                raw.setCreateAt(rs.getTimestamp("CreateAt"));
-                
-                int quantityUsed = rs.getInt("QuantityUsed");
-                rawQuantities.put(raw, quantityUsed);
-            }
-        } catch (SQLException e) {
-            System.out.println("Error in getRawQuantitiesForProduct: " + e.getMessage());
+    Map<Raw, Integer> productRawQuantities = new HashMap<>();
+    String query = "SELECT r.Id, r.Name, pr.Quantity " +
+                   "FROM Raw r " +
+                   "JOIN ProductRaw pr ON r.Id = pr.RawId " +
+                   "WHERE pr.ProductId = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setInt(1, productId);
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Raw raw = new Raw();
+            raw.setId(rs.getInt("Id"));
+            raw.setName(rs.getString("Name"));
+            int quantity = rs.getInt("Quantity");
+            productRawQuantities.put(raw, quantity);
         }
-        
-        return rawQuantities;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-    
+    return productRawQuantities;
+}
+
     // Check if there are enough raw materials to make a certain quantity of a product
     public boolean canMakeProduct(int productId, int productQuantity) {
         Map<Raw, Integer> rawQuantities = getRawQuantitiesForProduct(productId);
@@ -218,4 +243,32 @@ public class ProductRawDAO {
         
         return success;
     }
+
+    public boolean updateProductRaw(int productId, int rawId, int rawQuantityPerProduct) {
+    Connection conn = null;
+    PreparedStatement stmt = null;
+    String sql = "UPDATE product_raw SET quantity_per_product = ? WHERE product_id = ? AND raw_id = ?";
+
+    try {
+        conn = DBConnection.getConnection(); // Assuming you have a method to get DB connection
+        stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, rawQuantityPerProduct);
+        stmt.setInt(2, productId);
+        stmt.setInt(3, rawId);
+
+        int rowsUpdated = stmt.executeUpdate();
+        return rowsUpdated > 0; // If at least one row was updated, return true
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    } finally {
+        try {
+            if (stmt != null) stmt.close();
+            if (conn != null) conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
 }
