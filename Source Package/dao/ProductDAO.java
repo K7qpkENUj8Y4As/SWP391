@@ -234,41 +234,81 @@ public boolean updateProduct(Product product) {
     }
 }
 
-  public boolean updateQuantity(int productId, int addedQuantity) {
+//  public boolean updateQuantity(int productId, int addedQuantity) {
+//    String query = "UPDATE Product SET Quantity = Quantity + ? WHERE Id = ?";
+//    
+//    try (Connection conn = DBConnection.getConnection();
+//         PreparedStatement ps = conn.prepareStatement(query)) {
+//        
+//        ps.setInt(1, addedQuantity);
+//        ps.setInt(2, productId);
+//        
+//        int affectedRows = ps.executeUpdate();
+//        return (affectedRows > 0);
+//    } catch (Exception e) {
+//        System.out.println("Error in updateQuantity: " + e.getMessage());
+//        return false;
+//    }
+//}
+
+public boolean updateQuantity(int productId, int addedQuantity) {
     String query = "UPDATE Product SET Quantity = Quantity + ? WHERE Id = ?";
     
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(query)) {
         
-        ps.setInt(1, addedQuantity);
-        ps.setInt(2, productId);
+        ps.setInt(1, addedQuantity);  // Thêm số lượng vào
+        ps.setInt(2, productId);      // ID sản phẩm cần cập nhật
         
         int affectedRows = ps.executeUpdate();
-        return (affectedRows > 0);
+        return (affectedRows > 0);  // Nếu có ảnh hưởng dòng dữ liệu thì thành công
     } catch (Exception e) {
         System.out.println("Error in updateQuantity: " + e.getMessage());
         return false;
     }
 }
 
-    public boolean deleteProduct(int productId) {
-        String query = "DELETE FROM products WHERE id = ?";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+//Delete Product
+  public boolean deleteProduct(int productId) {
+    String deleteProductRawQuery = "DELETE FROM ProductRaw WHERE ProductId = ?";
+    String deleteProductQuery = "DELETE FROM product WHERE id = ?";
 
-            ps.setInt(1, productId);
+    try (Connection conn = DBConnection.getConnection()) {
+        // Tắt auto-commit để thực hiện transaction
+        conn.setAutoCommit(false);
 
-         
-            int rowsAffected = ps.executeUpdate();
+        try (PreparedStatement ps1 = conn.prepareStatement(deleteProductRawQuery);
+             PreparedStatement ps2 = conn.prepareStatement(deleteProductQuery)) {
 
-            return rowsAffected > 0;
-         } catch (Exception e) {
+            // Xóa từ bảng productRaw trước
+            ps1.setInt(1, productId);
+            ps1.executeUpdate();
+
+            // Sau đó xóa từ bảng product
+            ps2.setInt(1, productId);
+            int rowsAffected = ps2.executeUpdate();
+
+            // Nếu xóa thành công ở bảng product, thì commit
+            if (rowsAffected > 0) {
+                conn.commit();
+                return true;
+            } else {
+                conn.rollback();
+                return false;
+            }
+        } catch (Exception e) {
+            conn.rollback(); // Nếu có lỗi thì rollback
             e.printStackTrace();
-           
             return false;
-        } 
+        } finally {
+            conn.setAutoCommit(true); // Khôi phục trạng thái ban đầu
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        return false;
     }
+
 
 public int getGeneratedProductId() {
     String query = "SELECT SCOPE_IDENTITY()"; // Dành cho SQL Server để lấy ID cuối cùng được chèn

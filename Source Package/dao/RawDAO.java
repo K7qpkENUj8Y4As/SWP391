@@ -309,4 +309,77 @@ public List<Raw> getSoonToExpireRaws(int days) {
     
     return list;
 }
+
+// Kiểm tra xem số lượng nguyên liệu có đủ hay không (nếu cần thiết)
+// public boolean checkRawAvailability(int productId, int addedQuantity) {
+//        String query = "SELECT r.quantity AS raw_quantity " +
+//                       "FROM ProductRaw pr " +
+//                       "JOIN Raw r ON pr.RawId = r.Id " +
+//                       "WHERE pr.ProductId = ?";
+//        
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(query)) {
+//            
+//            ps.setInt(1, productId);
+//            
+//            try (ResultSet rs = ps.executeQuery()) {
+//                while (rs.next()) {
+//                    // Số lượng nguyên liệu trong bảng Raw
+//                    int rawQuantity = rs.getInt("raw_quantity");
+//                    
+//                    // Kiểm tra nếu số lượng nguyên liệu có đủ không
+//                    if (rawQuantity < addedQuantity) {
+//                        return false;  // Không đủ nguyên liệu
+//                    }
+//                }
+//                return true;  // Đủ nguyên liệu
+//            }
+//        } catch (Exception e) {
+//            System.out.println("Error in checkRawAvailability: " + e.getMessage());
+//            return false;
+//        }
+//    }
+
+ 
+ 
+
+    // Phương thức kiểm tra số lượng nguyên liệu và trừ số lượng nếu đủ cho thêm hàng
+    public boolean updateRawQuantity2(int productId, int addedQuantity) {
+        String query = "SELECT pr.RawId, pr.Quantity AS productRawQuantity, r.Quantity AS rawQuantity " +
+                       "FROM ProductRaw pr " +
+                       "JOIN Raw r ON pr.RawId = r.Id " +
+                       "WHERE pr.ProductId = ?";
+        
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query)) {
+            
+            ps.setInt(1, productId);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    int rawQuantity = rs.getInt("rawQuantity");
+                    int productRawQuantity = rs.getInt("productRawQuantity");
+                    
+                    // Kiểm tra số lượng nguyên liệu có đủ không
+                    if (rawQuantity < addedQuantity) {
+                        return false;  // Không đủ nguyên liệu
+                    }
+
+                    // Cập nhật lại số lượng nguyên liệu trong bảng Raw
+                    String updateQuery = "UPDATE Raw SET Quantity = Quantity - ? WHERE Id = ?";
+                    try (PreparedStatement updatePs = conn.prepareStatement(updateQuery)) {
+                        updatePs.setInt(1, addedQuantity);
+                        updatePs.setInt(2, rs.getInt("RawId"));
+                        updatePs.executeUpdate();
+                    }
+                }
+                return true;  // Đủ nguyên liệu, đã trừ
+            }
+        } catch (Exception e) {
+            System.out.println("Error in updateRawQuantity: " + e.getMessage());
+            return false;
+        }
+    }
 }
+
+

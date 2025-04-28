@@ -164,6 +164,8 @@ public class ProductController extends HttpServlet {
             
 
       }
+        
+        
 }
 
     @Override
@@ -177,7 +179,20 @@ public class ProductController extends HttpServlet {
         ProductRawDAO productRawDAO = new ProductRawDAO();
 
         String action = request.getParameter("action");
+ if (action == null) {
+        action = "";
+    }
 
+    switch (action) {
+        case "delete":
+            deleteProduct(request, response);
+            break;
+//        // các case khác (add, update, etc)
+//        default:
+//            response.sendRedirect(request.getContextPath() + "/product");
+//            break;
+  }
+//}
         if (action.equals("add")) {
             try {
                 // Extract product information
@@ -301,19 +316,19 @@ public class ProductController extends HttpServlet {
                         int rawId = entry.getKey();
                         int totalRawUsed = entry.getValue();
                    
-        boolean productRawAdded = productRawDAO.addProductRaw(productId, rawId, totalRawUsed / quantity); // Chỉ lưu định mức 1 sản phẩm
+     //   boolean productRawAdded = productRawDAO.addProductRaw(productId, rawId, totalRawUsed / quantity); // Chỉ lưu định mức 1 sản phẩm
 
-                        // Add product-raw relationship
-                        productRawDAO.addProductRaw(product.getId(), rawId, totalRawUsed / quantity); // chỉ lưu định mức 1 sản phẩm
+                        // Add product-raw relationship dòng này dùng ok này
+                      productRawDAO.addProductRaw(product.getId(), rawId, totalRawUsed / quantity); // chỉ lưu định mức 1 sản phẩm
 
                         // Trừ nguyên liệu thật trong kho
                         rawDAO.updateRawQuantity(rawId, totalRawUsed);
-                       if (!productRawAdded) {
+                     //  if (!productRawAdded) {
             // Nếu không thể thêm vào ProductRaw, xử lý lỗi
-            request.setAttribute("error", "Failed to associate product with raw material.");
-            request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
-            return;
-        }
+            //request.setAttribute("error", "Failed to associate product with raw material.");
+           // request.getRequestDispatcher("/view/productmanagement/addProduct.jsp").forward(request, response);
+           // return;
+      //  }
                     
                     }
                     // Chuyển hướng đến danh sách sản phẩm với thông báo thành công
@@ -379,7 +394,7 @@ public class ProductController extends HttpServlet {
 
                 
 //                // Create product object
-//            Product product = new Product();
+            Product product = new Product();
 //            product.setId(productId);
 //            product.setName(name);
 //            product.setPrice(price);
@@ -442,6 +457,7 @@ public class ProductController extends HttpServlet {
 
                         // Load raw materials and categories again
                         loadCategoriesAndRaws(request);
+request.setAttribute("product", product);
 
                         request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
                         return;
@@ -468,6 +484,8 @@ public class ProductController extends HttpServlet {
                     // If update failed
                     request.setAttribute("error", "Failed to update product. Please try again.");
                     request.setAttribute("product", existingProduct);
+                    request.setAttribute("product", product);
+
                     request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
                 }
 
@@ -480,34 +498,155 @@ public class ProductController extends HttpServlet {
         } catch (Exception e) {
             e.printStackTrace();
             request.setAttribute("error", "An error occurred: " + e.getMessage());
+           
+
             request.getRequestDispatcher("/view/productmanagement/editProduct.jsp").forward(request, response);
         }
     
             
         }
-    if ("updateQuantity".equals(action)) {
-            updateQuantity(request, response);
-        }
-    }
+//    if ("updateQuantity".equals(action)) {
+//            updateQuantity(request, response);
+//        }
+//    }
+//
+//    private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        try {
+//            int productId = Integer.parseInt(request.getParameter("productId"));
+//            int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
+//
+//            boolean success = productDAO.updateQuantity(productId, addedQuantity);
+// if (success) {
+//                response.sendRedirect("product"); // reload lại list
+//            } else {
+//                request.setAttribute("error", "Cập nhật số lượng thất bại");
+//                request.getRequestDispatcher("listProduct.jsp").forward(request, response);
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            response.getWriter().write("Error: " + e.getMessage());
+//        }
 
-    private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            int productId = Integer.parseInt(request.getParameter("productId"));
-            int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
+//    }
 
-            boolean success = productDAO.updateQuantity(productId, addedQuantity);
- if (success) {
-                response.sendRedirect("product"); // reload lại list
-            } else {
-                request.setAttribute("error", "Cập nhật số lượng thất bại");
-                request.getRequestDispatcher("listProduct.jsp").forward(request, response);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.getWriter().write("Error: " + e.getMessage());
+//if ("updateQuantity".equals(action)) {
+//    updateQuantity(request, response);
+//}
+//    }
+//
+//private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
+//        throws ServletException, IOException {
+//    try {
+//        int productId = Integer.parseInt(request.getParameter("productId"));
+//        int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
+//
+//        // Tạo đối tượng RawDAO để kiểm tra nguyên liệu
+//        RawDAO rawDAO = new RawDAO();
+//        
+//        // Kiểm tra nếu đủ nguyên liệu trong bảng raw
+//        boolean rawAvailable = rawDAO.checkRawAvailability(productId, addedQuantity);
+//        
+//        if (!rawAvailable) {
+//            request.setAttribute("error", "Không đủ nguyên liệu để tạo thêm sản phẩm.");
+//          //  request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+//                        request.getRequestDispatcher("product").forward(request, response);
+//
+//            return;
+//        }
+//
+//        // Cập nhật số lượng sản phẩm trong bảng product
+//        boolean success = productDAO.updateQuantity(productId, addedQuantity);
+//
+//        if (success) {
+//            // Nếu thành công, reload lại list sản phẩm
+//            response.sendRedirect("product"); 
+//        } else {
+//            request.setAttribute("error", "Cập nhật số lượng sản phẩm thất bại");
+//            request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+//        }
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        response.getWriter().write("Error: " + e.getMessage());
+//    }
+//}
+//if ("updateQuantity".equals(action)) {
+//    updateQuantity(request, response);
+//}
+//    }
+//private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
+//        throws ServletException, IOException {
+//    try {
+//        int productId = Integer.parseInt(request.getParameter("productId"));
+//        int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
+//
+//        // Tạo đối tượng RawDAO để kiểm tra nguyên liệu
+//        RawDAO rawDAO = new RawDAO();
+//        
+//        // Kiểm tra nếu đủ nguyên liệu trong bảng raw
+//        boolean rawAvailable = rawDAO.checkRawAvailability(productId, addedQuantity);
+//        
+//        if (!rawAvailable) {
+//            request.setAttribute("error", "Không đủ nguyên liệu để tạo thêm sản phẩm.");
+//            request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+//            return;
+//        }
+//
+//        // Cập nhật số lượng sản phẩm trong bảng product
+//        boolean success = productDAO.updateQuantity(productId, addedQuantity);
+//
+//        if (success) {
+//            // Nếu thành công, reload lại list sản phẩm
+//            response.sendRedirect("product"); 
+//        } else {
+//            request.setAttribute("error", "Cập nhật số lượng sản phẩm thất bại");
+//            request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+//        }
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        response.getWriter().write("Error: " + e.getMessage());
+//    }
+//}
+if ("updateQuantity".equals(action)) {
+    updateQuantity(request, response);
+
+}}
+
+private void updateQuantity(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        int productId = Integer.parseInt(request.getParameter("productId"));
+        int addedQuantity = Integer.parseInt(request.getParameter("addedQuantity"));
+
+        // Tạo đối tượng RawDAO để kiểm tra nguyên liệu và cập nhật số lượng nguyên liệu
+        RawDAO rawDAO = new RawDAO();
+        
+        // Kiểm tra nếu đủ nguyên liệu trong bảng raw
+        boolean rawAvailable = rawDAO.updateRawQuantity2(productId, addedQuantity);
+        
+        if (!rawAvailable) {
+            request.setAttribute("error", "Không đủ nguyên liệu để tạo thêm sản phẩm.");
+            request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+            return;
         }
+
+        // Cập nhật số lượng sản phẩm trong bảng product
+        boolean success = productDAO.updateQuantity(productId, addedQuantity);
+
+        if (success) {
+            // Nếu thành công, reload lại list sản phẩm
+            response.sendRedirect("product"); 
+        } else {
+            request.setAttribute("error", "Cập nhật số lượng sản phẩm thất bại");
+            request.getRequestDispatcher("/view/productmanagement/manageProduct.jsp").forward(request, response);
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+        response.getWriter().write("Error: " + e.getMessage());
     }
+}
+
+
 
     // Utility method to extract file name from HTTP header content-disposition
     private String getFileName(Part part) {
@@ -531,5 +670,24 @@ private void loadCategoriesAndRaws(HttpServletRequest request) {
     RawDAO rawDAO = new RawDAO();
     List<Raw> rawList = rawDAO.getAllRaws();
     request.setAttribute("raws", rawList);
+}
+
+
+//Delete Product
+private void deleteProduct(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
+    try {
+        int id = Integer.parseInt(request.getParameter("id"));
+
+        // Gọi DAO để xóa sản phẩm theo id
+        ProductDAO dao = new ProductDAO();
+        dao.deleteProduct(id);
+
+        // Sau khi xóa xong, quay lại trang danh sách sản phẩm
+        response.sendRedirect(request.getContextPath() + "/product");
+    } catch (NumberFormatException e) {
+        e.printStackTrace();
+        response.sendRedirect(request.getContextPath() + "/product");
+    }
 }
 }
