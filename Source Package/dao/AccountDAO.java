@@ -98,7 +98,7 @@ public class AccountDAO {
     
   public boolean registerCustomer(String username, String password, String email, String fullName) {
         String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status, isCustomer) VALUES (?, ?, ?, ?,1)";
-        String insertCustomerSQL = "INSERT INTO Customer (Email ,FullName ,Avatar ,Account_ID ,Phone,isGuest ) VALUES (?, ?, ?, ?,?,1)";
+        String insertCustomerSQL = "INSERT INTO Customer (Email ,FullName ,Avatar ,Account_ID ,Phone,isGuest ) VALUES (?, ?, ?, ?,?,0)";
 
         try (Connection conn = new DBConnection().getConnection()) {
             conn.setAutoCommit(false);

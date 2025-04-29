@@ -84,10 +84,9 @@ public class OrderDAO {
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
         Date now = new Date();
-        OrderItem order = new OrderItem();
+        Order order = new Order();
         order.setCreateAt(now);
-        List<OrderItem> items = new ArrayList<>();
-        items.add(order); // ✅ Now works
-        dao.createOrderItems(items);
+        order.setCustomerId(1);
+        dao.createOrder(order);
     }
 }

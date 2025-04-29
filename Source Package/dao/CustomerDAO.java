@@ -74,18 +74,27 @@ public class CustomerDAO {
         return false;
     }
 }
-   public void insertAccount(Customer acc) {
-    String sql = "INSERT INTO Customer (Email ,FullName ,Avatar  ,Phone,isGuest ) VALUES (?, ?, ?,?,0)";
+   public int insertCustomer(Customer customer) {
+        String sql = "INSERT INTO Customer (FullName, Phone, Address, isGuest) VALUES (?, ?, ?, 1)";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-    try (Connection conn = DBConnection.getConnection();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, acc.getEmail());
-        ps.setString(2, acc.getFullName()); // Hash nếu cần
-        ps.setString(3, "default.jsp");
-        ps.setString(4, acc.getPhone());
-        ps.executeUpdate();
-    } catch (SQLException e) {
-        e.printStackTrace();
+            stmt.setString(1, customer.getFullName());
+            stmt.setString(2, customer.getPhone());
+            stmt.setString(3, customer.getAddress());
+            int rows = stmt.executeUpdate();
+            if (rows > 0) {
+                try (ResultSet rs = stmt.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int generatedId = rs.getInt(1);
+                        customer.setId(generatedId); // Set lại ID cho customer
+                        return generatedId;
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
-}
 }

@@ -1,4 +1,6 @@
 package controller;
+
+import dao.CustomerDAO;
 import dao.OrderDAO;
 import dao.VNPayHelper;
 import model.Account;
@@ -12,12 +14,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 public class CheckOutController extends HttpServlet {
+
     private OrderDAO orderDAO;
+
     @Override
     public void init() throws ServletException {
         orderDAO = new OrderDAO();
     }
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -43,6 +49,7 @@ public class CheckOutController extends HttpServlet {
 
         request.getRequestDispatcher("/view/common/CheckOut.jsp").forward(request, response);
     }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
@@ -54,6 +61,9 @@ public class CheckOutController extends HttpServlet {
             customer.setFullName(request.getParameter("fullname"));
             customer.setAddress(request.getParameter("address"));
             customer.setPhone(request.getParameter("phone"));
+            CustomerDAO dao = new CustomerDAO();
+            int customerId = dao.insertCustomer(customer);
+            customer.setId(customerId);
         }
         List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
 
@@ -95,7 +105,7 @@ public class CheckOutController extends HttpServlet {
             orderItems.add(orderItem);
         }
         orderDAO.createOrderItems(orderItems);
-
+        session.removeAttribute("cart");
         // Xử lý theo PaymentMethod
         if ("VNPAY".equalsIgnoreCase(paymentMethod)) {
             String paymentUrl = VNPayHelper.createPaymentUrl(order);

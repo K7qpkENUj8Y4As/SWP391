@@ -657,10 +657,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto nav-links">
                         <li class="nav-item">
-                            <a class="nav-link active" href="home.jsp">Home</a>
+                            <a class="nav-link active" href="home">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="product">Shop</a>
+                            <a class="nav-link" href="productPage">Shop</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="category">Categories</a>

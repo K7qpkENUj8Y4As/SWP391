@@ -117,38 +117,37 @@
                     <span class="logo-text">Five Blooms</span>
                 </a>
                 <div class="collapse navbar-collapse">
-                     <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto nav-links">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="home.jsp">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="product">Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="cart">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span id="cart-count"><%= cartCount%></span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Login</a>                        
-                        </li>
-                        <li class="nav-item">                       
-                            <a class="nav-link" href="register">Register</a>                        
-                        </li>                      
-                        </li>
-                    </ul>
-                </div>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto nav-links">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="home">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="productPage">Shop</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="category">Categories</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="cart">
+                                    <i class="fas fa-shopping-cart"></i>
+                                    <span id="cart-count"><%= cartCount%></span>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="login">Login</a>                        
+                            </li>
+                            <li class="nav-item">                       
+                                <a class="nav-link" href="register">Register</a>                        
+                            </li>                                            
+                        </ul>
+                    </div>
                 </div>
             </div>
         </nav>

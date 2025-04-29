@@ -15,7 +15,7 @@ public class VNPayHelper {
     private static final String VNP_TMNCODE = "SQGAJR6C"; // Bỏ dấu cách thừa
     private static final String VNP_HASHSECRET = "24P3DE4RC8G9AIFR9L6XYO1L0UANPV8F"; // Bỏ dấu cách thừa
     private static final String VNP_PAYURL = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html"; 
-    private static final String VNP_RETURNURL = "http://localhost:8081/SWP391/vnpay_return"; // URL nhận kết quả thanh toán
+    private static final String VNP_RETURNURL = "http://localhost:8081/SWP391/checkOut"; // URL nhận kết quả thanh toán
 
     public static String createPaymentUrl(Order order) throws UnsupportedEncodingException {
         Map<String, String> vnpParams = new HashMap<>();
