@@ -18,7 +18,7 @@ import model.Account;
  *
  * @author trung
  */
-public class AddStaff extends HttpServlet {
+public class AddManager extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -81,7 +81,7 @@ public class AddStaff extends HttpServlet {
         newStaff.setUsername(username);
         newStaff.setPassword(hashUtil.md5(password)); // Bạn nên hash mật khẩu ở đây nếu cần
 
-        newStaff.setRole("Staff");
+        newStaff.setRole("Manager");
 
         newStaff.setStatus(1);
         newStaff.setIsCustomer(0);

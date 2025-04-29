@@ -373,7 +373,7 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-               <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto nav-links">
                         <li class="nav-item">
                             <a class="nav-link active" href="home">Home</a>
@@ -381,13 +381,13 @@
                         <li class="nav-item">
                             <a class="nav-link" href="productPage">Shop</a>
                         </li>
-<!--                        <li class="nav-item">
-                            <a class="nav-link" href="category">Categories</a>
-                        </li>-->
+                        <!--                        <li class="nav-item">
+                                                    <a class="nav-link" href="category">Categories</a>
+                                                </li>-->
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/view/common/AboutUsPage.jsp">About Us</a>
                         </li>
-                      
+
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/view/common/ContactPage.jsp">Contact</a>
                         </li>
@@ -482,9 +482,7 @@
                         <div class="col-6 col-md-3 mb-4">
                             <div class="product-card">
                                 <div class="product-image">
-                                    <div class="product-img" style="background-color: #f9f9f9;"></div>
-<img src="${pageContext.request.contextPath}/${product.image}" alt="${product.name}" class="img-fluid" />
-                           
+                                    <div class="product-img" style="background-color: #f9f9f9;"> <img src="${product.image}" alt="${product.name}" class="img-fluid" /></div>                                  
 
                                 </div>
                                 <div class="product-info">

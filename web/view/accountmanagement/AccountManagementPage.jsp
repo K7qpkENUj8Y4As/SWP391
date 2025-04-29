@@ -34,7 +34,7 @@
                     </div>
                     <div class="col-md-4">
                         <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
-                                data-bs-target="#addStaffModal">Add Staff</button>
+                                data-bs-target="#addStaffModal">Add Manager</button>
                     </div>
                 </div>
                 <div class="table-responsive">
