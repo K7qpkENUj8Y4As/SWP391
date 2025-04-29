@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true" %>
 <%
     // Lấy cart từ session
@@ -341,7 +342,7 @@
                                 <input type="hidden" name="quantity" value="${item.quantity}" class="quantity-input">
                                 <button type="button" class="quantity-btn minus-btn">-</button>
                                 <span class="quantity">${item.quantity}</span>
-                                <button type="button" class="quantity-btn plus-btn">+</button>
+                                <button type="button" class="quantity-btn plus-btn" data-max="${item.product.quantity}">+</button>
                             </form>
                             <form action="cart" method="post">
                                 <input type="hidden" name="action" value="remove">
@@ -392,22 +393,7 @@
                     }
                 });
             });
-
-            document.querySelectorAll('.plus-btn').forEach(button => {
-                button.addEventListener('click', function () {
-                    const form = this.closest('form');
-                    const quantityElement = form.querySelector('.quantity');
-                    const quantityInput = form.querySelector('.quantity-input'); // lấy input hidden
-                    let quantity = parseInt(quantityElement.textContent);
-
-                    quantity++;
-                    quantityElement.textContent = quantity;
-                    quantityInput.value = quantity; // cập nhật input hidden
-                    form.submit();
-                });
-            });
-
-            // Update total price
+           // Update total price
             function updateTotal() {
                 // In a real implementation, you would calculate based on actual prices
                 // This is just a placeholder for the demo
@@ -418,9 +404,27 @@
                     const quantity = parseInt(item.querySelector('.quantity').textContent);
                     total += price * quantity;
                 });
-
                 document.querySelector('.total-amount').textContent = 'Rp ' + total.toLocaleString('id-ID');
             }
+            document.querySelectorAll('.plus-btn').forEach(button => {
+                button.addEventListener('click', function () {
+                    const form = this.closest('form');
+                    const quantityElement = form.querySelector('.quantity');
+                    const quantityInput = form.querySelector('.quantity-input');
+                    let quantity = parseInt(quantityElement.textContent);
+
+                    const maxQuantity = parseInt(this.dataset.max);
+
+                    if (quantity < maxQuantity) {
+                        quantity++;
+                        quantityElement.textContent = quantity;
+                        quantityInput.value = quantity;
+                        form.submit(); // chỉ submit nếu hợp lệ
+                    } else {
+                        alert('Not enough stock available.');
+                    }
+                });
+            });
         </script>
     </body>
 </html>
