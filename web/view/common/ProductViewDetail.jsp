@@ -260,9 +260,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="productPage">Shop</a>
                         </li>
-                        <li class="nav-item">
+<!--                        <li class="nav-item">
                             <a class="nav-link" href="category">Categories</a>
-                        </li>
+                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
                         </li>
@@ -303,7 +303,7 @@
                     <div class="col-md-6">
                         <div class="product-info">
                             <h1 class="product-title">${product.name}</h1>
-                            <div class="product-price">Rp ${product.price}/stalk</div>
+                            <div class="product-price">${product.price}</div>
 
                             <div class="divider"></div>
 

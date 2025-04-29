@@ -483,11 +483,14 @@
                             <div class="product-card">
                                 <div class="product-image">
                                     <div class="product-img" style="background-color: #f9f9f9;"></div>
+<img src="${pageContext.request.contextPath}/${product.image}" alt="${product.name}" class="img-fluid" />
+                           
+
                                 </div>
                                 <div class="product-info">
                                     <div class="product-category">${product.category}</div>
                                     <a href="viewDetail?id=${product.id}"><h3 class="product-title">${product.name}</h3></a>
-                                    <div class="product-price">Rp ${product.price}/stalk</div>
+                                    <div class="product-price">price ${product.price}</div>
                                     <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                 </div>
                             </div>
