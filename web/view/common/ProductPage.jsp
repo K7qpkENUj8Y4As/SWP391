@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true" %>
 <%
     // Lấy cart từ session
@@ -487,8 +488,8 @@
                                 </div>
                                 <div class="product-info">
                                     <div class="product-category">${product.category}</div>
-                                    <a href="viewDetail?id=${product.id}"><h3 class="product-title">${product.name}</h3></a>
-                                    <div class="product-price">price ${product.price}</div>
+                                    <a href="viewDetail?id=${product.id}" style="text-decoration: none;"><h3 class="product-title">${product.name}</h3></a>
+                                    <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
                                     <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                 </div>
                             </div>

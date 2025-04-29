@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true" %>
 <%
     // Lấy cart từ session
@@ -218,12 +219,12 @@
                             <c:forEach var="item" items="${cartItems}">
                                 <div class="order-item d-flex justify-content-between">
                                     <div>${item.product.name} × ${item.quantity}</div>
-                                    <div>Rp ${item.product.price * item.quantity}</div>
+                                    <div> <fmt:formatNumber value="${item.product.price * item.quantity}" type="number"/> VNĐ</div>
                                 </div>
                             </c:forEach>
                             <div class="total d-flex justify-content-between">
                                 <div>Total:</div>
-                                <div>Rp ${totalAmount}</div>
+                                <div><fmt:formatNumber value="${totalAmount}" type="number"/> VNĐ</div>
                             </div>
                         </div>
                     </div>

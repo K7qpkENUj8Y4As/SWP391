@@ -234,12 +234,18 @@
             }
 
             .footer {
-                margin-top: 50px;
-                padding: 20px 0;
+                margin-top: 80px;
+                padding: 40px 0 20px;
                 text-align: center;
-                color: var(--light-text);
-                font-size: 0.9rem;
+                background-color: var(--dark-bg);
+                color: white;
             }
+
+            .footer a {
+                color: var(--accent-color);
+                text-decoration: none;
+            }
+
 
             @media (max-width: 768px) {
                 .cart-container {
@@ -334,7 +340,7 @@
                         <div class="cart-item">
                             <div class="item-info">
                                 <div class="item-name">${item.product.name}</div>
-                                <div class="item-price">Rp. ${item.product.price}/stalk</div>
+                                <div class="item-price"><fmt:formatNumber value="${item.product.price}" type="number"/> VNĐ</div>
                             </div>
                             <form action="cart" method="post" class="quantity-selector">
                                 <input type="hidden" name="action" value="update">
@@ -356,7 +362,7 @@
                     <div class="cart-summary">
                         <div class="total-row">
                             <span>Total</span>
-                            <span class="total-amount">Rp. <fmt:formatNumber value="${total}" type="number"/></span>
+                            <span class="total-amount"><fmt:formatNumber value="${total}" type="number"/> VNĐ</span>
                         </div>
 
                         <div class="action-buttons">
@@ -393,7 +399,7 @@
                     }
                 });
             });
-           // Update total price
+            // Update total price
             function updateTotal() {
                 // In a real implementation, you would calculate based on actual prices
                 // This is just a placeholder for the demo

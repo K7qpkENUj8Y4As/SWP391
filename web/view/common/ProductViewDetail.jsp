@@ -3,6 +3,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="true" %>
 <%
     // Lấy cart từ session
@@ -215,6 +216,18 @@
                 padding-top: 20px;
                 border-top: 1px solid #eee;
             }
+            .footer {
+                margin-top: 80px;
+                padding: 40px 0 20px;
+                text-align: center;
+                background-color: var(--dark-bg);
+                color: white;
+            }
+
+            .footer a {
+                color: var(--accent-color);
+                text-decoration: none;
+            }
 
             /* Responsive */
             @media (max-width: 992px) {
@@ -260,9 +273,9 @@
                         <li class="nav-item">
                             <a class="nav-link" href="productPage">Shop</a>
                         </li>
-<!--                        <li class="nav-item">
-                            <a class="nav-link" href="category">Categories</a>
-                        </li>-->
+                        <!--                        <li class="nav-item">
+                                                    <a class="nav-link" href="category">Categories</a>
+                                                </li>-->
                         <li class="nav-item">
                             <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
                         </li>
@@ -303,7 +316,7 @@
                     <div class="col-md-6">
                         <div class="product-info">
                             <h1 class="product-title">${product.name}</h1>
-                            <div class="product-price">${product.price}</div>
+                            <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
 
                             <div class="divider"></div>
 
@@ -312,18 +325,14 @@
                                 <p>${product.description}</p>
                             </div>
 
-                            <div class="quantity-selector">
-                                <label for="quantity" style="margin-right: 15px;">Quantity:</label>
-                                <button class="quantity-btn minus-btn">-</button>
-                                <input type="number" id="quantity" class="quantity-input" value="1" min="1">
-                                <button class="quantity-btn plus-btn">+</button>
-                            </div>
+                            <!--                            <div class="quantity-selector">
+                                                            <label for="quantity" style="margin-right: 15px;">Quantity:</label>
+                                                            <button class="quantity-btn minus-btn">-</button>
+                                                            <input type="number" id="quantity" class="quantity-input" value="1" min="1">
+                                                            <button class="quantity-btn plus-btn">+</button>
+                                                        </div>-->
 
                             <button class="add-to-cart-btn">Add to Cart</button>
-
-                            <div class="product-meta">
-                                <p>© Maurizio Dei Famigliaia Le Reggio Sanzano</p>
-                            </div>
                         </div>
                     </div>
                 </div>

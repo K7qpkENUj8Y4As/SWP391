@@ -236,7 +236,18 @@ function closePopup() {
         <c:if test="${empty products}">
             <div class="alert alert-info">Không có sản phẩm nào.</div>
         </c:if>
-
+     <!-- Search form -->
+        <form action="${pageContext.request.contextPath}/product" method="get" class="mb-4">
+            <input type="hidden" name="action" value="search">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search products..." name="keyword" value="${keyword}">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
         <table class="table table-bordered table-hover">
             <thead class="thead-light">
                 <tr>
