@@ -662,14 +662,14 @@
                         <li class="nav-item">
                             <a class="nav-link" href="productPage">Shop</a>
                         </li>
-                        <li class="nav-item">
+<!--                        <li class="nav-item">
                             <a class="nav-link" href="category">Categories</a>
+                        </li>-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/common/AboutUsPage.jsp">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/view/common/ContactPage.jsp">Contact</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="cart">
