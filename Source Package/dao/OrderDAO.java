@@ -21,6 +21,32 @@ import model.OrderItem;
  */
 public class OrderDAO {
 
+    public List<Order> getAllOrders() {
+        List<Order> list = new ArrayList<>();
+
+        String sql = "SELECT Id, TotalPrice, Status, CreateAt, CustomerId, deliveryStatus, Note FROM [Order]";
+
+        try (Connection conn = new DBConnection().getConnection(); PreparedStatement ps = conn.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Order o = new Order();
+                o.setId(rs.getInt("Id"));
+                o.setTotalPrice(rs.getDouble("TotalPrice"));
+                o.setStatus(rs.getBoolean("Status") ? 1 : 0); // convert bit to int
+                o.setCreateAt(rs.getTimestamp("CreateAt"));   // get as java.util.Date
+                o.setCustomerId(rs.getInt("CustomerId"));
+                o.setDeliveryStatus(rs.getString("deliveryStatus"));
+                o.setNote(rs.getString("Note"));
+                list.add(o);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
     public int createOrder(Order order) {
         int generatedId = -1;
         String sql = "INSERT INTO [Order] (TotalPrice, Status, CreateAt, CustomerId, DeliveryStatus, Note) VALUES (?, ?, ?, ?, ?, ?)";
@@ -31,7 +57,9 @@ public class OrderDAO {
             ps.setInt(2, order.getStatus());
             ps.setTimestamp(3, new java.sql.Timestamp(order.getCreateAt().getTime()));
             ps.setInt(4, order.getCustomerId());
-            ps.setInt(5, order.getDeliveryStatus());
+            //    ps.setInt(5, order.getDeliveryStatus());
+            ps.setString(5, order.getDeliveryStatus());
+
             ps.setString(6, order.getNote());
 
             int rowsAffected = ps.executeUpdate();
@@ -75,6 +103,18 @@ public class OrderDAO {
             ps.setInt(1, status);
             ps.setInt(2, orderId);
 
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateOrderStatus(int orderId, int status, String deliveryStatus) {
+        String sql = "UPDATE [Order] SET Status = ?, deliveryStatus = ? WHERE Id = ?";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, status);
+            ps.setString(2, deliveryStatus);
+            ps.setInt(3, orderId);
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();

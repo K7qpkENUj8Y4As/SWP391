@@ -4,17 +4,18 @@
  */
 package model;
 
-
 import java.math.BigDecimal;
 import java.util.Date;
 
 public class OrderItem {
-    private int id;           
-    private int orderId;      
-    private int productId;    
-    private int quantity;     
-    private Date createAt;    
-    private double price; 
+
+    private int id;
+    private int orderId;
+    private int productId;
+    private int quantity;
+    private Date createAt;
+    private double price;
+    private String productName;
 
     public OrderItem() {
     }
@@ -76,11 +77,18 @@ public class OrderItem {
         this.price = price;
     }
 
- 
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     // Override phương thức toString để dễ dàng kiểm tra đối tượng
     @Override
     public String toString() {
-        return "OrderItem [id=" + id + ", orderId=" + orderId + ", productId=" + productId + 
-               ", quantity=" + quantity + ", createAt=" + createAt + ", price=" + price + "]";
+        return "OrderItem [id=" + id + ", orderId=" + orderId + ", productId=" + productId
+                + ", quantity=" + quantity + ", createAt=" + createAt + ", price=" + price + "]";
     }
 }

@@ -87,7 +87,10 @@ public class CheckOutController extends HttpServlet {
         Order order = new Order();
         order.setTotalPrice(totalAmount);
         order.setStatus(0); // Chưa thanh toán
-        order.setDeliveryStatus(0); // Chưa giao
+
+        order.setDeliveryStatus("Not Delivered"); // Chưa giao
+
+        // order.setDeliveryStatus(0); // Chưa giao
         order.setCreateAt(now);
         order.setCustomerId(customer.getId());
         order.setNote(note);

@@ -8,12 +8,78 @@ import dbConnection.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.sql.ResultSet;
+
+import java.util.List;
+import model.OrderItem;
 
 /**
  *
  * @author Admin
  */
 public class OrderItemDAO {
+      // Lấy danh sách OrderItem theo OrderId
+//    public List<OrderItem> getOrderItemsByOrderId(int orderId) throws SQLException {
+//        List<OrderItem> orderItems = new ArrayList<>();
+//        String query = "SELECT * FROM OrderItem WHERE OrderId = ?";
+//        
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(query)) {
+//            
+//            ps.setInt(1, orderId);
+//        ResultSet rs = ps.executeQuery();
+//            
+//            while (rs.next()) {
+//                OrderItem item = new OrderItem();
+//                item.setId(rs.getInt("Id"));
+//                item.setOrderId(rs.getInt("OrderId"));
+//                item.setProductId(rs.getInt("ProductId"));
+//                item.setQuantity(rs.getInt("Quantity"));
+//                item.setCreateAt(rs.getDate("CreateAt"));
+//                item.setPrice(rs.getDouble("Price"));
+//                 orderItems.add(item);
+//        }
+//    } catch (SQLException e) {
+//        System.out.println("Error fetching order items: " + e.getMessage());
+//        throw e; // Re-throw the exception if necessary
+//    }
+//        
+//        return orderItems;
+//    }
+public List<OrderItem> getOrderItemsByOrderId(int orderId) throws SQLException {
+    List<OrderItem> orderItems = new ArrayList<>();
+    String query = "SELECT oi.*, p.Name AS ProductName " +
+                   "FROM OrderItem oi " +
+                   "JOIN Product p ON oi.ProductId = p.Id " +
+                   "WHERE oi.OrderId = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+
+        ps.setInt(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        while (rs.next()) {
+            OrderItem item = new OrderItem();
+            item.setId(rs.getInt("Id"));
+            item.setOrderId(rs.getInt("OrderId"));
+            item.setProductId(rs.getInt("ProductId"));
+            item.setQuantity(rs.getInt("Quantity"));
+            item.setCreateAt(rs.getDate("CreateAt"));
+            item.setPrice(rs.getDouble("Price"));
+            item.setProductName(rs.getString("ProductName")); // Gán tên sản phẩm
+
+            orderItems.add(item);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error fetching order items: " + e.getMessage());
+        throw e;
+    }
+
+    return orderItems;
+}
+
     public boolean deleteOrderItemsByProductId(int productId) {
     String query = "DELETE FROM OrderItem WHERE ProductId = ?";
     try (Connection conn = DBConnection.getConnection();
@@ -29,5 +95,7 @@ public class OrderItemDAO {
         return false;
     }
 }
+
+  
 
 }
