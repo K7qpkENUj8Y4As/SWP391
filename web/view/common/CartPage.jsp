@@ -1,7 +1,14 @@
+<%@page import="model.CartItem"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page session="true" %>
+<%
+    // Lấy cart từ session
+    List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+    int cartCount = (cart != null) ? cart.size() : 0;
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>

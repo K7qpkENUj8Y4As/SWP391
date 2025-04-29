@@ -3,8 +3,17 @@
     Created on : Apr 15, 2025, 11:36:18 PM
     Author     : ADMIN
 --%>
-
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="model.CartItem"%>
+<%@page import="java.util.List"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page session="true" %>
+<%
+    // Lấy cart từ session
+    List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+    int cartCount = (cart != null) ? cart.size() : 0;
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -645,13 +654,38 @@
                 <div class="logo-text">Five Blooms</div>
             </div>
             
-            <ul class="nav-links">
-                <li><a href="home.jsp" class="active">Home</a></li>
-                <li><a href="productPage">Shop</a></li>
-                <li><a href="category">Categories</a></li>
-                <li><a href="view/common/AboutUsPage.jsp">About Us</a></li>
-                <li><a href="contact.jsp">Contact</a></li>
-            </ul>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto nav-links">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="home.jsp">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="product">Shop</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="category">Categories</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span id="cart-count"><%= cartCount%></span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login">Login</a>                        
+                        </li>
+                        <li class="nav-item">                       
+                            <a class="nav-link" href="register">Register</a>                        
+                        </li>                      
+                        </li>
+                    </ul>
+                </div>
             
             <div class="mobile-menu">☰</div>
         </div>

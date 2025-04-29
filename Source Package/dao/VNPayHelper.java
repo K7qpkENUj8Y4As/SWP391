@@ -22,7 +22,7 @@ public class VNPayHelper {
         vnpParams.put("vnp_Version", VNP_VERSION);
         vnpParams.put("vnp_Command", VNP_COMMAND);
         vnpParams.put("vnp_TmnCode", VNP_TMNCODE);
-        vnpParams.put("vnp_Amount", String.valueOf((long) (order.getTotalPrice() * 100))); // nhân 100
+        vnpParams.put("vnp_Amount", String.valueOf(Math.round(order.getTotalPrice() * 100))); // nhân 100
         vnpParams.put("vnp_CurrCode", "VND");
         vnpParams.put("vnp_TxnRef", String.valueOf(order.getId()));
         vnpParams.put("vnp_OrderInfo", "Thanh toan don hang: " + order.getId());

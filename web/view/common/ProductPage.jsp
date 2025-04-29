@@ -1,6 +1,14 @@
+<%@page import="model.CartItem"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page session="true" %>
+<%
+    // Lấy cart từ session
+    List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
+    int cartCount = (cart != null) ? cart.size() : 0;
+%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -320,7 +328,7 @@
                     font-size: 1rem;
                 }
             }
-             /* Category Section Styling */
+            /* Category Section Styling */
             .category {
                 position: relative;
             }
@@ -377,16 +385,23 @@
                             <a class="nav-link" href="category">Categories</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="AboutUsPage.jsp">About Us</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contact.jsp">Contact</a>
+                            <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="cart.jsp">
+                            <a class="nav-link" href="cart">
                                 <i class="fas fa-shopping-cart"></i>
-                                <span id="cart-count">0</span>
+                                <span id="cart-count"><%= cartCount%></span>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="login">Login</a>                        
+                        </li>
+                        <li class="nav-item">                       
+                            <a class="nav-link" href="register">Register</a>                        
+                        </li>                      
                         </li>
                     </ul>
                 </div>
@@ -402,7 +417,7 @@
         <section class="search">
             <div class="container" >
                 <nav class="breadcrumb">
-                    <a class="breadcrumb-item text-muted" href="#">Home</a>
+                    <a class="breadcrumb-item text-muted" href="home">Home</a>
                     <span class="breadcrumb-item active" >Shopping</span>
                 </nav>
                 <!-- Search Bar -->

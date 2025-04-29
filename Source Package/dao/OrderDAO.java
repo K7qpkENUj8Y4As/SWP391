@@ -3,30 +3,33 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+
 import dbConnection.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import dbConnection.DBConnection;
+import java.util.ArrayList;
+import java.util.Date;
 import model.Order;
 import model.OrderItem;
+
 /**
  *
  * @author trung
  */
 public class OrderDAO {
-    
+
     public int createOrder(Order order) {
         int generatedId = -1;
         String sql = "INSERT INTO [Order] (TotalPrice, Status, CreateAt, CustomerId, DeliveryStatus, Note) VALUES (?, ?, ?, ?, ?, ?)";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-             
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+
             ps.setDouble(1, order.getTotalPrice());
             ps.setInt(2, order.getStatus());
-            ps.setTimestamp(4, new java.sql.Timestamp(order.getCreateAt().getTime()));
+            ps.setTimestamp(3, new java.sql.Timestamp(order.getCreateAt().getTime()));
             ps.setInt(4, order.getCustomerId());
             ps.setInt(5, order.getDeliveryStatus());
             ps.setString(6, order.getNote());
@@ -48,8 +51,7 @@ public class OrderDAO {
     public void createOrderItems(List<OrderItem> items) {
         String sql = "INSERT INTO OrderItem (OrderId, ProductId, Quantity, CreateAt, Price) VALUES (?, ?, ?, ?, ?)";
 
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             for (OrderItem item : items) {
                 ps.setInt(1, item.getOrderId());
@@ -65,10 +67,10 @@ public class OrderDAO {
             e.printStackTrace();
         }
     }
-     public void updateStatus(int orderId, int status) {
+
+    public void updateStatus(int orderId, int status) {
         String sql = "UPDATE [Order] SET Status = ? WHERE Id = ?";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, status);
             ps.setInt(2, orderId);
@@ -77,5 +79,15 @@ public class OrderDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public static void main(String[] args) {
+        OrderDAO dao = new OrderDAO();
+        Date now = new Date();
+        OrderItem order = new OrderItem();
+        order.setCreateAt(now);
+        List<OrderItem> items = new ArrayList<>();
+        items.add(order); // ✅ Now works
+        dao.createOrderItems(items);
     }
 }
