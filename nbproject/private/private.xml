@@ -37,6 +37,19 @@
             <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/HashUtilDAO.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/OrderItemDAO.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Account.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/ProductRawDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/CheckOutController.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/CheckOut.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Order.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/model/Category.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/dao/OrderDAO.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AccountController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/ViewDetailController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/CategoryController.java</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/CartController.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/home.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/dashboardPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/Source%20Package/config/VnpayConfig.java</file>
         </group>
     </open-files>
 </project-private>

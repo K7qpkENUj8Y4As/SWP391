@@ -31,7 +31,7 @@ public class CustomerDAO {
     }
     
    public Customer getCustomerByAccountId(int accountId) {
-    String sql = "SELECT * FROM Customer WHERE Account_id=?";
+    String sql = "SELECT * FROM Customer WHERE Id=?";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, accountId);
@@ -72,6 +72,20 @@ public class CustomerDAO {
     } catch (Exception e) {
         e.printStackTrace();
         return false;
+    }
+}
+   public void insertAccount(Customer acc) {
+    String sql = "INSERT INTO Customer (Email ,FullName ,Avatar  ,Phone,isGuest ) VALUES (?, ?, ?,?,0)";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, acc.getEmail());
+        ps.setString(2, acc.getFullName()); // Hash nếu cần
+        ps.setString(3, "default.jsp");
+        ps.setString(4, acc.getPhone());
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
 }
 }

@@ -1,10 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%
-   
-    String username = (String) session.getAttribute("username"); 
-%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -371,21 +367,6 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto nav-links">
-                        <li class="nav-item dropdown">
-  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    Welcome, <%= username != null ? username : "Guest" %>!
-  </a>
-  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-    <% if (username != null) { %>
-      <li><a class="dropdown-item" href="updateProfile">View Profile</a></li>
-      <li><a class="dropdown-item" href="logout">Logout</a></li>
-    <% } else { %>
-      <li><a class="dropdown-item" href="/login">Login</a></li>
-      <li><a class="dropdown-item" href="/signup">Sign Up</a></li>
-    <% } %>
-  </ul>
-</li>
-
                         <li class="nav-item">
                             <a class="nav-link active" href="home.jsp">Home</a>
                         </li>
@@ -490,7 +471,7 @@
                                 </div>
                                 <div class="product-info">
                                     <div class="product-category">${product.category}</div>
-                                    <h3 class="product-title">${product.name}</h3>
+                                    <a href="viewDetail?id=${product.id}"><h3 class="product-title">${product.name}</h3></a>
                                     <div class="product-price">Rp ${product.price}/stalk</div>
                                     <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
                                 </div>

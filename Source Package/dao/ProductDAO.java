@@ -4,7 +4,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
-
 import dbConnection.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -127,7 +126,30 @@ public class ProductDAO {
     return null;
 }
 
+ public Product getProductById2(int id) {
+    String query = "SELECT * FROM Product WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Product product = new Product();
+            product.setId(rs.getInt("Id"));
+            product.setName(rs.getString("Name"));
+            product.setPrice(rs.getDouble("Price"));
+            product.setImage(rs.getString("Image"));
+            product.setCategoryId(rs.getInt("CategoryId"));
+            product.setDescription(rs.getString("Description"));
+            product.setCreateAt(rs.getDate("CreateAt"));
+            product.setQuantity(rs.getInt("Quantity"));
+            return product;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
 
+    return null;
+}
 public List<Product> getFeaturedProducts(int limit) {
     List<Product> products = new ArrayList<>();
     String query = "SELECT * FROM Product ORDER BY Id DESC LIMIT ?"; // Lấy sản phẩm mới nhất
@@ -308,9 +330,8 @@ public boolean updateQuantity(int productId, int addedQuantity) {
         e.printStackTrace();
         return false;
     }
-
-
-public int getGeneratedProductId() {
+  }
+ public int getGeneratedProductId(){
     String query = "SELECT SCOPE_IDENTITY()"; // Dành cho SQL Server để lấy ID cuối cùng được chèn
     int lastInsertedId = -1; // Khởi tạo giá trị mặc định nếu không tìm thấy ID
     try (Connection conn = DBConnection.getConnection();
@@ -326,12 +347,5 @@ public int getGeneratedProductId() {
     }
     
     return lastInsertedId; // Trả về ID của sản phẩm vừa được chèn
-
-     public static void main(String[] args) {
-       ProductDAO dao=new ProductDAO();
-         System.out.println(dao.getProductById(1).getName());
 }
-
-}
-
 }

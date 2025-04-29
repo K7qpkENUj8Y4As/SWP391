@@ -1,0 +1,81 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package dao;
+import dbConnection.DBConnection;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.List;
+import dbConnection.DBConnection;
+import model.Order;
+import model.OrderItem;
+/**
+ *
+ * @author trung
+ */
+public class OrderDAO {
+    
+    public int createOrder(Order order) {
+        int generatedId = -1;
+        String sql = "INSERT INTO [Order] (TotalPrice, Status, CreateAt, CustomerId, DeliveryStatus, Note) VALUES (?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             
+            ps.setDouble(1, order.getTotalPrice());
+            ps.setInt(2, order.getStatus());
+            ps.setTimestamp(4, new java.sql.Timestamp(order.getCreateAt().getTime()));
+            ps.setInt(4, order.getCustomerId());
+            ps.setInt(5, order.getDeliveryStatus());
+            ps.setString(6, order.getNote());
+
+            int rowsAffected = ps.executeUpdate();
+            if (rowsAffected > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        generatedId = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return generatedId;
+    }
+
+    public void createOrderItems(List<OrderItem> items) {
+        String sql = "INSERT INTO OrderItem (OrderId, ProductId, Quantity, CreateAt, Price) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            for (OrderItem item : items) {
+                ps.setInt(1, item.getOrderId());
+                ps.setInt(2, item.getProductId());
+                ps.setInt(3, item.getQuantity());
+                ps.setTimestamp(4, new java.sql.Timestamp(item.getCreateAt().getTime()));
+                ps.setDouble(5, item.getPrice());
+                ps.addBatch();
+            }
+            ps.executeBatch();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+     public void updateStatus(int orderId, int status) {
+        String sql = "UPDATE [Order] SET Status = ? WHERE Id = ?";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, status);
+            ps.setInt(2, orderId);
+
+            ps.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}

@@ -14,10 +14,12 @@ public class OrderItem {
     private int productId;    
     private int quantity;     
     private Date createAt;    
-    private BigDecimal price; 
+    private double price; 
 
-   
-    public OrderItem(int id, int orderId, int productId, int quantity, Date createAt, BigDecimal price) {
+    public OrderItem() {
+    }
+
+    public OrderItem(int id, int orderId, int productId, int quantity, Date createAt, double price) {
         this.id = id;
         this.orderId = orderId;
         this.productId = productId;
@@ -26,7 +28,6 @@ public class OrderItem {
         this.price = price;
     }
 
-    // Getter và Setter
     public int getId() {
         return id;
     }
@@ -67,14 +68,15 @@ public class OrderItem {
         this.createAt = createAt;
     }
 
-    public BigDecimal getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(BigDecimal price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
+ 
     // Override phương thức toString để dễ dàng kiểm tra đối tượng
     @Override
     public String toString() {

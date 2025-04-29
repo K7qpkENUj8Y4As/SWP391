@@ -1,85 +1,112 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package controller;
-
-import java.io.IOException;
-import java.io.PrintWriter;
+import dao.OrderDAO;
+import dao.VNPayHelper;
+import model.Account;
+import model.CartItem;
+import model.Customer;
+import model.Order;
+import model.OrderItem;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-/**
- *
- * @author trung
- */
+import jakarta.servlet.http.*;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 public class CheckOutController extends HttpServlet {
+    private OrderDAO orderDAO;
+    @Override
+    public void init() throws ServletException {
+        orderDAO = new OrderDAO();
+    }
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet CheckOutController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet CheckOutController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+        HttpSession session = request.getSession();
+        Customer customer = (Customer) session.getAttribute("customer");
+        // Tự động fill thông tin khách hàng
+        if (customer != null) {
+            request.setAttribute("fullname", customer.getFullName());
+            request.setAttribute("address", customer.getAddress());
+            request.setAttribute("phone", customer.getPhone());
+        }
+
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
+        double totalAmount = 0;
+        if (cartItems != null) {
+            for (CartItem item : cartItems) {
+                totalAmount += item.getProduct().getPrice() * item.getQuantity();
+            }
+        }
+
+        request.setAttribute("cartItems", cartItems);
+        request.setAttribute("totalAmount", totalAmount);
+
+        request.getRequestDispatcher("/view/common/CheckOut.jsp").forward(request, response);
+    }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        HttpSession session = request.getSession();
+        Account account = (Account) session.getAttribute("account");
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (account == null || customer == null) {
+            customer = new Customer();
+            customer.setFullName(request.getParameter("fullname"));
+            customer.setAddress(request.getParameter("address"));
+            customer.setPhone(request.getParameter("phone"));
+        }
+        List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
+
+        if (cartItems == null || cartItems.isEmpty()) {
+            response.sendRedirect("cart.jsp");
+            return;
+        }
+
+        String note = request.getParameter("note");
+        String paymentMethod = request.getParameter("paymentMethod");
+
+        // Tính tổng tiền
+        double totalAmount = 0;
+        for (CartItem item : cartItems) {
+            totalAmount += item.getProduct().getPrice() * item.getQuantity();
+        }
+
+        Date now = new Date();
+
+        // Tạo Order
+        Order order = new Order();
+        order.setTotalPrice(totalAmount);
+        order.setStatus(0); // Chưa thanh toán
+        order.setDeliveryStatus(0); // Chưa giao
+        order.setCreateAt(now);
+        order.setCustomerId(customer.getId());
+        order.setNote(note);
+        int orderId = orderDAO.createOrder(order);
+
+        // Tạo OrderItems
+        List<OrderItem> orderItems = new ArrayList<>();
+        for (CartItem item : cartItems) {
+            OrderItem orderItem = new OrderItem();
+            orderItem.setOrderId(orderId);
+            orderItem.setProductId(item.getProduct().getId());
+            orderItem.setQuantity(item.getQuantity());
+            orderItem.setPrice(item.getProduct().getPrice());
+            orderItem.setCreateAt(now);
+            orderItems.add(orderItem);
+        }
+        orderDAO.createOrderItems(orderItems);
+
+        // Xử lý theo PaymentMethod
+        if ("VNPAY".equalsIgnoreCase(paymentMethod)) {
+            String paymentUrl = VNPayHelper.createPaymentUrl(order);
+            response.sendRedirect(paymentUrl);
+        } else {
+            // Thanh toán COD
+            session.removeAttribute("cartItems");
+            session.removeAttribute("totalAmount");
+
+            request.setAttribute("message", "Đặt hàng thành công! Thanh toán khi nhận hàng.");
+            request.getRequestDispatcher("/view/common/PaymentResult.jsp").forward(request, response);
         }
     }
-
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

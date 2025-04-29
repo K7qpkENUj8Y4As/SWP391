@@ -73,7 +73,7 @@ public class CartController extends HttpServlet {
                 break;
         }
         
-        request.getRequestDispatcher("/view/common/CartPage.jsp").forward(request, response);
+         response.sendRedirect("cart");
     }
     
     private void addToCart(int productId, List<CartItem> cartItems) {
@@ -84,7 +84,7 @@ public class CartController extends HttpServlet {
         if (existingItem.isPresent()) {
             existingItem.get().setQuantity(existingItem.get().getQuantity() + 1);
         } else {
-            Product product = productDAO.getProductById(productId);
+            Product product = productDAO.getProductById2(productId);
             cartItems.add(new CartItem(product, 1));
         }
     }
