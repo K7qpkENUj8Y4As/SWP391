@@ -97,71 +97,7 @@
                     <small class="form-text text-muted">Leave empty to keep current image (if editing)</small>
                 </div>
 
-                <!--            <h4 class="mt-4">Raw Materials</h4>
-                            <p class="text-muted">Select the raw materials used in this product and specify the quantity required for each.</p>
-                            
-                            <div id="rawMaterialsContainer">
-                <c:forEach items="${rawMaterials}" var="raw">
-                    <div class="raw-material-row">
-                        <div class="form-row">
-                            <div class="col-md-1">
-                                <div class="form-check mt-2">
-                    <c:set var="isSelected" value="false" />
-                    <c:set var="selectedQuantity" value="0" />
-                    
-                    <c:forEach items="${productRawQuantities}" var="entry">
-                        <c:if test="${entry.key.id == raw.id}">
-                            <c:set var="isSelected" value="true" />
-                            <c:set var="selectedQuantity" value="${entry.value}" />
-                        </c:if>
-                    </c:forEach>
-                    
-                    <input class="form-check-input raw-checkbox" type="checkbox" 
-                           id="raw-${raw.id}" 
-                    ${isSelected ? 'checked' : ''} 
-                    onchange="toggleQuantityField(this, ${raw.id})">
-         </div>
-     </div>
-     
-     <div class="col-md-5">
-         <label for="raw-${raw.id}" class="form-label">
-                    ${raw.name}
-                    <c:if test="${raw.expriseDate.time < currentDate.time}">
-                        <span class="expired">(EXPIRED)</span>
-                    </c:if>
-                    <c:if test="${raw.quantity < 10}">
-                        <span class="low-quantity">(Low Stock: ${raw.quantity} left)</span>
-                    </c:if>
-                </label>
-                <input type="hidden" name="rawId" value="${raw.id}">
-            </div>
-            
-            <div class="col-md-3">
-                <div class="input-group">
-                    <input type="number" class="form-control quantity-input" 
-                           id="quantity-${raw.id}" 
-                           name="rawQuantity" 
-                           value="${selectedQuantity}" 
-                           min="0" 
-                    ${!isSelected ? 'disabled' : ''}>
-             <div class="input-group-append">
-                 <span class="input-group-text">units</span>
-             </div>
-         </div>
-     </div>
-     
-     <div class="col-md-3">
-         <small class="text-muted">Available: ${raw.quantity} units</small>
-                    <c:if test="${raw.expriseDate != null}">
-                        <br>
-                        <small class="text-muted">Expires: <fmt:formatDate value="${raw.expriseDate}" pattern="yyyy-MM-dd" /></small>
-                    </c:if>
-                </div>
-            </div>
-        </div>
-                </c:forEach>
-            </div>
-                -->
+               
 
                 <h4 class="mt-4">Raw Materials</h4>
                 <p class="text-muted">Select the raw materials used in this product and specify the quantity required for each.</p>
@@ -205,21 +141,7 @@
                                 <c:if test="${raw.expriseDate != null}">
                                     <br><small>Expires: <fmt:formatDate value="${raw.expriseDate}" pattern="yyyy-MM-dd"/></small>
                                 </c:if>
-                                <%--    
-                                  <c:if test="${raw.expriseDate != null}">
-                           <br>
-                           <small>
-                               Expires: 
-                               <fmt:formatDate value="${raw.expriseDate}" pattern="yyyy-MM-dd"/>
-                               
-                               <!-- Hiển thị cảnh báo nếu hết hạn -->
-                               <c:if test="${raw.expired}">
-                                   <span style="color:red; font-weight: bold;"> (Expired)</span>
-                               </c:if>
-                           </small>
-                       </c:if>
-
-                                --%>
+                         
 
 
                             </div>

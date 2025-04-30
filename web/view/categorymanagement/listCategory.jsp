@@ -1,9 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html; charset=UTF-8" language="java" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="model.Category" %>
-<%@ page import="java.util.List" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Management - Flower Shop Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
@@ -11,42 +13,60 @@
             background-color: #fff5f5;
             color: #333;
         }
+
         .container {
             background-color: #ffffff;
             padding: 2rem;
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
         h2 {
             color: #d63384;
             font-weight: bold;
         }
+
         .btn-success {
             background-color: #d63384;
             border: none;
         }
+
         .btn-success:hover {
             background-color: #c02676;
         }
+
         .table thead {
             background-color: #ffe0e9;
         }
+
         .btn-primary {
             background-color: #6f42c1;
             border: none;
         }
+
         .btn-primary:hover {
             background-color: #5b32a1;
         }
+
         .btn-danger {
             background-color: #e63946;
             border: none;
         }
+
         .btn-danger:hover {
             background-color: #d62839;
         }
+
         #toast {
             background-color: #d63384;
+        }
+
+        .form-container {
+            margin-bottom: 20px;
+        }
+
+        .form-container input {
+            width: 300px;
         }
     </style>
 </head>
@@ -54,59 +74,74 @@
     <%@ include file="/view/dashboard/sidebar.jsp" %>
     
     <div style="margin-left: 250px; padding: 20px;">
-    <div class="container">
-        <h2 class="mb-4">Category List</h2>
-        <a href="category?action=create" class="btn btn-success mb-3">+ Add New</a>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Category Name</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <%
-                    List<Category> categories = (List<Category>) request.getAttribute("categories");
-                    if (categories != null) {
-                        for (Category c : categories) {
-                %>
-                <tr>
-                    <td><%= c.getId() %></td>
-                    <td><%= c.getName() %></td>
-                    <td>
-                        <a href="category?action=edit&id=<%= c.getId() %>" class="btn btn-primary btn-sm">Edit</a>
-                        <a href="category?action=delete&id=<%= c.getId() %>" class="btn btn-danger btn-sm"
-                           onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
-                    </td>
-                </tr>
-                <%
-                        }
-                    }
-                %>
-            </tbody>
-        </table>
-    </div>
+        <div class="container">
+            <h2 class="mb-4">Category List</h2>
 
-    <%-- Toast message --%>
-    <%
-        String message = (String) session.getAttribute("message");
-        if (message != null) {
-    %>
-    <div id="toast" style="position: fixed; top: 20px; right: 20px; color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999;">
-        <%= message %>
-    </div>
+            <!-- Display Success Message -->
+            <c:if test="${not empty sessionScope.message}">
+                <div class="alert alert-success">${sessionScope.message}</div>
+                <c:remove var="message"/>
+            </c:if>
 
-    <script>
-        setTimeout(() => {
-            const toast = document.getElementById('toast');
-            if (toast) toast.remove();
-        }, 3000);
-    </script>
-    <%
-            session.removeAttribute("message");
-        }
-    %>
+            <!-- Form for Add/Edit Category -->
+            <c:if test="${showForm == 'create' || showForm == 'edit'}">
+                <div class="form-container">
+                    <form action="category" method="post">
+                        <input type="hidden" name="action" value="${showForm == 'edit' ? 'edit' : 'create'}">
+                        <c:if test="${showForm == 'edit'}">
+                            <input type="hidden" name="id" value="${editCategory.id}">
+                        </c:if>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Category Name</label>
+                            <input type="text" class="form-control" name="name" value="${showForm == 'edit' ? editCategory.name : ''}" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">${showForm == 'edit' ? 'Update' : 'Add New'}</button>
+                    </form>
+                </div>
+            </c:if>
+
+            <!-- Add New Category Button -->
+            <a href="category?action=create" class="btn btn-success mb-3">+ Add New</a>
+
+            <!-- Category List Table -->
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Category Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <c:forEach var="category" items="${categories}">
+                        <tr>
+                            <td>${category.id}</td>
+                            <td>${category.name}</td>
+                            <td>
+                                <a href="category?action=edit&id=${category.id}" class="btn btn-primary btn-sm">Edit</a>
+                                <a href="category?action=delete&id=${category.id}" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </tbody>
+            </table>
+        </div>
+
+        <%-- Toast Message --%>
+        <c:if test="${not empty sessionScope.message}">
+            <div id="toast" style="position: fixed; top: 20px; right: 20px; color: white; padding: 12px 24px; border-radius: 8px; z-index: 9999;">
+                ${sessionScope.message}
+            </div>
+
+            <script>
+                setTimeout(() => {
+                    const toast = document.getElementById('toast');
+                    if (toast) toast.remove();
+                }, 3000);
+            </script>
+        </c:if>
+
     </div>
 </body>
 </html>

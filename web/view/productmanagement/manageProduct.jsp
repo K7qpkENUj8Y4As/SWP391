@@ -188,7 +188,7 @@ function closePopup() {
 </body>
 </html>
 --%>
-
+<%--
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -201,6 +201,7 @@ function closePopup() {
     <head>
         <meta charset="UTF-8">
         <title>Product Management</title>
+        
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
             #popup {
@@ -227,6 +228,7 @@ function closePopup() {
         </style>
     </head>
     <body>
+        
         <%@ include file="/view/dashboard/sidebar.jsp" %>
         <div style="margin-left: 250px; padding: 20px;">
         <div class="container mt-4">
@@ -344,6 +346,236 @@ function closePopup() {
                         document.getElementById('overlay').style.display = 'none';
                     }
         </script>
+        </div>
+    </body>
+</html>
+--%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    String role = (String) session.getAttribute("role");
+    String username = (String) session.getAttribute("username");
+%>
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Product Management</title>
+                <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f8f9fa;
+                padding: 20px;
+            }
+
+            h2 {
+                color: #d6336c;
+                text-align: center;
+            }
+
+            .container {
+                background-color: #fff;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+                max-width: 1000px;
+                margin: auto;
+            }
+
+            .btn-primary {
+                background-color: #d6336c;
+                border: none;
+            }
+
+            .btn-primary:hover {
+                background-color: #c2185b;
+            }
+
+            .btn-secondary {
+                background-color: #ffdeeb;
+                color: #d6336c;
+                border: none;
+            }
+
+            .btn-secondary:hover {
+                background-color: #f8bbd0;
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 9998;
+            }
+
+            #popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: #fff;
+                padding: 20px;
+                border: 2px solid #ccc;
+                z-index: 9999;
+                border-radius: 10px;
+            }
+
+            .modal-content {
+                border-radius: 10px;
+            }
+
+            .modal-header {
+                background-color: #d6336c;
+                color: white;
+                border-radius: 10px 10px 0 0;
+            }
+
+            .modal-footer {
+                border-top: none;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <%@ include file="/view/dashboard/sidebar.jsp" %>
+        <div style="margin-left: 250px; padding: 20px;">
+            <div class="container mt-4">
+                <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
+                <h2>Product Management</h2>
+                <a href="${pageContext.request.contextPath}/product?action=showAddForm" class="btn btn-primary mb-3">
+                    Add New Product
+                </a>
+
+                <!-- Product Management Table -->
+                <c:if test="${empty products}">
+                    <div class="alert alert-info">No products available.</div>
+                </c:if>
+
+                <!-- Search Form -->
+                <form action="${pageContext.request.contextPath}/product" method="get" class="mb-4">
+                    <input type="hidden" name="action" value="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search products..." name="keyword" value="${keyword}">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="submit">
+                                <i class="fas fa-search"></i> Search
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <table id="productTable" class="table table-bordered table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Image</th>
+                            <th>Product Name</th>
+                            <th>Price</th>
+                            <th>Quantity in Stock</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <c:forEach items="${products}" var="product">
+                            <tr>
+                                <td><img src="${pageContext.request.contextPath}/${not empty product.image ? product.image : 'images/products/default-product.jpg'}" width="80" height="80" alt="${product.name}"/></td>
+                                <td>${product.name}</td>
+                                <td>$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                                <td>${product.quantity}</td>
+                                <td>
+                                    <a href="${pageContext.request.contextPath}/product?action=showEditForm&id=${product.id}" class="btn btn-warning btn-sm">Edit</a>
+
+                                    <button type="button" class="btn btn-success btn-sm" onclick="openPopup(${product.id})">Add Stock</button>
+
+                                    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal${product.id}">Delete</button>
+                                </td>
+                            </tr>
+
+                            <!-- Modal for Deletion Confirmation -->
+                            <div class="modal fade" id="deleteModal${product.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel${product.id}" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">Confirm Deletion</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            Are you sure you want to delete the product "${product.name}"?
+                                        </div>
+                                        <div class="modal-footer">
+                                            <form action="${pageContext.request.contextPath}/product" method="post">
+                                                <input type="hidden" name="action" value="delete">
+                                                <input type="hidden" name="id" value="${product.id}">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </c:forEach>
+                    </tbody>
+                </table>
+
+                <% } %>
+            </div>
+
+            <!-- Popup for Adding Stock -->
+            <div class="overlay" id="overlay" onclick="closePopup()"></div>
+            <div id="popup">
+                <form action="product" method="post">
+                    <input type="hidden" name="action" value="updateQuantity" />
+                    <input type="hidden" id="productId" name="productId" />
+                    <div class="form-group">
+                        <label>Enter additional quantity:</label>
+                        <input type="number" name="addedQuantity" class="form-control" required />
+                    </div>
+                    <button type="submit" class="btn btn-primary">Confirm</button>
+                    <button type="button" class="btn btn-secondary" onclick="closePopup()">Cancel</button>
+                </form>
+            </div>
+
+            <!-- Bootstrap and JS scripts -->
+<!--            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
+            <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Thêm thư viện JavaScript cho DataTables -->
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+
+        <script>
+            $(document).ready(function() {
+                $('#productTable').DataTable({
+                    "pageLength": 10, 
+                    "ordering": true, 
+                    "searching": true 
+                });
+            });
+
+            
+            
+          
+                function openPopup(productId) {
+                    document.getElementById('popup').style.display = 'block';
+                    document.getElementById('overlay').style.display = 'block';
+                    document.getElementById('productId').value = productId;
+                }
+
+                function closePopup() {
+                    document.getElementById('popup').style.display = 'none';
+                    document.getElementById('overlay').style.display = 'none';
+                }
+            </script>
         </div>
     </body>
 </html>

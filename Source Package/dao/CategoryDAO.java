@@ -52,6 +52,25 @@ public class CategoryDAO {
         }
         return null;
     }
+public Category getCategoryByName(String name) {
+    String query = "SELECT * FROM Category WHERE Name = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setString(1, name);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            Category category = new Category();
+            category.setId(rs.getInt("Id"));
+            category.setName(rs.getString("Name"));
+            return category;
+        }
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return null;
+}
+
+
     
     // Thêm mới Category
 public void addCategory(Category category) {

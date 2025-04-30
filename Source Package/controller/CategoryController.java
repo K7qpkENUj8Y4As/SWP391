@@ -3,7 +3,6 @@ package controller;
 import dao.CategoryDAO;
 import dao.ProductDAO;
 import model.Category;
-import model.Product;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,57 +13,49 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import model.Product;
 
 @WebServlet(name = "CategoryController", urlPatterns = {"/category"})
 public class CategoryController extends HttpServlet {
 
     private CategoryDAO categoryDAO;
-    private ProductDAO productDAO;
 
     @Override
     public void init() throws ServletException {
         categoryDAO = new CategoryDAO();
-        productDAO = new ProductDAO();
     }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-             HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
-        // Kiểm tra session và quyền truy cập
         if (session == null || session.getAttribute("account") == null) {
             response.sendRedirect("login");
             return;
         }
 
         String role = (String) session.getAttribute("role");
-
-        // Kiểm tra nếu không phải Manager hoặc Seller thì chuyển hướng về home
         if (!"Seller".equalsIgnoreCase(role) && !"Manager".equalsIgnoreCase(role)) {
             response.sendRedirect("home");
             return;
-        
         }
-        
+
         String action = request.getParameter("action");
         if (action == null) {
-            action = "list"; // mặc định là list
+            action = "list";
         }
 
         switch (action) {
             case "create":
-                showCreateForm(request, response);
+                showInlineCreateForm(request, response);
                 break;
             case "edit":
-                showEditForm(request, response);
+                showInlineEditForm(request, response);
                 break;
             case "delete":
                 deleteCategory(request, response);
-                break;
-            case "view":
-                viewCategoryProducts(request, response);
                 break;
             default:
                 listCategories(request, response);
@@ -77,9 +68,7 @@ public class CategoryController extends HttpServlet {
             throws ServletException, IOException {
 
         String action = request.getParameter("action");
-        if (action == null) {
-            action = "list";
-        }
+        if (action == null) action = "list";
 
         switch (action) {
             case "create":
@@ -94,8 +83,6 @@ public class CategoryController extends HttpServlet {
         }
     }
 
-    // ================= Các hàm xử lý ==================
-
     private void listCategories(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         List<Category> categories = categoryDAO.getAllCategories();
@@ -103,61 +90,98 @@ public class CategoryController extends HttpServlet {
         request.getRequestDispatcher("/view/categorymanagement/listCategory.jsp").forward(request, response);
     }
 
-    private void showCreateForm(HttpServletRequest request, HttpServletResponse response)
+    private void showInlineCreateForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("/view/categorymanagement/createCategory.jsp").forward(request, response);
+        request.setAttribute("showForm", "create");
+        listCategories(request, response);
     }
 
-    private void showEditForm(HttpServletRequest request, HttpServletResponse response)
+    private void showInlineEditForm(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        Category existingCategory = categoryDAO.getCategoryById(id);
-        request.setAttribute("category", existingCategory);
-        request.getRequestDispatcher("/view/categorymanagement/editCategory.jsp").forward(request, response);
+        Category category = categoryDAO.getCategoryById(id);
+        request.setAttribute("showForm", "edit");
+        request.setAttribute("editCategory", category);
+        listCategories(request, response);
     }
 
     private void insertCategory(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
-        String name = request.getParameter("name");
+        String name = request.getParameter("name").trim();
+
+        // Validate category name
+        if (name.isEmpty()) {
+            request.getSession().setAttribute("message", "Tên danh mục không được để trống!");
+            response.sendRedirect("category?action=create");
+            return;
+        }
+
+        if (name.matches(".*\\s.*")) {
+            request.getSession().setAttribute("message", "Tên danh mục không được chứa khoảng trắng.");
+            response.sendRedirect("category?action=create");
+            return;
+        }
+
+        if (categoryDAO.getCategoryByName(name) != null) {
+            request.getSession().setAttribute("message", "Danh mục với tên này đã tồn tại!");
+            response.sendRedirect("category?action=create");
+            return;
+        }
+
         Category newCategory = new Category();
         newCategory.setName(name);
-
         categoryDAO.addCategory(newCategory);
-            request.getSession().setAttribute("message", "Thêm danh mục thành công!");
 
+        request.getSession().setAttribute("message", "Thêm danh mục thành công!");
         response.sendRedirect("category?action=list");
     }
 
     private void updateCategory(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
-        String name = request.getParameter("name");
+        String name = request.getParameter("name").trim();
 
-        Category category = new Category();
-        category.setId(id);
-        category.setName(name);
+        // Validate category name
+        if (name.isEmpty()) {
+            request.getSession().setAttribute("message", "Tên danh mục không được để trống!");
+            response.sendRedirect("category?action=edit&id=" + id);
+            return;
+        }
 
-        categoryDAO.updateCategory(category);
+        if (name.matches(".*\\s.*")) {
+            request.getSession().setAttribute("message", "Tên danh mục không được chứa khoảng trắng.");
+            response.sendRedirect("category?action=edit&id=" + id);
+            return;
+        }
+
+        Category category = categoryDAO.getCategoryById(id);
+        if (category != null) {
+            category.setName(name);
+            categoryDAO.updateCategory(category);
+
             request.getSession().setAttribute("message", "Cập nhật danh mục thành công!");
-
-        response.sendRedirect("category?action=list");
+            response.sendRedirect("category?action=list");
+        } else {
+            request.getSession().setAttribute("message", "Danh mục không tồn tại!");
+            response.sendRedirect("category?action=list");
+        }
     }
 
     private void deleteCategory(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
         categoryDAO.deleteCategory(id);
+        request.getSession().setAttribute("message", "Xóa danh mục thành công!");
         response.sendRedirect("category?action=list");
     }
 
-    private void viewCategoryProducts(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        int categoryId = Integer.parseInt(request.getParameter("id"));
-        Category category = categoryDAO.getCategoryById(categoryId);
-        List<Product> products = productDAO.getProductsByCategoryId(categoryId);
-
-        request.setAttribute("category", category);
-        request.setAttribute("products", products);
-        request.getRequestDispatcher("/view/categorymanagement/listCategory.jsp").forward(request, response);
-    }
+//    private void viewCategoryProducts(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//        int categoryId = Integer.parseInt(request.getParameter("id"));
+//        Category category = categoryDAO.getCategoryById(categoryId);
+//        List<Product> products = productDAO.getProductsByCategoryId(categoryId);
+//        request.setAttribute("category", category);
+//        request.setAttribute("products", products);
+//        request.getRequestDispatcher("/view/categorymanagement/listCategory.jsp").forward(request, response);
+//    }
 }

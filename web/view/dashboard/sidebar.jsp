@@ -13,9 +13,15 @@
             width: 250px;
             background-color: #f4f4f4;
             padding-top: 20px;
+            
             position: fixed;
             height: 100%;
             left: 0;
+            position: fixed;
+          top: 0;
+           height: 100vh;
+/*        background-color: #f8f9fa;*/
+          
         }
 
         .sidebar a {
