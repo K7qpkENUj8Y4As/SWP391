@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="p-5">
+    <%@ include file="/view/dashboard/sidebar.jsp" %>
     <div class="container">
         <h2 class="mb-4">Chỉnh sửa danh mục</h2>
 

@@ -44,6 +44,7 @@
     </style>
 </head>
 <body>
+    <%@ include file="/view/dashboard/sidebar.jsp" %>
     <% if ("Admin".equals(role) || "Manager".equals(role)) { %>
     <div class="container mt-4">
         <h2>Edit Product</h2>

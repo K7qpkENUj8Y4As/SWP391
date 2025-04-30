@@ -12,6 +12,7 @@
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">      
     </head>
     <body>
+        <%@ include file="/view/dashboard/sidebar.jsp" %>
         <div class="container my-5">
             <div class="card shadow-sm border rounded-4 p-3">
                 <div class="row mb-3">
@@ -25,11 +26,9 @@
                     <div class="col-md-4">
                         <select id="roleFilter" class="form-select">
                             <option value="">All Roles</option>
-
                             <option value="Manager">Manager</option>
                             <option value="Customer">Customer</option>
-                            <option value="Staff">Staff</option>
-
+                            <option value="Staff">Seller</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -63,7 +62,7 @@
                                             </button>
                                         </form>
 
-       
+
                                     </td>
                                 </tr>
                             </c:forEach>

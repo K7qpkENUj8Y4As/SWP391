@@ -20,7 +20,6 @@
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/FAQController.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/UpdateProfileController.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddToCart.java</file>
-            <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddStaff.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/AddRaw.java</file>
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/UpdateRaw.java</file>
             <file>file:/D:/SWP_391/SWP391/web/view/rawmanagement/RawManagementPage.jsp</file>
@@ -49,7 +48,14 @@
             <file>file:/D:/SWP_391/SWP391/Source%20Package/controller/CartController.java</file>
             <file>file:/D:/SWP_391/SWP391/web/view/common/home.jsp</file>
             <file>file:/D:/SWP_391/SWP391/web/view/common/dashboardPage.jsp</file>
-            <file>file:/D:/SWP_391/SWP391/Source%20Package/config/VnpayConfig.java</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/PaymentResult.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/ProductViewDetail.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/AboutUsPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/ContactPage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/FAQpage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/common/ServicePage.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/components/Footer.jsp</file>
+            <file>file:/D:/SWP_391/SWP391/web/view/components/Header.jsp</file>
         </group>
     </open-files>
 </project-private>

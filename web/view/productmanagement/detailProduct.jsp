@@ -35,6 +35,7 @@
     </style>
 </head>
 <body>
+    <%@ include file="/view/dashboard/sidebar.jsp" %>
     <div class="container mt-4">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">

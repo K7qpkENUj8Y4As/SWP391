@@ -69,7 +69,7 @@
     </style>
 </head>
 <body>
-
+<%@ include file="/view/dashboard/sidebar.jsp" %>
 <div class="container">
     <h2>Create Similar Product</h2>
 

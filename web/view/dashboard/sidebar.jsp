@@ -1,0 +1,67 @@
+<%-- 
+    Document   : sidebar
+    Created on : Apr 30, 2025, 8:05:34?AM
+    Author     : trung
+--%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>JSP Page</title>
+        <style>
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background-color: #f4f4f4;
+            padding-top: 20px;
+            position: fixed;
+            height: 100%;
+            left: 0;
+        }
+
+        .sidebar a {
+            text-decoration: none;
+            color: #ff66b2;
+            padding: 12px 15px;
+            display: block;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        .sidebar a:hover {
+            background-color: #ffccf2;
+            color: white;
+        }
+
+        </style>
+    </head>
+    <!-- Sidebar -->
+   <div class="sidebar">
+    <h2 style="text-align: center; color: #ff66b2;">Dashboard</h2>
+
+    <c:if test="${sessionScope.role == 'Admin'}">
+        <a href="${pageContext.request.contextPath}/account">Manage User</a>
+    </c:if>
+
+    <c:if test="${sessionScope.role == 'Manager'}">
+        <a href="${pageContext.request.contextPath}/product">Manage Products</a>
+        <a href="${pageContext.request.contextPath}/category">Manage Categories</a>
+        <a href="${pageContext.request.contextPath}/raw">Manage Raw</a>
+        <a href="${pageContext.request.contextPath}/account">Manage Seller</a>
+        <a href="${pageContext.request.contextPath}/viewOrders.jsp">View Orders</a>
+    </c:if>
+
+    <c:if test="${sessionScope.role == 'Seller'}">
+        <a href="${pageContext.request.contextPath}/raw">Management Raw</a>
+        <a href="${pageContext.request.contextPath}/product">Add Product</a>
+        <a href="${pageContext.request.contextPath}/manageOrders.jsp">Manage Orders</a>
+    </c:if>
+
+    <%--<c:if test="${sessionScope.role == 'Customer'}">--%>
+        <!--<a href="${pageContext.request.contextPath}/shopProducts.jsp">Shop Products</a>-->
+        <!--<a href="${pageContext.request.contextPath}/viewOrders.jsp">View My Orders</a>-->
+    <%--</c:if>--%>
+
+    <c:if test="${empty sessionScope.role}">
+        <a href="${pageContext.request.contextPath}/login">Login</a>
+    </c:if>
+</div>

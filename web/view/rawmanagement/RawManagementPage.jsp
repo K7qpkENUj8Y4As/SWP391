@@ -25,7 +25,7 @@
         </style>
     </head>
     <body>
-
+<%@ include file="/view/dashboard/sidebar.jsp" %>
         <div class="container my-5">
             <div class="card shadow-sm border rounded-4 p-3">
                 <h2 class="fw-bold mb-4">Manager Flower</h2>

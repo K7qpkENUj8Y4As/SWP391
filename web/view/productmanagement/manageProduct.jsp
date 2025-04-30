@@ -198,84 +198,87 @@ function closePopup() {
 %>
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
-    <title>Product Management</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        #popup {
-            display: none;
-            position: fixed;
-            left: 50%; top: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 20px;
-            border: 2px solid #ccc;
-            z-index: 9999;
-        }
-        .overlay {
-            display: none;
-            position: fixed;
-            left: 0; top: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            z-index: 9998;
-        }
-    </style>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <title>Product Management</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+            #popup {
+                display: none;
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background: #fff;
+                padding: 20px;
+                border: 2px solid #ccc;
+                z-index: 9999;
+            }
+            .overlay {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.5);
+                z-index: 9998;
+            }
+        </style>
+    </head>
+    <body>
+        <%@ include file="/view/dashboard/sidebar.jsp" %>
+        <div class="container mt-4">
+            <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
+            <h2>Product Management</h2>
+            <a href="${pageContext.request.contextPath}/product?action=showAddForm" class="btn btn-primary mb-3">
+                Thêm sản phẩm mới
+            </a>
 
-<div class="container mt-4">
-    <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
-        <h2>Product Management</h2>
-        <a href="${pageContext.request.contextPath}/product?action=showAddForm" class="btn btn-primary mb-3">
-            Thêm sản phẩm mới
-        </a>
-        
-        <!-- Bảng quản lý sản phẩm -->
-        <c:if test="${empty products}">
-            <div class="alert alert-info">Không có sản phẩm nào.</div>
-        </c:if>
-     <!-- Search form -->
-        <form action="${pageContext.request.contextPath}/product" method="get" class="mb-4">
-            <input type="hidden" name="action" value="search">
-            <div class="input-group">
-                <input type="text" class="form-control" placeholder="Search products..." name="keyword" value="${keyword}">
-                <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">
-                        <i class="fas fa-search"></i> Search
-                    </button>
+            <!-- Bảng quản lý sản phẩm -->
+            <c:if test="${empty products}">
+                <div class="alert alert-info">Không có sản phẩm nào.</div>
+            </c:if>
+            <!-- Search form -->
+            <form action="${pageContext.request.contextPath}/product" method="get" class="mb-4">
+                <input type="hidden" name="action" value="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search products..." name="keyword" value="${keyword}">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <i class="fas fa-search"></i> Search
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
-        <table class="table table-bordered table-hover">
-            <thead class="thead-light">
-                <tr>
-                    <th>Ảnh</th>
-                    <th>Tên sản phẩm</th>
-                    <th>Giá</th>
-                    <th>Số lượng tồn</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                <c:forEach items="${products}" var="product">
+            </form>
+            <table class="table table-bordered table-hover">
+                <thead class="thead-light">
                     <tr>
-                        <td><img src="${pageContext.request.contextPath}/${not empty product.image ? product.image : 'images/products/default-product.jpg'}" width="80" height="80" alt="${product.name}"/></td>
-                        <td>${product.name}</td>
-                        <td>$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
-                        <td>${product.quantity}</td>
-                       <td>
-    <a href="${pageContext.request.contextPath}/product?action=showEditForm&id=${product.id}" class="btn btn-warning btn-sm">Sửa</a>
-
-    <button type="button" class="btn btn-success btn-sm" onclick="openPopup(${product.id})">Nhập thêm hàng</button>
-
-    <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal${product.id}">Xóa</button>
-</td>
-
+                        <th>Ảnh</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Giá</th>
+                        <th>Số lượng tồn</th>
+                        <th>Hành động</th>
                     </tr>
+                </thead>
+                <tbody>
+                    <c:forEach items="${products}" var="product">
+                        <tr>
+                            <td><img src="${pageContext.request.contextPath}/${not empty product.image ? product.image : 'images/products/default-product.jpg'}" width="80" height="80" alt="${product.name}"/></td>
+                            <td>${product.name}</td>
+                            <td>$<fmt:formatNumber value="${product.price}" pattern="#,##0.00"/></td>
+                            <td>${product.quantity}</td>
+                            <td>
+                                <a href="${pageContext.request.contextPath}/product?action=showEditForm&id=${product.id}" class="btn btn-warning btn-sm">Sửa</a>
 
-                    <!-- Modal xác nhận xóa -->
+                                <button type="button" class="btn btn-success btn-sm" onclick="openPopup(${product.id})">Nhập thêm hàng</button>
+
+                                <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal${product.id}">Xóa</button>
+                            </td>
+
+                        </tr>
+
+                        <!-- Modal xác nhận xóa -->
                     <div class="modal fade" id="deleteModal${product.id}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel${product.id}" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
@@ -301,45 +304,45 @@ function closePopup() {
                     </div>
 
                 </c:forEach>
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-    <% } %>
-</div>
-
-<!-- Popup nhập thêm hàng -->
-<div class="overlay" id="overlay" onclick="closePopup()"></div>
-<div id="popup">
-    <form action="product" method="post">
-        <input type="hidden" name="action" value="updateQuantity" />
-        <input type="hidden" id="productId" name="productId" />
-        <div class="form-group">
-            <label>Nhập thêm số lượng:</label>
-            <input type="number" name="addedQuantity" class="form-control" required />
+            <% }%>
         </div>
-        <button type="submit" class="btn btn-primary">Xác nhận</button>
-        <button type="button" class="btn btn-secondary" onclick="closePopup()">Hủy</button>
-    </form>
-</div>
 
-<!-- Bootstrap scripts -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <!-- Popup nhập thêm hàng -->
+        <div class="overlay" id="overlay" onclick="closePopup()"></div>
+        <div id="popup">
+            <form action="product" method="post">
+                <input type="hidden" name="action" value="updateQuantity" />
+                <input type="hidden" id="productId" name="productId" />
+                <div class="form-group">
+                    <label>Nhập thêm số lượng:</label>
+                    <input type="number" name="addedQuantity" class="form-control" required />
+                </div>
+                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                <button type="button" class="btn btn-secondary" onclick="closePopup()">Hủy</button>
+            </form>
+        </div>
+
+        <!-- Bootstrap scripts -->
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 
-<script>
-function openPopup(productId) {
-    document.getElementById('popup').style.display = 'block';
-    document.getElementById('overlay').style.display = 'block';
-    document.getElementById('productId').value = productId;
-}
-function closePopup() {
-    document.getElementById('popup').style.display = 'none';
-    document.getElementById('overlay').style.display = 'none';
-}
-</script>
+        <script>
+                    function openPopup(productId) {
+                        document.getElementById('popup').style.display = 'block';
+                        document.getElementById('overlay').style.display = 'block';
+                        document.getElementById('productId').value = productId;
+                    }
+                    function closePopup() {
+                        document.getElementById('popup').style.display = 'none';
+                        document.getElementById('overlay').style.display = 'none';
+                    }
+        </script>
 
-</body>
+    </body>
 </html>

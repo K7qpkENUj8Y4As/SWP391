@@ -1,15 +1,7 @@
-<%@page import="model.CartItem"%>
-<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ page session="true" %>
-<%
-    // Lấy cart từ session
-    List<CartItem> cart = (List<CartItem>) session.getAttribute("cart");
-    int cartCount = (cart != null) ? cart.size() : 0;
-%>
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -36,46 +28,12 @@
                 margin: 0;
                 padding: 0;
             }
-
-            .navbar {
-                background-color: white;
-                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-                padding: 15px 0;
-            }
-
+            
             .logo-text {
                 font-size: 1.5rem;
                 font-weight: 700;
                 color: var(--primary-color);
             }
-
-            .nav-links a {
-                text-decoration: none;
-                color: var(--text-color);
-                font-weight: 500;
-                position: relative;
-                transition: color 0.3s;
-            }
-
-            .nav-links a:hover {
-                color: var(--primary-color);
-            }
-
-            .nav-links a::after {
-                content: '';
-                position: absolute;
-                width: 0;
-                height: 2px;
-                bottom: -5px;
-                left: 0;
-                background-color: var(--primary-color);
-                transition: width 0.3s;
-            }
-
-            .nav-links a:hover::after {
-                width: 100%;
-            }
-
             .active {
                 color: var(--primary-color) !important;
             }
@@ -231,22 +189,7 @@
             .btn-checkout:hover {
                 background-color: var(--secondary-color);
                 border-color: var(--secondary-color);
-            }
-
-            .footer {
-                margin-top: 80px;
-                padding: 40px 0 20px;
-                text-align: center;
-                background-color: var(--dark-bg);
-                color: white;
-            }
-
-            .footer a {
-                color: var(--accent-color);
-                text-decoration: none;
-            }
-
-
+            }         
             @media (max-width: 768px) {
                 .cart-container {
                     margin: 20px;
@@ -271,48 +214,7 @@
     </head>
     <body>
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg">
-            <div class="container">
-                <a class="navbar-brand" href="#">
-                    <span class="logo-text">Five Blooms</span>
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto nav-links">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="home">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="productPage">Shop</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="category">Categories</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/AboutUsPage.jsp">About Us</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="${pageContext.request.contextPath}/Contact.jsp">Contact</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="cart">
-                                <i class="fas fa-shopping-cart"></i>
-                                <span id="cart-count"><%= cartCount%></span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login">Login</a>                        
-                        </li>
-                        <li class="nav-item">                       
-                            <a class="nav-link" href="register">Register</a>                        
-                        </li>                                            
-                    </ul>
-                </div>
-            </div>
-        </nav>
-
+        <%@ include file="/view/components/Header.jsp" %>
         <!-- Breadcrumb -->
         <div class="container">
             <nav aria-label="breadcrumb">
@@ -373,12 +275,7 @@
                 </c:otherwise>
             </c:choose>
         </div>
-
-
-        <div class="footer">
-            © Natasha Devi Pramudita | All Rights Reserved
-        </div>
-
+        <%@ include file="/view/components/Footer.jsp" %>
         <!-- Bootstrap JS -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 

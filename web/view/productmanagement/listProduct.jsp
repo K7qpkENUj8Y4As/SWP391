@@ -34,6 +34,7 @@
     </style>
 </head>
 <body>
+    <%@ include file="/view/dashboard/sidebar.jsp" %>
     <div class="container mt-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2>Product Management</h2>
