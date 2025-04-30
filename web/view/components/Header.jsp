@@ -18,6 +18,22 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 <style>
+
+
+    body {
+        margin: 0;
+        padding: 0;
+    }
+
+    header {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background-color: white;
+    }
+
+
+
     .logo {
         display: flex;
         align-items: center;
@@ -50,7 +66,7 @@
     }
     .navbar {
         background-color: white;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         position: sticky;
         top: 0;
         z-index: 100;
@@ -103,69 +119,75 @@
     .no-caret::after {
         display: none !important;
     }
+
+
 </style>
 <!-- HEADER -->
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <div class="logo">
-            <img img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="QT Fresh Flower Shop Logo">
-            <a class="navbar-brand" href="home">
-                <span class="logo-text">Five Blooms</span>
-            </a>
-        </div>  
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto nav-links">
-                <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().endsWith("/home") ? "active" : ""%>" href="${pageContext.request.contextPath}/home">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().endsWith("/productPage") ? "active" : ""%>" href="${pageContext.request.contextPath}/productPage">Shop</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/AboutUsPage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/AboutUsPage.jsp">About Us</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/ContactPage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/ContactPage.jsp">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/FAQpage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/FAQpage.jsp">FAQ</a>
-                </li>
-                <li class="nav-item position-relative me-3">
-                    <a class="nav-link" href="${pageContext.request.contextPath}/cart">
-                        <i class="fas fa-shopping-cart fa-lg"></i>
-                        <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
-                            <%= cartCount%>
-                        </span>
-                    </a>
-                </li>
-                <% if (loggedInUser == null) { %>
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link dropdown-toggle no-caret d-flex align-items-center" role="button" data-bs-toggle="dropdown">
-                        <i class="fas fa-user-circle fa-lg me-1"></i> Account
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-                    </ul>
-                </li>
-                <% } else {%>
-                <li class="nav-item dropdown me-2">
-                    <a class="nav-link dropdown-toggle no-caret d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                        <img src="${pageContext.request.contextPath}/images/<%= loggedInUser.getAvatar()%>" class="rounded-circle me-2" width="32" height="32" alt="avatar" style="object-fit: cover;">
-                        <span><%= loggedInUser.getFullName()%></span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/updateProfile"><i class="fas fa-user me-2"></i>Profile</a></li>
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                    </ul>
-                </li>
-                <% }%>
-            </ul>
-        </div>
 
-</nav>
 
+<header>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <div class="logo">
+                <img img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="QT Fresh Flower Shop Logo">
+                <a class="navbar-brand" href="home">
+                    <span class="logo-text">Five Blooms</span>
+                </a>
+            </div>  
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto nav-links">
+                    <li class="nav-item">
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/home") ? "active" : ""%>" href="${pageContext.request.contextPath}/home">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/productPage") ? "active" : ""%>" href="${pageContext.request.contextPath}/productPage">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/AboutUsPage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/AboutUsPage.jsp">About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/ContactPage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/ContactPage.jsp">Contact</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/FAQpage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/FAQpage.jsp">FAQ</a>
+                    </li>
+                    <li class="nav-item position-relative me-3">
+                        <a class="nav-link" href="${pageContext.request.contextPath}/cart">
+                            <i class="fas fa-shopping-cart fa-lg"></i>
+                            <span class="position-absolute top-10 start-100 translate-middle badge rounded-pill bg-danger">
+                                <%= cartCount%>
+                            </span>
+                        </a>
+                    </li>
+                    <% if (loggedInUser == null) { %>
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle no-caret d-flex align-items-center" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user-circle fa-lg me-1"></i> Account
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        </ul>
+                    </li>
+                    <% } else {%>
+                    <li class="nav-item dropdown me-2">
+                        <a class="nav-link dropdown-toggle no-caret d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
+                            <img src="${pageContext.request.contextPath}/images/<%= loggedInUser.getAvatar()%>" class="rounded-circle me-2" width="32" height="32" alt="avatar" style="object-fit: cover;">
+                            <span><%= loggedInUser.getFullName()%></span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/updateProfile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                            <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                        </ul>
+                    </li>
+                    <% }%>
+                </ul>
+            </div>
+
+    </nav>
+
+</header>
 

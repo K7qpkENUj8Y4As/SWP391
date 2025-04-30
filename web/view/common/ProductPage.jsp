@@ -310,6 +310,30 @@
         bottom: -5px;
         left: 25%;
     }
+    
+    .btn-pink {
+        background-color: #ff66b2; /* Màu hồng */
+        color: white;
+        font-size: 16px;
+        padding: 10px 25px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        display: inline-block;
+        text-align: center;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .btn-pink:hover {
+        background-color: #ff3385; /* Màu hồng đậm khi hover */
+    }
+
+    .category-link-all {
+        margin-top: 10px;
+        margin-bottom: 25px;
+        text-align: center;
+    }
 </style>
 
 <body>
@@ -337,7 +361,7 @@
                 </form>
             </div>
     </section>
-    <!-- Category Section - Thêm link filter -->
+<!--     Category Section - Thêm link filter 
     <section class="category py-5">
         <div class="container position-relative">
             <div class="section-title">
@@ -369,7 +393,7 @@
                 </div>
             </div>
 
-            <!-- Carousel Controls -->
+             Carousel Controls 
             <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
@@ -379,7 +403,63 @@
                 <span class="visually-hidden">Next</span>
             </button>
         </div>
-    </section>
+    </section>-->
+
+
+<section class="category py-5">
+    <div class="container position-relative">
+        <div class="section-title">
+            <h5>CATEGORY</h5>
+        </div>
+
+
+<!-- Nút View All Products -->
+<div class="category-link-all">
+    <a href="productPage" style="text-decoration: none;">
+        <button class="btn-pink">View All Products</button>
+    </a>
+</div>
+
+        <div id="categoryCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                <c:forEach var="i" begin="0" end="${fn:length(categoryList) - 1}" step="4">
+                    <div class="carousel-item ${i == 0 ? 'active' : ''}">
+                        <div class="row">
+                            <c:forEach var="j" begin="0" end="3">
+                                <c:if test="${(i + j) < fn:length(categoryList)}">
+                                    <c:set var="category" value="${categoryList[i + j]}" />
+                                    <div class="col-6 col-md-3 text-center mb-4">
+                                        <a href="productPage?category=${category.id}" style="text-decoration: none; color: inherit;">
+                                            <div class="category-box p-4 d-flex flex-column justify-content-center align-items-center mb-3">
+                                                <div class="category-icon">
+                                                    <i class="fas fa-box fa-3x"></i> <!-- Biểu tượng danh mục -->
+                                                </div>
+                                                <div class="category-title ${param.category == category.id ? 'active' : ''}">
+                                                    ${category.name}
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
+                    </div>
+                </c:forEach>
+            </div>
+        </div>
+
+        <!-- Các nút điều khiển carousel -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
+    </div>
+</section>
+
     <!-- Product Section -->
     <section class="product py-5 bg-white">
         <div class="container">
@@ -396,12 +476,19 @@
                                 <div class="product-img" style="background-color: #f9f9f9;"> <img src="${product.image}" alt="${product.name}" class="img-fluid" /></div>                                  
 
                             </div>
-                            <div class="product-info">
+<!--                            <div class="product-info">
                                 <div class="product-category">${product.category}</div>
                                 <a href="viewDetail?id=${product.id}" style="text-decoration: none;"><h3 class="product-title">${product.name}</h3></a>
                                 <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
                                 <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
-                            </div>
+                            </div>-->
+<div class="product-info">
+    <div class="product-category" style="display:none;">${product.category}</div>
+    <a href="viewDetail?id=${product.id}" style="text-decoration: none;"><h3 class="product-title">${product.name}</h3></a>
+    <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
+    <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
+</div>
+
                         </div>
                     </div>
                 </c:forEach>
