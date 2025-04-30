@@ -49,21 +49,44 @@
                 <div class="alert alert-danger">${error}</div>
             </c:if>
 
-            <form action="product" method="post" enctype="multipart/form-data">
+            <form action="product" method="post"  class="needs-validation"  enctype="multipart/form-data">
                 <input type="hidden" name="action" value="${product != null && product.id > 0 ? 'edit' : 'add'}">
                 <c:if test="${product != null && product.id > 0}">
                     <input type="hidden" name="id" value="${product.id}">
                 </c:if>
 
-                <div class="form-group">
+<!--                <div class="form-group">
                     <label for="name">Product Name:</label>
                     <input type="text" class="form-control" id="name" name="name" value="${product != null ? product.name : ''}" required>
-                </div>
+                </div>-->
+<!--<div class="form-group">
+  <label for="name">Product Name: <span class="text-danger">*</span></label>
+  <input type="text" class="form-control" id="name" name="name" value="${product != null ? product.name : ''}" required>
+  <div class="invalid-feedback">Please enter the product name.</div>
+</div>-->
+<div class="form-group">
+    <label for="name">Product Name: <span class="text-danger">*</span> </label>
+    <input type="text" class="form-control" id="name" name="name"
+           value="${product != null ? product.name : ''}"
+           required pattern=".*[^ ].*"
+           oninvalid="this.setCustomValidity('Product name cannot be empty or only spaces')"
+           oninput="this.setCustomValidity('')">
+</div>
+
 
                 <div class="form-group">
                     <label for="price">Price:</label>
-                    <input type="number" class="form-control" id="price" name="price" step="0.01" value="${product != null ? product.price : '0.00'}" required>
-                </div>
+<!--                    <input type="number" class="form-control" id="price" name="price" step="0.01" value="${product != null ? product.price : '0.00'}" required>-->
+                
+
+                
+                <input type="number" class="form-control" id="price" name="price" step="0.01"
+       value="${product != null ? product.price : '0.00'}"
+       required min="0"
+       oninvalid="this.setCustomValidity('Please enter a valid price (0 or greater)')"
+       oninput="this.setCustomValidity('')">
+
+</div>
 
                 <div class="form-group">
                     <label for="categoryId">Category:</label>
@@ -77,14 +100,26 @@
 
                 <div class="form-group">
                     <label for="description">Description:</label>
-                    <textarea class="form-control" id="description" name="description" rows="3">${product != null ? product.description : ''}</textarea>
+<!--                    <textarea class="form-control" id="description" name="description" rows="3">${product != null ? product.description : ''}</textarea>-->
+                <textarea class="form-control" id="description" name="description" rows="3"
+          required pattern=".*[^ ].*"
+          oninvalid="this.setCustomValidity('Description cannot be empty or only spaces')"
+          oninput="this.setCustomValidity('')">${product != null ? product.description : ''}</textarea>
+
+                
                 </div>
 
                 <div class="form-group">
                     <label for="quantity">Initial Quantity:</label>
-                    <input type="number" class="form-control" id="quantity" name="quantity" value="${product != null ? product.quantity : '0'}" min="0" required>
-                </div>
-
+<!--                    <input type="number" class="form-control" id="quantity" name="quantity" value="${product != null ? product.quantity : '0'}" min="0" required>-->
+                
+               
+<input type="number" class="form-control" id="quantity" name="quantity"
+       value="${product != null ? product.quantity : '0'}"
+       min="0" required
+       oninvalid="this.setCustomValidity('Please enter a quantity (0 or greater)')"
+       oninput="this.setCustomValidity('')">
+ </div>
                 <div class="form-group">
                     <label for="image">Product Image:</label>
                     <c:if test="${product != null && not empty product.image}">
@@ -160,7 +195,43 @@
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.min.css"></script>
+<script>
+  // Bootstrap form validation
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      var forms = document.getElementsByClassName('needs-validation');
+      Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
+          form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+</script>
+ <script>
+document.querySelector('form').addEventListener('submit', function (e) {
+    const nameInput = document.getElementById('name');
+    const descriptionInput = document.getElementById('description');
 
+    if (nameInput.value.trim() === '') {
+        nameInput.setCustomValidity('Product name cannot be empty or only spaces');
+        nameInput.reportValidity();
+        e.preventDefault();
+    }
+
+    if (descriptionInput.value.trim() === '') {
+        descriptionInput.setCustomValidity('Description cannot be empty or only spaces');
+        descriptionInput.reportValidity();
+        e.preventDefault();
+    }
+});
+
+</script>
         <script>
                                // Function to toggle the quantity input field based on checkbox state
                                function toggleQuantityField(checkbox, rawId) {

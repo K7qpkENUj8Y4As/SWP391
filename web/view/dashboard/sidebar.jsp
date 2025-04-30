@@ -54,6 +54,7 @@
         <a href="${pageContext.request.contextPath}/category">Manage Categories</a>
         <a href="${pageContext.request.contextPath}/raw">Manage Raw</a>
         <a href="${pageContext.request.contextPath}/account">Manage Seller</a>
+         <a href="${pageContext.request.contextPath}/customermanagement">Manage Customer</a>
         <a href="${pageContext.request.contextPath}/orders">View Orders</a>
     </c:if>
 

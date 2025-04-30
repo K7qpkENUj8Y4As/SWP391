@@ -142,4 +142,50 @@ public class CustomerDAO {
     }
     return customer;
 }
+  
+  public Map<Customer, Integer> getCustomersWithStatus() {
+    Map<Customer, Integer> customerStatusMap = new LinkedHashMap<>();
+    String query = "SELECT c.Id AS CustomerId, c.FullName, c.Email, c.Phone, c.Address, c.Gender, c.Avatar, c.Account_id, " +
+                   "a.Status " +
+                   "FROM Customer c " +
+                   "JOIN Account a ON c.Account_id = a.Id " +
+                   "WHERE a.Role = 'Customer'";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Customer customer = new Customer();
+            customer.setId(rs.getInt("CustomerId"));
+            customer.setFullName(rs.getString("FullName"));
+            customer.setEmail(rs.getString("Email"));
+            customer.setPhone(rs.getString("Phone"));
+            customer.setAddress(rs.getString("Address"));
+            customer.setGender(rs.getString("Gender"));
+            customer.setAvatar(rs.getString("Avatar"));
+            customer.setAccountId(rs.getInt("Account_id"));
+
+            int status = rs.getInt("Status");
+            customerStatusMap.put(customer, status);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return customerStatusMap;
+}
+
+public void updateAccountStatus(int accountId, int newStatus) {
+    String query = "UPDATE Account SET Status = ? WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        ps.setInt(1, newStatus);
+        ps.setInt(2, accountId);
+        ps.executeUpdate();
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
+
 }

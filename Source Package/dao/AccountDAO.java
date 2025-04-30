@@ -11,7 +11,10 @@ import java.sql.ResultSet;
 import model.Account;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import model.Customer;
 /**
  *
  * @author trung
@@ -196,6 +199,108 @@ public class AccountDAO {
         }
         return false;
     }
+//public List<Account> getCustomers() {
+//    List<Account> list = new ArrayList<>();
+//    String sql = "SELECT Account_id, Username, Role, Status FROM Account WHERE Role = 'Customer'";
+//
+//    try (Connection conn = DBConnection.getConnection();
+//         PreparedStatement ps = conn.prepareStatement(sql);
+//         ResultSet rs = ps.executeQuery()) {
+//
+//        while (rs.next()) {
+//            Account acc = new Account();
+//            acc.setAccountID(rs.getInt("Account_id"));   // đúng với tên trong DB
+//            acc.setUsername(rs.getString("Username"));
+//            acc.setRole(rs.getString("Role"));
+//            acc.setStatus(rs.getInt("Status"));
+//            list.add(acc);
+//        }
+//    } catch (SQLException e) {
+//        e.printStackTrace();
+//    }
+//    return list;
+//}
+
+ // Phương thức để cập nhật trạng thái tài khoản
+//    public boolean updateAccountStatusCustomer(int accountID, int status) {
+//        String query = "UPDATE Account SET Status = ? WHERE AccountId = ?";
+//
+//        try (Connection conn = DBConnection.getConnection();
+//             PreparedStatement ps = conn.prepareStatement(query)) {
+//
+//            ps.setInt(1, status); // Cập nhật status
+//            ps.setInt(2, accountID); // Chọn accountID cần cập nhật
+//
+//            int result = ps.executeUpdate();
+//            return result > 0; // Trả về true nếu cập nhật thành công
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return false; // Trả về false nếu có lỗi
+//        }
+//    }
+    
+public List<Account> getCustomers() {
+        List<Account> customers = new ArrayList<>();
+//        String query = "SELECT c.Id AS CustomerId, a.Username, a.Role, a.Status " +
+//                       "FROM Account a " +
+//                       "JOIN Customer c ON a.Id = c.Account_id " +
+//                       "WHERE a.Role = 'Customer'";
+String query = "SELECT c.Id AS CustomerId, a.Username, a.Role, a.Status, " +
+               "c.FullName, c.Email, c.Phone, c.Address " +
+               "FROM Account a " +
+               "JOIN Customer c ON a.Id = c.Account_id " +
+               "WHERE a.Role = 'Customer'";
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement ps = conn.prepareStatement(query);
+             ResultSet rs = ps.executeQuery()) {
+
+            while (rs.next()) {
+                Account account = new Account();
+                account.setAccountID(rs.getInt("CustomerId"));
+                account.setUsername(rs.getString("Username"));
+                account.setRole(rs.getString("Role"));
+                account.setStatus(rs.getInt("Status"));
+                customers.add(account);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return customers;
+    }
+
+public Map<Customer, Integer> getCustomersWithStatus() {
+    Map<Customer, Integer> customerStatusMap = new LinkedHashMap<>();
+    String query = "SELECT c.Id AS CustomerId, c.FullName, c.Email, c.Phone, c.Address, c.Gender, c.Avatar, c.Account_id, " +
+                   "a.Status " +
+                   "FROM Customer c " +
+                   "JOIN Account a ON c.Account_id = a.Id " +
+                   "WHERE a.Role = 'Customer'";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            Customer customer = new Customer();
+            customer.setId(rs.getInt("CustomerId"));
+            customer.setFullName(rs.getString("FullName"));
+            customer.setEmail(rs.getString("Email"));
+            customer.setPhone(rs.getString("Phone"));
+            customer.setAddress(rs.getString("Address"));
+            customer.setGender(rs.getString("Gender"));
+            customer.setAvatar(rs.getString("Avatar"));
+            customer.setAccountId(rs.getInt("Account_id"));
+
+            int status = rs.getInt("Status");
+            customerStatusMap.put(customer, status);
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return customerStatusMap;
+}
 
  public static void main(String[] args) throws SQLException {
        AccountDAO dao=new AccountDAO();

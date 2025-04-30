@@ -178,7 +178,33 @@ public class ProductController extends HttpServlet {
         RawDAO rawDAO = new RawDAO();
         ProductRawDAO productRawDAO = new ProductRawDAO();
 
-        String action = request.getParameter("action");
+//        String action = request.getParameter("action");
+// if (action == null) {
+//        action = "";
+//    }
+////
+////    switch (action) {
+////        case "delete":
+////            deleteProduct(request, response);
+////            break;
+//////        // các case khác (add, update, etc)
+////        default:
+////            response.sendRedirect(request.getContextPath() + "/product");
+//////            break;
+////            return;
+////  }
+//
+// switch (action) {
+//        case "delete":
+//            deleteProduct(request, response);
+//            break;
+////        // các case khác (add, update, etc)
+////        default:
+////            response.sendRedirect(request.getContextPath() + "/product");
+////            break;
+//  }
+////}
+      String action = request.getParameter("action");
  if (action == null) {
         action = "";
     }
@@ -194,13 +220,37 @@ public class ProductController extends HttpServlet {
   }
 //}
         if (action.equals("add")) {
+                boolean hasError = false;
+
             try {
                 // Extract product information
-                String name = request.getParameter("name");
+                //  String name = request.getParameter("name");
+
+//String name = name == null ? "" : name.trim();
+
+                String nameRaw = request.getParameter("name");
+                String name = nameRaw == null ? "" : nameRaw.trim();
+                if (name.isEmpty()) {
+                    request.getSession().setAttribute("message", "Tên sản phẩm không được để trống hoặc chỉ chứa khoảng trắng!");
+                    response.sendRedirect("product?action=showAddForm");
+                    return;
+                }
+
+
+
                 double price = Double.parseDouble(request.getParameter("price"));
+                try {
+    if (price <= 0) {
+        request.setAttribute("error", "Price must be a positive number.");
+    }
+} catch (NumberFormatException e) {
+    request.setAttribute("error", "Price must be a valid number.");
+}
                 int categoryId = Integer.parseInt(request.getParameter("categoryId"));
                 String description = request.getParameter("description");
                 int quantity = Integer.parseInt(request.getParameter("quantity"));
+
+
 
                 // Handle image upload
                 String imagePath = "default-product.jpg"; // Default image path
@@ -223,7 +273,7 @@ public class ProductController extends HttpServlet {
                         imagePath = "images/products/" + uniqueFileName;
                     }
                 }
-
+  
                 // Create product object
                 Product product = new Product();
                 product.setName(name);
