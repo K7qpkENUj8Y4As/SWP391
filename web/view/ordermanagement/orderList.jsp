@@ -240,11 +240,16 @@ function loadOrderItems(orderId) {
 <!DOCTYPE html>
 
 <html>
+
+
+
     <head>
         <title>Danh sách đơn hàng</title>
-        <!-- CSS DataTables -->
+        <!-- Liên kết đến CSS của DataTables -->
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
         <style>
+
+
             body {
                 font-family: Arial, sans-serif;
                 background-color: #f8f9fa;
@@ -291,7 +296,25 @@ function loadOrderItems(orderId) {
                 color: #d6336c;
                 font-weight: bold;
             }
+            .customer-card {
+                background-color: #fff;
+                border: 1px solid #ddd;
+                padding: 20px;
+                border-radius: 8px;
+                margin-top: 30px;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            }
+
+            .customer-card h3 {
+                color: #d6336c;
+                margin-bottom: 15px;
+            }
+
+            .customer-card p {
+                margin: 5px 0;
+            }
         </style>
+
 
         <!-- jQuery + DataTables JS -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -335,14 +358,7 @@ function loadOrderItems(orderId) {
                                             Chưa thanh toán
                                         </c:otherwise>
                                     </c:choose>
-
-
                                 </td>
-
-
-
-
-
                                 <td>${o.createAt}</td>
 
                                 <td>
@@ -352,17 +368,15 @@ function loadOrderItems(orderId) {
                                     </select>
                                 </td>
 
-
-
-
                                 <td>${o.note}</td>
                                 <td>
-                                    <button onclick="loadOrderItems('${o.id}')">View Detail</button>
+                                    <button onclick="loadOrderItems('${o.id}')">View OrderItem</button>
+
+                                    <button onclick="loadCustomerInfo('${o.customerId}', '${o.id}')">View Customer Info</button>
                                 </td>
 
 
 
-                                </td>
                             </tr>
                         </c:forEach>
                     </tbody>
@@ -371,8 +385,8 @@ function loadOrderItems(orderId) {
             </c:otherwise>
         </c:choose>
 
-        <!-- Div hiển thị chi tiết đơn hàng -->
-        <div id="orderDetailsSection" class="details-table">
+        <!-- Bảng chi tiết đơn hàng -->
+        <div id="orderDetailsSection" class="details-table" style="flex: 2;">
             <h3 class="details-title">Chi tiết đơn hàng</h3>
             <table id="orderDetails">
                 <thead>
@@ -390,13 +404,37 @@ function loadOrderItems(orderId) {
             </table>
         </div>
 
+        <!-- Thông tin người nhận -->
+        <div id="customerInfoSection" class="customer-card" style="display: none;">
+            <!-- Nội dung sẽ được thay bằng AJAX -->
+
+
+            <h3>Thông tin người nhận</h3>
+            <p><strong>Họ tên:</strong> <span id="customerName"></span></p>
+            <p><strong>Số điện thoại:</strong> <span id="customerPhone"></span></p>
+            <p><strong>Địa chỉ:</strong> <span id="customerAddress"></span></p>
+        </div>
+
+
+
         <!-- DataTables script -->
         <script type="text/javascript">
             $(document).ready(function () {
                 $('#ordersTable').DataTable();
             });
 
+        </script>
+
+
+
+        <script>
+            let currentOrderId = null;
+
             function loadOrderItems(orderId) {
+                if (currentOrderId !== orderId) {
+                    $('#customerInfoSection').hide(); // Ẩn thông tin người nhận của đơn khác
+                }
+
                 $.ajax({
                     url: 'OrderItems',
                     method: 'GET',
@@ -407,9 +445,34 @@ function loadOrderItems(orderId) {
                         $('html, body').animate({
                             scrollTop: $("#orderDetailsSection").offset().top
                         }, 500);
+                        currentOrderId = orderId; // cập nhật order đang xem
                     },
                     error: function () {
                         alert("Lỗi khi tải dữ liệu chi tiết đơn hàng.");
+                    }
+                });
+            }
+
+            function loadCustomerInfo(customerId, orderId) {
+                if (currentOrderId !== orderId) {
+                    $('#orderDetailsSection').hide(); 
+                }
+
+                $('#customerInfoSection').hide(); 
+
+                $.ajax({
+                    url: 'viewCustomer',
+                    method: 'GET',
+                    data: {customerId: customerId},
+                    success: function (response) {
+                        $('#customerInfoSection').html('<h3>Thông tin người nhận</h3>' + response).show();
+                        $('html, body').animate({
+                            scrollTop: $("#customerInfoSection").offset().top
+                        }, 500);
+                        currentOrderId = orderId; // cập nhật order đang xem
+                    },
+                    error: function () {
+                        alert("Lỗi khi tải thông tin khách hàng.");
                     }
                 });
             }

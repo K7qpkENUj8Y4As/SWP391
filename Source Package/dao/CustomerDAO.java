@@ -97,4 +97,49 @@ public class CustomerDAO {
         }
         return -1;
     }
+   
+   public Customer getCustomerByOrderId(int orderId) throws SQLException {
+    Customer customer = null;
+
+    String sql = "SELECT c.Id AS CustomerId, c.FullName, c.Phone, c.Address " +
+                 "FROM [Order] o " +
+                 "JOIN Customer c ON o.CustomerId = c.Id " +
+                 "WHERE o.Id = ?";
+
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, orderId);
+        ResultSet rs = ps.executeQuery();
+
+        if (rs.next()) {
+            customer = new Customer();
+            customer.setCustomerId(rs.getInt("CustomerId"));
+            customer.setFullName(rs.getString("FullName"));
+            customer.setPhone(rs.getString("Phone"));
+            customer.setAddress(rs.getString("Address"));
+        }
+    }
+
+    return customer;
+}
+
+  public Customer getCustomerById(int id) {
+    Customer customer = null;
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(
+                 "SELECT FullName, Phone, Address FROM Customer WHERE Id = ?")) {
+        ps.setInt(1, id);
+        ResultSet rs = ps.executeQuery();
+        if (rs.next()) {
+            customer = new Customer();
+            customer.setFullName(rs.getString("FullName"));
+            customer.setPhone(rs.getString("Phone"));
+            customer.setAddress(rs.getString("Address"));
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+    return customer;
+}
 }

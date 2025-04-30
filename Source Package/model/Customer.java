@@ -92,4 +92,8 @@ public class Customer {
     public void setAccountId(int accountId) {
         this.accountId = accountId;
     }
+
+    public void setCustomerId(int aInt) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }
