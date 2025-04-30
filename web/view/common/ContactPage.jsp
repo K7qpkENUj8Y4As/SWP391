@@ -101,16 +101,16 @@
             <div class="row mb-4">
                 <div class="col-md-12">
                     <p class="contact-info">
-                        <span class="icon">??</span><strong>Email</strong> : 2141720147@student.polinema.ac.id
+                        <span class="icon"></span><strong>Email</strong> : 2Fleurs@gmail.com
                     </p>
                     <p class="contact-info">
-                        <span class="icon">?</span><strong>Phone Number</strong> : +62895-3669-96023
+                        <span class="icon"></span><strong>Phone Number</strong> : +84392522003
                     </p>
                     <p class="contact-info">
-                        <span class="icon">?</span><strong>LinkedIn</strong> : Natasha Dwi Pramudita
+                        <span class="icon"></span><strong>LinkedIn</strong> : 2Fleurs
                     </p>
                     <p class="contact-info">
-                        <span class="icon">?</span><strong>Instagram</strong> : @natnatyuhuuu
+                        <span class="icon"></span><strong>Instagram</strong> : @2Fleurs
                     </p>
                 </div>
             </div>

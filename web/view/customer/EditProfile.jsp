@@ -1,38 +1,82 @@
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@page import="model.Customer"%>
+<%@ page contentType="text/html" pageEncoding="UTF-8"%>
+<%@ page import="model.Customer"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<html>
+<html lang="en">
 <head>
-    <title>Chỉnh sửa hồ sơ</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 600px;
+            margin-top: 50px;
+        }
+        .form-control {
+            margin-bottom: 15px;
+        }
+        .btn-primary {
+            width: 100%;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+       
+
+    </style>
 </head>
 <body>
-    <h2>Chỉnh sửa hồ sơ cá nhân</h2>
-  
-<%
-    Customer c = (Customer) request.getAttribute("customer");
-    if (c != null) {
-        out.println("Customer info: " + c.getFullName() + ", " + c.getEmail());
-    } else {
-        out.println("Customer is not available!");
-    }
-%>
-    <form action="updateProfile" method="post">
-        <input type="hidden" name="id" value="<%= c.getId() %>" />
+        <%@ include file="/view/components/Header.jsp" %>
 
-        Họ tên: <input type="text" name="fullName" value="<%= c.getFullName() %>" required/><br/>
-        Email: <input type="email" name="email" value="<%= c.getEmail() %>" required/><br/>
-        Số điện thoại: <input type="text" name="phone" value="<%= c.getPhone() %>" required/><br/>
-Địa chỉ: <input type="text" name="address" value="<%= c.getAddress() != null ? c.getAddress() : "" %>" required/><br/>
-       Giới tính: 
-<select name="gender">
-    <option value="Nam" <%= (c != null && "Nam".equals(c.getGender())) ? "selected" : "" %>>Nam</option>
-    <option value="Nữ" <%= (c != null && "Nữ".equals(c.getGender())) ? "selected" : "" %>>Nữ</option>
-</select><br/>
+<div class="container">
+    <h2 class="mb-4">Edit Profile</h2>
 
+    <c:choose>
+        <c:when test="${not empty customer}">
+            <form action="updateProfile" method="post">
+                <input type="hidden" name="id" value="${customer.id}" />
 
-        <button type="submit">Lưu thay đổi</button>
-    </form>
+                <div class="mb-3">
+                    <label for="fullName" class="form-label">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" value="${customer.fullName}" required/>
+                </div>
 
-    <p style="color:green;"><%= request.getAttribute("message") != null ? request.getAttribute("message") : "" %></p>
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="${customer.email}" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="${customer.phone}" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" value="${customer.address}" required/>
+                </div>
+
+                <div class="mb-3">
+                    <label for="gender" class="form-label">Gender</label>
+                    <select class="form-select" name="gender" id="gender">
+                        <option value="Male" ${customer.gender == 'Male' ? 'selected' : ''}>Male</option>
+                        <option value="Female" ${customer.gender == 'Female' ? 'selected' : ''}>Female</option>
+                    </select>
+                </div>
+
+<button type="submit" class="btn btn-primary" style="background-color: #ff66b2; border-color: pink;">Save Changes</button>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <p class="text-danger">Customer information not found!</p>
+        </c:otherwise>
+    </c:choose>
+
+    <p class="message text-success">${message != null ? message : ''}</p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -53,10 +53,8 @@ public class CustomerDAO {
     }
     return null;
 }
-
-    
-   public boolean updateCustomer(Customer customer) {
-    String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=? WHERE Id=?";
+public boolean updateCustomer(Customer customer) {
+    String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=? WHERE Account_id=?";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -65,7 +63,7 @@ public class CustomerDAO {
         ps.setString(3, customer.getPhone());
         ps.setString(4, customer.getAddress());
         ps.setString(5, customer.getGender());
-        ps.setInt(6, customer.getId());
+        ps.setInt(6, customer.getAccountId());  // Dùng Account_id thay vì Id
 
         int rows = ps.executeUpdate();
         return rows > 0;
@@ -74,6 +72,28 @@ public class CustomerDAO {
         return false;
     }
 }
+
+
+    
+//   public boolean updateCustomer(Customer customer) {
+//    String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=? WHERE Id=?";
+//    try (Connection conn = DBConnection.getConnection();
+//         PreparedStatement ps = conn.prepareStatement(sql)) {
+//
+//        ps.setString(1, customer.getFullName());
+//        ps.setString(2, customer.getEmail());
+//        ps.setString(3, customer.getPhone());
+//        ps.setString(4, customer.getAddress());
+//        ps.setString(5, customer.getGender());
+//        ps.setInt(6, customer.getId());
+//
+//        int rows = ps.executeUpdate();
+//        return rows > 0;
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        return false;
+//    }
+//}
    public int insertCustomer(Customer customer) {
         String sql = "INSERT INTO Customer (FullName, Phone, Address, isGuest) VALUES (?, ?, ?, 1)";
         try (Connection conn = DBConnection.getConnection();
@@ -187,5 +207,9 @@ public void updateAccountStatus(int accountId, int newStatus) {
         e.printStackTrace();
     }
 }
+
+    public void updateCustomer(String fullName, String email, String phone, String address, String gender, int accountId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 
 }

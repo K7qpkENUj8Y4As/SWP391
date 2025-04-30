@@ -27,19 +27,25 @@ public class UpdateProfileController extends HttpServlet {
             response.sendRedirect("login");
         }
     }
+@Override
+protected void doPost(HttpServletRequest request, HttpServletResponse response)
+        throws ServletException, IOException {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    int id = Integer.parseInt(request.getParameter("id"));
+    String fullName = request.getParameter("fullName");
+    String email = request.getParameter("email");
+    String phone = request.getParameter("phone");
+    String address = request.getParameter("address");
+    String gender = request.getParameter("gender");
 
-        int id = Integer.parseInt(request.getParameter("id"));
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String phone = request.getParameter("phone");
-        String address = request.getParameter("address");
-        String gender = request.getParameter("gender");
+    // Giữ nguyên id và thêm accountId từ session
+    HttpSession session = request.getSession();
+    Account acc = (Account) session.getAttribute("account");
 
-        Customer customer = new Customer(id,  fullName,  email,  phone,  address,  gender);
+    if (acc != null) {
+        Customer customer = new Customer(id, fullName, email, phone, address, gender);
+        customer.setAccountId(acc.getAccountID()); // Đặt accountId vào đối tượng customer
+
         CustomerDAO dao = new CustomerDAO();
         boolean success = dao.updateCustomer(customer);
 
@@ -51,5 +57,8 @@ public class UpdateProfileController extends HttpServlet {
 
         request.setAttribute("customer", customer);
         request.getRequestDispatcher("/view/customer/EditProfile.jsp").forward(request, response);
+    } else {
+        response.sendRedirect("login");
     }
+}
 }
