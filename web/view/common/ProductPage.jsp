@@ -285,6 +285,31 @@
     .active::after {
         width: 100% !important;
     }
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: black !important; /* Adjust color as needed */
+    }
+
+    /* Optional: Change the hover color */
+    .carousel-control-prev:hover .carousel-control-prev-icon,
+    .carousel-control-next:hover .carousel-control-next-icon {
+        background-color: #f8f9fa !important; /* Change to any hover color */
+    }
+    .category-title.active {
+        color: var(--primary-color);
+        font-weight: bold;
+        position: relative;
+    }
+
+    .category-title.active::after {
+        content: "";
+        position: absolute;
+        width: 50%;
+        height: 2px;
+        background-color: var(--primary-color);
+        bottom: -5px;
+        left: 25%;
+    }
 </style>
 
 <body>
@@ -303,18 +328,18 @@
             </nav>
             <!-- Search Bar -->
             <div class="input-group mb-5 shadow-sm">
-                <input type="text" class="form-control py-2" placeholder="Search Product">
-                <button class="btn btn-outline-secondary" type="button">
-                    <i class="fas fa-search"></i>
-                </button>
+                <form action="productPage" method="get" class="d-flex w-100">
+                    <input type="text" name="search" class="form-control py-2" placeholder="Search Product" 
+                           value="${param.search}">
+                    <button class="btn btn-outline-secondary" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
             </div>
-        </div>
     </section>
-    <!-- Category Section -->
-    <!-- Category Section -->
-
+    <!-- Category Section - Thêm link filter -->
     <section class="category py-5">
-        <div class="container position-relative"> <!-- Added position-relative here -->
+        <div class="container position-relative">
             <div class="section-title">
                 <h5>CATEGORY</h5>
             </div>
@@ -328,8 +353,13 @@
                                     <c:if test="${(i + j) < fn:length(categoryList)}">
                                         <c:set var="category" value="${categoryList[i + j]}" />
                                         <div class="col-6 col-md-3 text-center mb-4">
-                                            <div class="category-img"></div>
-                                            <div class="category-title">${category.name}</div>
+                                            <a href="productPage?category=${category.id}" 
+                                               style="text-decoration: none; color: inherit;">
+                                                <div class="category-img"></div>
+                                                <div class="category-title ${param.category == category.id ? 'active' : ''}">
+                                                    ${category.name}
+                                                </div>
+                                            </a>
                                         </div>
                                     </c:if>
                                 </c:forEach>
@@ -339,12 +369,12 @@
                 </div>
             </div>
 
-            <!-- Carousel Controls - Moved outside the carousel-inner -->
-            <button class="carousel-control-prev position-absolute start-0" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev" style="top: 50%; transform: translateY(-50%);">
+            <!-- Carousel Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#categoryCarousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next position-absolute end-0" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next" style="top: 50%; transform: translateY(-50%);">
+            <button class="carousel-control-next" type="button" data-bs-target="#categoryCarousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -378,22 +408,30 @@
             </div>
 
             <!-- Pagination -->
+            <!-- Pagination -->
             <nav aria-label="Product pagination" class="mt-4">
                 <ul class="pagination justify-content-center">
                     <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
-                        <a class="page-link" href="?page=${currentPage - 1}" aria-label="Previous">
+                        <a class="page-link" 
+                           href="?page=${currentPage - 1}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}" 
+                           aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
                     <c:forEach begin="1" end="${totalPages}" var="i">
                         <li class="page-item ${i == currentPage ? 'active' : ''}">
-                            <a class="page-link" href="?page=${i}">${i}</a>
+                            <a class="page-link" 
+                               href="?page=${i}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}">
+                                ${i}
+                            </a>
                         </li>
                     </c:forEach>
 
                     <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
-                        <a class="page-link" href="?page=${currentPage + 1}" aria-label="Next">
+                        <a class="page-link" 
+                           href="?page=${currentPage + 1}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}" 
+                           aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

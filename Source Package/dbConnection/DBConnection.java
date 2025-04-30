@@ -1,16 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package dbConnection;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
-/**
- * 
- * @author Duong
- */
+
 public class DBConnection {
     private static final String URL = "jdbc:sqlserver://localhost\\SQLEXPRESS:1433;databaseName=SWP391;encrypt=true;trustServerCertificate=true";
     private static final String USER = "sa";
@@ -23,5 +17,9 @@ public class DBConnection {
         } catch (ClassNotFoundException e) {
             throw new SQLException("Database driver not found", e);
         }
+    }
+
+    public static PreparedStatement prepareStatement(String sql) throws SQLException {
+        return getConnection().prepareStatement(sql);
     }
 }

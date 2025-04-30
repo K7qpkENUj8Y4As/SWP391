@@ -24,27 +24,31 @@
             }
         </style>
     </head>
-    <body>
-<%@ include file="/view/dashboard/sidebar.jsp" %>
-<div style="margin-left: 250px; padding: 20px;">
+  <body>
+        <%@ include file="/view/dashboard/sidebar.jsp" %>
         <div class="container my-5">
             <div class="card shadow-sm border rounded-4 p-3">
                 <h2 class="fw-bold mb-4">Manager Flower</h2>
                 <!-- Date Filters -->
-                <div class="row mb-4" >
+                <div class="row mb-4">
                     <div class="col-md-2">
                         <label for="createDate" class="form-label">Import Date:</label>    
                     </div>
                     <div class="col-md-4">
                         <input type="date" class="form-control" id="createDate" />
                     </div>
-                    <div class="col-md-6 ">
-                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createFlowerModal">
-                            Create Flower
-                        </button>
+                    <div class="col-md-2">
+                        <label for="expireDate" class="form-label">Expired Date:</label>    
+                    </div>
+                    <div class="col-md-4">
+                        <input type="date" class="form-control" id="expireDate" />
                     </div>
                 </div>
-
+                <div class="col-md-6 ">
+                    <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createFlowerModal" style="margin-bottom: 10px;">
+                        Create Flower
+                    </button>
+                </div>
                 <!-- Table -->
                 <div class="table-responsive">
                     <table id="flowerTable" class="table table-striped table-bordered text-center">
@@ -182,7 +186,6 @@
                 </div>
             </div>
         </div>
-        </div>
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
         <!-- Bootstrap Bundle -->
@@ -192,8 +195,8 @@
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
-                                              function confirmDelete() {
-                                                 return confirm('Are you sure you want to delete this flower?');
+                                                function confirmDelete() {
+                                                    return confirm('Are you sure you want to delete this flower?');
                                                 }
                                                 $(document).ready(function () {
                                                     $('#updateFlowerModal').on('show.bs.modal', function (event) {
@@ -228,20 +231,52 @@
 
                                                     // Custom search filter by Import Date
                                                     $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                                        const importDate = new Date(data[5]).toISOString().split('T')[0]; // Column index 5 = Import Date
-                                                        const selectedDate = $('#createDate').val();
+                                                        const importDate = new Date(data[5]).toISOString().split('T')[0]; // Import Date
+                                                        const expiredDate = new Date(data[4]).toISOString().split('T')[0]; // Expired Date
 
-                                                        if (!selectedDate)
-                                                            return true; // No filter applied
-                                                        return importDate === selectedDate; // Match exact date
+                                                        const selectedImportDate = $('#createDate').val();
+                                                        const selectedExpiredDate = $('#expireDate').val();
+
+                                                        const matchImport = !selectedImportDate || importDate === selectedImportDate;
+                                                        const matchExpired = !selectedExpiredDate || expiredDate === selectedExpiredDate;
+
+                                                        return matchImport && matchExpired;
                                                     });
 
                                                     // Trigger table redraw on date change
-                                                    $('#createDate').on('change', function () {
+                                                    $('#createDate, #expireDate').on('change', function () {
                                                         table.draw();
                                                     });
                                                 });
+                                                function validateForm(formId) {
+                                                    const form = document.getElementById(formId);
+                                                    const quantity = form.querySelector('[name="quantity"]');
+                                                    const expriseDate = form.querySelector('[name="expriseDate"]');
 
+                                                    const today = new Date().toISOString().split('T')[0];
+
+                                                    if (parseInt(quantity.value) <= 0) {
+                                                        alert("Quantity must be greater than 0.");
+                                                        return false;
+                                                    }
+
+                                                    if (expriseDate.value < today) {
+                                                        alert("Expired date must not be in the past.");
+                                                        return false;
+                                                    }
+
+                                                    return true;
+                                                }
+
+                                                document.getElementById("createFlowerModal").addEventListener("submit", function (e) {
+                                                    if (!validateForm("createFlowerModal"))
+                                                        e.preventDefault();
+                                                });
+
+                                                document.getElementById("updateFlowerModal").addEventListener("submit", function (e) {
+                                                    if (!validateForm("updateFlowerModal"))
+                                                        e.preventDefault();
+                                                });
         </script>
 
     </body>

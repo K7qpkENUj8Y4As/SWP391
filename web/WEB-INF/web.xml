@@ -29,7 +29,7 @@
         <servlet-class>controller.AccountController</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>AddStaff</servlet-name>
+        <servlet-name>AddManager</servlet-name>
         <servlet-class>controller.AddManager</servlet-class>
     </servlet>
     <servlet>
@@ -55,6 +55,14 @@
     <servlet>
         <servlet-name>ReturnController</servlet-name>
         <servlet-class>controller.ReturnController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>LogoutController</servlet-name>
+        <servlet-class>controller.LogoutController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AddStaff</servlet-name>
+        <servlet-class>controller.AddStaff</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -141,8 +149,8 @@
         <url-pattern>/account</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
-        <servlet-name>AddStaff</servlet-name>
-        <url-pattern>/addStaff</url-pattern>
+        <servlet-name>AddManager</servlet-name>
+        <url-pattern>/addManager</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ProductPageController</servlet-name>
@@ -184,5 +192,13 @@
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>/images/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LogoutController</servlet-name>
+        <url-pattern>/logout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AddStaff</servlet-name>
+        <url-pattern>/addStaff</url-pattern>
     </servlet-mapping>
 </web-app>

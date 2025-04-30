@@ -5,134 +5,153 @@
 <html>
     <head>
         <title>About Us</title>
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #fff;
+            }
+
+            .page-container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            h1, h2, h3, p {
+                margin: 0;
+                padding: 0;
+            }
+
+            h2 {
+                font-size: 32px;
+                margin-bottom: 30px;
+            }
+
+            .header {
+                text-align: center;
+                margin-bottom: 30px;
+            }
+
+            .content-container {
+                display: flex;
+                gap: 40px;
+                flex-wrap: wrap;
+                align-items: center;
+                margin-bottom: 40px;
+            }
+
+            .about-content {
+                flex: 1 1 400px;
+            }
+
+            .about-text {
+                margin-bottom: 15px;
+                color: #333;
+                font-size: 16px;
+                line-height: 1.6;
+            }
+
+            .highlight {
+                font-weight: bold;
+                color: #d63384;
+            }
+
+            .about-image {
+                flex: 1 1 300px;
+            }
+
+            .about-image img {
+                width: 100%;
+                max-height: 340px;
+                object-fit: cover;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            }
+
+            .values-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-bottom: 40px;
+            }
+
+            .value-card {
+                flex: 1 1 300px;
+                background-color: #fff8f6;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            }
+
+            .value-title {
+                margin: 10px 0;
+                color: #000;
+            }
+
+            .value-icon {
+                font-size: 24px;
+            }
+
+            .contact-about-section {
+                margin-top: 40px;
+                padding-bottom: 20px;
+            }
+
+            .contact-about-title {
+                font-size: 28px;
+                margin-bottom: 10px;
+            }
+
+            .contact-about-info {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            .contact-about-item {
+                flex: 1 1 250px;
+                background-color: #f9f9f9;
+                padding: 15px;
+                border-radius: 8px;
+            }
+
+            .contact-about-icon {
+                font-size: 20px;
+                margin-bottom: 5px;
+            }
+
+            .contact-about-label {
+                font-weight: bold;
+                color: #222;
+            }
+
+            .active {
+                color: var(--primary-color) !important;
+            }
+
+            .active::after {
+                width: 100% !important;
+            }
+
+            @media (max-width: 768px) {
+                .content-container,
+                .values-container,
+                .contact-info {
+                    flex-direction: column;
+                }
+            }
+        </style>
     </head>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #fff;
-        }
-
-        .container {
-            max-width: 1100px;
-            margin: 50px auto;
-            padding: 0 20px;
-        }
-
-        h2 {
-            font-size: 32px;
-            margin-bottom: 30px;
-        }
-
-        .reviews {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
-        }
-
-        .review-card {
-            flex: 1 1 230px;
-            background-color: #fff8f6;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .review-card img {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-        }
-
-        .review-name {
-            font-weight: bold;
-            margin: 10px 0 5px;
-        }
-
-        .stars {
-            color: #ffc107;
-            margin: 5px 0;
-        }
-
-        .review-text {
-            color: #444;
-            font-size: 14px;
-            margin-bottom: 10px;
-        }
-
-        .review-date {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .see-all {
-            text-align: center;
-            margin-bottom: 60px;
-            color: #777;
-            cursor: pointer;
-        }
-
-        .contact-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 40px;
-            align-items: flex-start;
-        }
-
-        .contact-info {
-            flex: 1;
-            min-width: 300px;
-        }
-
-        .contact-info h4 {
-            margin-bottom: 20px;
-            font-size: 18px;
-            font-weight: 600;
-            color: #111;
-        }
-
-        .contact-info p {
-            margin: 10px 0;
-            color: #444;
-        }
-
-        .contact-info p span {
-            display: block;
-            font-weight: 600;
-            color: #000;
-        }
-
-        .contact-image {
-            flex: 1;
-            min-width: 300px;
-            max-height: 300px
-        }
-
-        .contact-image img {
-            width: 100%;
-            height: 340px;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-        .active {
-            color: var(--primary-color) !important;
-        }
-
-        .active::after {
-            width: 100% !important;
-        }
-        .active {
-            color: var(--primary-color) !important;
-        }
-
-        .active::after {
-            width: 100% !important;
-        }
-    </style>
     <body>
         <%@ include file="/view/components/Header.jsp" %>
+
         <div class="page-container">
             <div class="header">
                 <h1>About Us</h1>
@@ -143,7 +162,7 @@
                 <div class="about-content">
                     <h2 class="section-title">Our Story</h2>
                     <p class="about-text">
-                        Welcome to <span class="highlight">Five Blooms </span> – your go-to destination for the most beautiful flowers for every special occasion.
+                        Welcome to <span class="highlight">Five Blooms</span> – your go-to destination for the most beautiful flowers for every special occasion.
                     </p>
                     <p class="about-text">
                         Established in <span class="highlight">2025</span>, we specialize in providing both imported and locally sourced fresh flowers for birthdays, anniversaries, weddings, and seasonal celebrations.
@@ -157,7 +176,7 @@
                 </div>
 
                 <div class="about-image">
-                    <img src="file/images/flower-shop.png" alt="Five Blooms " />
+                    <img src="https://dongnai360.com/images/post/2024/02/nhung_cua_hang_hoa_tuoi_tai_dong_nai/tiem_hoa_yeu_thuong.webp" alt="Five Blooms" />
                 </div>
             </div>
 
@@ -182,31 +201,35 @@
                 </div>
             </div>
 
-            <div class="contact-section">
-                <h2 class="contact-title">Contact Us</h2>
+            <div class="contact-about-section">
+                <h2 class="contact-about-title">Contact Us</h2>
                 <p>Let us help you spread messages of love through the language of flowers</p>
 
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div class="contact-label">Address</div>
+                <div class="contact-about-info">
+                    <div class="contact-about-item">
+                        <div class="contact-about-icon">📍</div>
+                        <div class="contact-about-label">Address</div>
                         <div>123 Rose Street, District 1, Hoa Lac City</div>
                     </div>
 
-                    <div class="contact-item">
-                        <div class="contact-icon">📞</div>
-                        <div class="contact-label">Hotline</div>
+                    <div class="contact-about-item">
+                        <div class="contact-about-icon">📞</div>
+                        <div class="contact-about-label">Hotline</div>
                         <div>+84 909 123 456</div>
                     </div>
 
-                    <div class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div class="contact-label">Email</div>
+                    <div class="contact-about-item">
+                        <div class="contact-about-icon">📧</div>
+                        <div class="contact-about-label">Email</div>
                         <div>contact@fiveblooms.com</div>
                     </div>
                 </div>
             </div>
         </div>
+
         <%@ include file="/view/components/Footer.jsp" %>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     </body>
 </html>

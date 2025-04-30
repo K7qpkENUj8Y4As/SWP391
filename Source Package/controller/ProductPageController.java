@@ -12,7 +12,10 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import model.Category;
 import model.Product;
 
@@ -22,75 +25,64 @@ import model.Product;
  */
 public class ProductPageController extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ProductPageController</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ProductPageController at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String searchTerm = request.getParameter("search");
+        String categoryIdStr = request.getParameter("category");
+        int categoryId = 0; // Default to 0 if the parameter is null or empty
+
+        if (categoryIdStr != null && !categoryIdStr.isEmpty()) {
+            try {
+                categoryId = Integer.parseInt(categoryIdStr);
+            } catch (NumberFormatException e) {
+                // Handle the error (e.g., log the error)
+                System.out.println("Invalid category ID: " + categoryIdStr);
+                categoryId = 0; // Set to 0 in case of an invalid number
+            }
         }
-    }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        CategoryDAO category= new CategoryDAO();
-        ProductDAO product =new ProductDAO();
-        List<Category> categoryList =category.getAllCategories();
-        List<Product> productList=product.getAllProducts();
-        request.setAttribute("categoryList", categoryList);
+        int page = 1;
+        int recordsPerPage = 8;
+
+        try {
+            page = Integer.parseInt(request.getParameter("page"));
+        } catch (NumberFormatException e) {
+            // default to page = 1
+        }
+
+        ProductDAO productDAO = new ProductDAO();
+        List<Product> productList = null;
+        int totalRecords = 0;
+
+        searchTerm = (searchTerm != null) ? searchTerm.trim() : "";  // For search term, trim to avoid extra spaces    // categoryId is already an int, no need for trim
+
+        try {
+            if (!searchTerm.isEmpty()) {
+                productList = productDAO.searchProducts(searchTerm, (page - 1) * recordsPerPage, recordsPerPage);
+                totalRecords = productDAO.countSearchResults(searchTerm);
+            } else if (categoryId != 0) {
+                productList = productDAO.getProductsByCategory(categoryId, (page - 1) * recordsPerPage, recordsPerPage);
+                totalRecords = productDAO.countProductsByCategory(categoryId);
+            } else {
+                productList = productDAO.getAllProducts((page - 1) * recordsPerPage, recordsPerPage);
+                totalRecords = productDAO.countAllProducts();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ProductPageController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        int totalPages = (int) Math.ceil((double) totalRecords / recordsPerPage);
+
+        CategoryDAO categoryDAO = new CategoryDAO();
+        List<Category> categoryList = categoryDAO.getAllCategories();
+
         request.setAttribute("productList", productList);
-        request.getRequestDispatcher("view/common/ProductPage.jsp").forward(request, response);
-    }
+        request.setAttribute("categoryList", categoryList);
+        request.setAttribute("currentPage", page);
+        request.setAttribute("totalPages", totalPages);
+        request.setAttribute("searchTerm", searchTerm);
+        request.setAttribute("selectedCategory", categoryId);
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+        request.getRequestDispatcher("/view/common/ProductPage.jsp").forward(request, response);
     }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
 
 }

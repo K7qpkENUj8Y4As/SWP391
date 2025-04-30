@@ -188,6 +188,20 @@
             .active::after {
                 width: 100% !important;
             }
+            .quantity-input {
+                width: 60px;
+                height: 40px;
+                text-align: center;
+                border: 1px solid #ddd;
+                font-size: 1.1rem;
+                -moz-appearance: textfield;
+            }
+
+            .quantity-input::-webkit-inner-spin-button,
+            .quantity-input::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
         </style>
     </head>
     <body>
@@ -219,13 +233,11 @@
                                 <h3>Description</h3>
                                 <p>${product.description}</p>
                             </div>
-
-                            <!--                            <div class="quantity-selector">
-                                                            <label for="quantity" style="margin-right: 15px;">Quantity:</label>
-                                                            <button class="quantity-btn minus-btn">-</button>
-                                                            <input type="number" id="quantity" class="quantity-input" value="1" min="1">
-                                                            <button class="quantity-btn plus-btn">+</button>
-                                                        </div>-->
+                            <div class="quantity-selector">
+                                <button type="button" class="quantity-btn minus-btn">-</button>
+                                <input type="number" id="quantity" name="quantity" class="quantity-input" value="1" min="1" max="${product.quantity}">
+                                <button type="button" class="quantity-btn plus-btn" data-max="${product.quantity}">+</button>
+                            </div>
 
                             <button class="add-to-cart-btn">Add to Cart</button>
                         </div>
@@ -252,26 +264,41 @@
                                         });
                                         element.classList.add('active');
                                     }
-
-                                    // Quantity selector functionality
                                     $(document).ready(function () {
+                                        const quantityInput = $('#quantity');
+
                                         $('.minus-btn').click(function () {
-                                            const quantityInput = $('#quantity');
-                                            let quantity = parseInt(quantityInput.val());
+                                            let quantity = parseInt(quantityInput.val()) || 1;
                                             if (quantity > 1) {
                                                 quantityInput.val(quantity - 1);
                                             }
                                         });
 
                                         $('.plus-btn').click(function () {
-                                            const quantityInput = $('#quantity');
-                                            let quantity = parseInt(quantityInput.val());
-                                            quantityInput.val(quantity + 1);
+                                            let quantity = parseInt(quantityInput.val()) || 1;
+                                            const max = parseInt($(this).data('max')) || 100;
+                                            if (quantity < max) {
+                                                quantityInput.val(quantity + 1);
+                                            }
                                         });
 
-                                        // Add to cart functionality
+                                        // Prevent invalid input (non-numeric, negative, or decimal)
+                                        quantityInput.on('input', function () {
+                                            let value = parseInt($(this).val());
+                                            const max = parseInt($(this).attr('max')) || 100;
+
+                                            if (isNaN(value) || value < 1) {
+                                                $(this).val(1);
+                                            } else if (value > max) {
+                                                $(this).val(max);
+                                            } else {
+                                                $(this).val(value);
+                                            }
+                                        });
+
+                                        // Add to cart AJAX
                                         $('.add-to-cart-btn').click(function () {
-                                            const productId = ${product.id};
+                                            const productId = '${product.id}';
                                             const quantity = $('#quantity').val();
                                             const button = $(this);
 
@@ -288,7 +315,6 @@
                                                 success: function (response) {
                                                     if (response.success) {
                                                         button.html('<i class="fas fa-check"></i> Added to Cart');
-                                                        // Update cart count
                                                         $('#cart-count').text(response.cartCount);
                                                     } else {
                                                         button.html('Error! Try Again');
@@ -308,6 +334,7 @@
                                             });
                                         });
                                     });
+
         </script>
     </body>
 </html>

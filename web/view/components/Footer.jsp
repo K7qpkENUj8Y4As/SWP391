@@ -9,7 +9,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <style>
         /* Footer */
-         :root {
+        :root {
             --primary-color: #d6336c;
             --secondary-color: #f06595;
             --accent-color: #ffdeeb;
@@ -161,10 +161,10 @@
             <h3>QT Fresh Flower Shop</h3>
             <p>We deliver beautiful, fresh flowers for all occasions. Our expert florists create stunning arrangements that will bring joy to your loved ones.</p>
             <div class="social-links">
-                <a href="#"><span>fb</span></a>
-                <a href="#"><span>ig</span></a>
-                <a href="#"><span>tw</span></a>
-                <a href="#"><span>pin</span></a>
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-pinterest-p"></i></a>
             </div>
         </div>
 
@@ -183,19 +183,19 @@
         <div class="footer-contact">
             <h3>Contact Us</h3>
             <div class="contact-item">
-                <span class="contact-icon">?</span>
+                <i class="fas fa-map-marker-alt contact-icon"></i>
                 <div>123 Rose Street, District 1, Ho Chi Minh City</div>
             </div>
             <div class="contact-item">
-                <span class="contact-icon">?</span>
+                <i class="fas fa-phone contact-icon"></i>
                 <div>+84 909 123 456</div>
             </div>
             <div class="contact-item">
-                <span class="contact-icon">?</span>
+                <i class="fas fa-envelope contact-icon"></i>
                 <div>contact@qtflowershop.com</div>
             </div>
             <div class="contact-item">
-                <span class="contact-icon">?</span>
+                <i class="fas fa-clock contact-icon"></i>
                 <div>Mon-Sat: 8:00 AM - 8:00 PM</div>
             </div>
         </div>

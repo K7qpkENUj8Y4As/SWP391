@@ -32,7 +32,7 @@
             .hero {
                 position: relative;
                 height: 600px;
-                background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('file/images/hero-bg.jpg');
+                background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.squarespace-cdn.com/content/v1/57451c424c2f85ae9b18f48d/1653676592228-KO25QHNG9RAV0DB9LKHC/facebook-link-image+2.jpeg?format=2500w');
                 background-size: cover;
                 background-position: center;
                 color: white;
@@ -416,8 +416,7 @@
                 <h1>Beautiful Flowers for Every Occasion</h1>
                 <p>Discover our wide range of fresh, high-quality flowers perfect for any celebration, occasion, or to simply brighten someone's day.</p>
                 <div class="hero-buttons">
-                    <a href="shop.jsp" class="btn btn-primary">Shop Now</a>
-                    <a href="categories.jsp" class="btn btn-secondary">Explore Categories</a>
+                    <a href="productPage" class="btn btn-primary">Shop Now</a>             
                 </div>
             </div>
         </section>
@@ -457,65 +456,64 @@
         </section>
 
         <!-- Products Section -->
-        <section class="products">
-            <div class="products-container">
+        <section class="product py-5 bg-white">
+            <div class="container">
                 <div class="section-title">
-                    <h2>Featured Bouquets</h2>
-                    <p>Explore our most popular flower arrangements</p>
+                    <h5>PRODUCTS</h5>
+                    <p class="text-muted text-center">Explore our beautiful flower collection</p>
                 </div>
 
-                <div class="product-grid">
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="file/images/product1.jpg" alt="Romantic Rose Bouquet">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-category">Anniversary</div>
-                            <h3 class="product-title">Romantic Rose Bouquet</h3>
-                            <div class="product-price">$49.99</div>
-                            <button class="product-button">Add to Cart</button>
-                        </div>
-                    </div>
+                <div class="row">
+                    <c:forEach var="product" items="${productList}">
+                        <div class="col-6 col-md-3 mb-4">
+                            <div class="product-card">
+                                <div class="product-image">
+                                    <div class="product-img" style="background-color: #f9f9f9;"> <img src="${product.image}" alt="${product.name}" class="img-fluid" /></div>                                  
 
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="file/images/product2.jpg" alt="Spring Delight">
+                                </div>
+                                <div class="product-info">
+                                    <div class="product-category">${product.category}</div>
+                                    <a href="viewDetail?id=${product.id}" style="text-decoration: none;"><h3 class="product-title">${product.name}</h3></a>
+                                    <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
+                                    <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="product-info">
-                            <div class="product-category">Birthday</div>
-                            <h3 class="product-title">Spring Delight</h3>
-                            <div class="product-price">$59.99</div>
-                            <button class="product-button">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="file/images/product3.jpg" alt="Elegant Lilies">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-category">Sympathy</div>
-                            <h3 class="product-title">Elegant Lilies</h3>
-                            <div class="product-price">$64.99</div>
-                            <button class="product-button">Add to Cart</button>
-                        </div>
-                    </div>
-
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="file/images/product4.jpg" alt="Colorful Tulips">
-                        </div>
-                        <div class="product-info">
-                            <div class="product-category">Celebration</div>
-                            <h3 class="product-title">Colorful Tulips</h3>
-                            <div class="product-price">$39.99</div>
-                            <button class="product-button">Add to Cart</button>
-                        </div>
-                    </div>
+                    </c:forEach>
                 </div>
+
+                <!-- Pagination -->
+                <!-- Pagination -->
+                <nav aria-label="Product pagination" class="mt-4">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item ${currentPage == 1 ? 'disabled' : ''}">
+                            <a class="page-link" 
+                               href="?page=${currentPage - 1}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}" 
+                               aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <c:forEach begin="1" end="${totalPages}" var="i">
+                            <li class="page-item ${i == currentPage ? 'active' : ''}">
+                                <a class="page-link" 
+                                   href="?page=${i}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}">
+                                    ${i}
+                                </a>
+                            </li>
+                        </c:forEach>
+
+                        <li class="page-item ${currentPage == totalPages ? 'disabled' : ''}">
+                            <a class="page-link" 
+                               href="?page=${currentPage + 1}${not empty param.search ? '&search=' += param.search : ''}${not empty param.category ? '&category=' += param.category : ''}" 
+                               aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </section>
-
         <!-- Testimonials Section -->
         <section class="testimonials">
             <div class="testimonials-container">
@@ -585,7 +583,71 @@
             </div>
         </section>
 
-        <!-- Footer -->
         <%@ include file="/view/components/Footer.jsp" %>
+        <!-- Bootstrap JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+
+            $(document).ready(function () {
+                // Initialize cart count (you might want to load this from server)
+                updateCartCount();
+
+                $('.add-to-cart-btn').click(function () {
+                    const productId = $(this).data('product-id');
+                    const button = $(this);
+
+                    button.prop('disabled', true);
+                    button.html('<i class="fas fa-spinner fa-spin"></i> Adding...');
+
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/AddToCart',
+                        type: 'POST',
+                        data: {
+                            productId: productId,
+                            quantity: 1 // You might want to add quantity later
+                        },
+                        success: function (response) {
+                            if (response.success) {
+                                button.html('<i class="fas fa-check"></i> Added!');
+                                updateCartCount(response.cartCount);
+                            } else {
+                                button.html('Failed!');
+                                console.error(response.message);
+                            }
+
+                            // Reset button after 2 seconds
+                            setTimeout(function () {
+                                button.html('Add to Cart');
+                                button.prop('disabled', false);
+                            }, 2000);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Status:', status);
+                            console.error('Error:', error);
+                            console.error('Response:', xhr.responseText); // 👈 Add this line
+                            button.html('Error! Try Again');
+                            setTimeout(function () {
+                                button.html('Add to Cart');
+                                button.prop('disabled', false);
+                            }, 2000);
+                        }
+                    });
+                });
+
+                function updateCartCount(count) {
+                    if (count !== undefined) {
+                        $('#cart-count').text(count);
+                    } else {
+                        // Load current cart count from server
+                        $.get('getCartCount', function (response) {
+                            $('#cart-count').text(response.cartCount || 0);
+                        }).fail(function () {
+                            $('#cart-count').text(0);
+                        });
+                    }
+                }
+            });
+        </script>
     </body>
 </html>

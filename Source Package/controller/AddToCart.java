@@ -24,9 +24,10 @@ import model.Product;
  */
 @WebServlet(name = "AddToCart", urlPatterns = {"/AddToCart"})
 public class AddToCart extends HttpServlet {
+
     private ProductDAO productDAO = new ProductDAO();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) 
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         response.setContentType("application/json");
@@ -63,20 +64,30 @@ public class AddToCart extends HttpServlet {
                 cartItems = new ArrayList<>();
                 session.setAttribute("cart", cartItems);
             }
-
+            int quantity;
+            try {
+                quantity = Integer.parseInt(request.getParameter("quantity"));
+                if (quantity > product.getQuantity()) {
+                    quantity = product.getQuantity();
+                }              
+                if (quantity <= 0) {
+                    quantity = 1; // fallback
+                }
+            } catch (NumberFormatException e) {
+                quantity = 1;
+            }
             // Check if product already exists in cart
             boolean productExists = false;
             for (CartItem item : cartItems) {
                 if (item.getProduct().getId() == productId) {
-                    item.setQuantity(item.getQuantity() + 1);
+                    item.setQuantity(quantity); // cập nhật đúng số lượng chọn
                     productExists = true;
                     break;
                 }
             }
 
-            // If product not in cart, add new item
             if (!productExists) {
-                cartItems.add(new CartItem(product, 1));
+                cartItems.add(new CartItem(product, quantity));
             }
 
             // Success JSON
@@ -84,4 +95,3 @@ public class AddToCart extends HttpServlet {
         }
     }
 }
-

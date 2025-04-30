@@ -4,10 +4,10 @@
     Author     : trung
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-        <style>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>JSP Page</title>
+    <style>
         /* Sidebar styles */
         .sidebar {
             width: 250px;
@@ -32,11 +32,11 @@
             color: white;
         }
 
-        </style>
-    </head>
-    
-    <!-- Sidebar -->
-   <div class="sidebar">
+    </style>
+</head>
+
+<!-- Sidebar -->
+<div class="sidebar">
     <h2 style="text-align: center; color: #ff66b2;">Dashboard</h2>
 
     <c:if test="${sessionScope.role == 'Admin'}">
@@ -61,7 +61,9 @@
         <!--<a href="${pageContext.request.contextPath}/shopProducts.jsp">Shop Products</a>-->
         <!--<a href="${pageContext.request.contextPath}/viewOrders.jsp">View My Orders</a>-->
     <%--</c:if>--%>
-
+    <c:if test="${not empty sessionScope.account}">   
+        <a class="nav-link" href="${pageContext.request.contextPath}/logout">Logout</a>
+    </c:if>
     <c:if test="${empty sessionScope.role}">
         <a href="${pageContext.request.contextPath}/login">Login</a>
     </c:if>

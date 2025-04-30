@@ -192,6 +192,39 @@
         </section>
         <%@ include file="/view/components/Footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+            document.querySelector("form").addEventListener("submit", function (e) {
+                const name = document.getElementById("fullname").value.trim();
+                const phone = document.getElementById("phone").value.trim();
+                const address = document.getElementById("address").value.trim();
 
+                const namePattern = /^[A-Za-zÀ-ỹ\s]+$/; // Chữ cái + khoảng trắng
+                const phonePattern = /^\d{10}$/;        // Chính xác 10 chữ số
+                const addressPattern = /^[A-Za-zÀ-ỹ0-9\s,.-]+$/; // Không ký tự đặc biệt ngoài , . -
+
+                let errorMessages = [];
+
+                // Kiểm tra họ tên
+                if (!name || !namePattern.test(name)) {
+                    errorMessages.push("Full Name must not contain numbers or special characters.");
+                }
+
+                // Kiểm tra số điện thoại
+                if (!phonePattern.test(phone)) {
+                    errorMessages.push("Phone number must be exactly 10 digits.");
+                }
+
+                // Kiểm tra địa chỉ
+                if (!address || !addressPattern.test(address)) {
+                    errorMessages.push("Address must not contain special characters (except , and -).");
+                }
+
+                if (errorMessages.length > 0) {
+                    e.preventDefault();
+                    alert(errorMessages.join("\n"));
+                }
+            });
+        </script>
     </body>
 </html>
