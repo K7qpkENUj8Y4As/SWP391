@@ -13,6 +13,9 @@
     </head>
     <body>
         <%@ include file="/view/dashboard/sidebar.jsp" %>
+        
+            <div style="margin-left: 250px; padding: 20px;">
+
         <div class="container my-5">
             <div class="card shadow-sm border rounded-4 p-3">
                 <div class="row mb-3">
@@ -95,7 +98,8 @@
                         </div>
                     </div>
                 </div>
-            </div>       
+            </div>      
+        </div>
             <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
             <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>

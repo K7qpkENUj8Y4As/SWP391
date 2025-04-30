@@ -313,6 +313,22 @@ function loadOrderItems(orderId) {
             .customer-card p {
                 margin: 5px 0;
             }
+            .wrapper {
+    display: flex;
+    flex-direction: row;
+}
+
+.sidebar {
+    width: 250px; /* hoặc kích thước phù hợp */
+    flex-shrink: 0;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-x: auto; /* Cho phép cuộn ngang nếu cần */
+}
+
         </style>
 
 
@@ -322,8 +338,17 @@ function loadOrderItems(orderId) {
     </head>
     <body>
 
-        <h2>Danh sách đơn hàng</h2>
+        
+        <%@ include file="/view/dashboard/sidebar.jsp" %>
 
+<div style="margin-left: 250px; padding: 20px">
+    <h2 style="margin-bottom: 10px;">Danh sách đơn hàng</h2>
+</div>
+        <div class="wrapper">
+        
+        <div style="margin-left: 250px; padding: 20px;">
+
+        
         <c:choose>
             <c:when test="${empty orders}">
                 <p style="text-align:center; color: #888;">Không có đơn hàng nào.</p>
@@ -381,7 +406,11 @@ function loadOrderItems(orderId) {
                         </c:forEach>
                     </tbody>
                 </table>
+ </div>
 
+            </div>
+                
+                 <div style="margin-left: 250px; padding: 20px;">
             </c:otherwise>
         </c:choose>
 
@@ -415,8 +444,8 @@ function loadOrderItems(orderId) {
             <p><strong>Địa chỉ:</strong> <span id="customerAddress"></span></p>
         </div>
 
-
-
+        
+   </div>
         <!-- DataTables script -->
         <script type="text/javascript">
             $(document).ready(function () {

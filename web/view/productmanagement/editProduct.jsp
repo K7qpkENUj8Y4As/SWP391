@@ -14,7 +14,6 @@
 %>
 
 <%
-    // Lấy dữ liệu product từ request
     Product product = (Product) request.getAttribute("product");
 %>
 <!DOCTYPE html>
@@ -45,6 +44,8 @@
 </head>
 <body>
     <%@ include file="/view/dashboard/sidebar.jsp" %>
+        <div style="margin-left: 250px; padding: 20px;">
+
     <% if ("Admin".equals(role) || "Manager".equals(role)) { %>
     <div class="container mt-4">
         <h2>Edit Product</h2>
@@ -151,6 +152,7 @@
             </div>
         </form>
     </div>
+        </div>
     <% } else { %>
         <div class="container mt-4">
             <div class="alert alert-danger">You do not have permission to access this page.</div>

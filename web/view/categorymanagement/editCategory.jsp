@@ -14,6 +14,8 @@
 </head>
 <body class="p-5">
     <%@ include file="/view/dashboard/sidebar.jsp" %>
+        <div style="margin-left: 250px; padding: 20px;">
+
     <div class="container">
         <h2 class="mb-4">Chỉnh sửa danh mục</h2>
 
@@ -28,5 +30,6 @@
             <a href="category?action=list" class="btn btn-secondary">Quay lại</a>
         </form>
     </div>
+        </div>
 </body>
 </html>

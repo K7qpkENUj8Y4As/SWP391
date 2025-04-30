@@ -228,6 +228,7 @@ function closePopup() {
     </head>
     <body>
         <%@ include file="/view/dashboard/sidebar.jsp" %>
+        <div style="margin-left: 250px; padding: 20px;">
         <div class="container mt-4">
             <% if ("Seller".equals(role) || "Manager".equals(role)) { %>
             <h2>Product Management</h2>
@@ -343,6 +344,6 @@ function closePopup() {
                         document.getElementById('overlay').style.display = 'none';
                     }
         </script>
-
+        </div>
     </body>
 </html>

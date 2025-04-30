@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import model.Order;
 
@@ -27,6 +28,23 @@ public class OrderListServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        
+           HttpSession session = request.getSession(false);
+
+        // Kiểm tra session và quyền truy cập
+        if (session == null || session.getAttribute("account") == null) {
+            response.sendRedirect("login");
+            return;
+        }
+
+        String role = (String) session.getAttribute("role");
+
+        // Kiểm tra nếu không phải Manager hoặc Seller thì chuyển hướng về home
+        if (!"Seller".equalsIgnoreCase(role) && !"Manager".equalsIgnoreCase(role)) {
+            response.sendRedirect("home");
+            return;
+        
+        }
         OrderDAO dao = new OrderDAO();
         List<Order> orders = dao.getAllOrders();
         request.setAttribute("orders", orders);

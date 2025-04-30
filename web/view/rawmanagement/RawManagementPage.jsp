@@ -26,6 +26,7 @@
     </head>
     <body>
 <%@ include file="/view/dashboard/sidebar.jsp" %>
+<div style="margin-left: 250px; padding: 20px;">
         <div class="container my-5">
             <div class="card shadow-sm border rounded-4 p-3">
                 <h2 class="fw-bold mb-4">Manager Flower</h2>
@@ -180,6 +181,7 @@
                     </div>
                 </div>
             </div>
+        </div>
         </div>
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

@@ -34,6 +34,7 @@
 
         </style>
     </head>
+    
     <!-- Sidebar -->
    <div class="sidebar">
     <h2 style="text-align: center; color: #ff66b2;">Dashboard</h2>
@@ -47,13 +48,13 @@
         <a href="${pageContext.request.contextPath}/category">Manage Categories</a>
         <a href="${pageContext.request.contextPath}/raw">Manage Raw</a>
         <a href="${pageContext.request.contextPath}/account">Manage Seller</a>
-        <a href="${pageContext.request.contextPath}/viewOrders.jsp">View Orders</a>
+        <a href="${pageContext.request.contextPath}/orders">View Orders</a>
     </c:if>
 
     <c:if test="${sessionScope.role == 'Seller'}">
         <a href="${pageContext.request.contextPath}/raw">Management Raw</a>
         <a href="${pageContext.request.contextPath}/product">Add Product</a>
-        <a href="${pageContext.request.contextPath}/manageOrders.jsp">Manage Orders</a>
+        <a href="${pageContext.request.contextPath}/orders">Manage Orders</a>
     </c:if>
 
     <%--<c:if test="${sessionScope.role == 'Customer'}">--%>

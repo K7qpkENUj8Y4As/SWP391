@@ -39,6 +39,8 @@
     </head>
     <body>
         <%@ include file="/view/dashboard/sidebar.jsp" %>
+            <div style="margin-left: 250px; padding: 20px;">
+
         <% if ("Admin".equals(role) || "Manager".equals(role)) { %>
         <div class="container mt-4">
             <h2>${product != null && product.id > 0 ? 'Edit' : (isSimilar ? 'Create Similar' : 'Add')} Product</h2>
@@ -231,6 +233,7 @@
                 </div>
             </form>
         </div>
+            </div>
         <% }%>
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
