@@ -377,14 +377,6 @@ function closePopup() {
                 text-align: center;
             }
 
-            .container {
-                background-color: #fff;
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
-                max-width: 1000px;
-                margin: auto;
-            }
 
             .btn-primary {
                 background-color: #d6336c;
@@ -429,19 +421,8 @@ function closePopup() {
                 border-radius: 10px;
             }
 
-            .modal-content {
-                border-radius: 10px;
-            }
-
-            .modal-header {
-                background-color: #d6336c;
-                color: white;
-                border-radius: 10px 10px 0 0;
-            }
-
-            .modal-footer {
-                border-top: none;
-            }
+            
+            
         </style>
     </head>
     <body>

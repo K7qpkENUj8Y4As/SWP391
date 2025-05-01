@@ -472,7 +472,7 @@
 
                                 </div>
                                 <div class="product-info">
-                                    <div class="product-category">${product.category}</div>
+<!--                                    <div class="product-category">${product.category}</div>-->
                                     <a href="viewDetail?id=${product.id}" style="text-decoration: none;"><h3 class="product-title">${product.name}</h3></a>
                                     <div class="product-price"><fmt:formatNumber value="${product.price}" type="number"/> VNĐ</div>
                                     <button class="product-button add-to-cart-btn" data-product-id="${product.id}">Add to Cart</button>

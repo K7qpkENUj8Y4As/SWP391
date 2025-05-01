@@ -1,3 +1,6 @@
+
+
+
 <%@ page contentType="text/html; charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page import="model.Category" %>
@@ -8,73 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Category Management - Flower Shop Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #fff5f5;
-            color: #333;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        }
-
-        h2 {
-            color: #d63384;
-            font-weight: bold;
-        }
-
-        .btn-success {
-            background-color: #d63384;
-            border: none;
-        }
-
-        .btn-success:hover {
-            background-color: #c02676;
-        }
-
-        .table thead {
-            background-color: #ffe0e9;
-        }
-
-        .btn-primary {
-            background-color: #6f42c1;
-            border: none;
-        }
-
-        .btn-primary:hover {
-            background-color: #5b32a1;
-        }
-
-        .btn-danger {
-            background-color: #e63946;
-            border: none;
-        }
-
-        .btn-danger:hover {
-            background-color: #d62839;
-        }
-
-        #toast {
-            background-color: #d63384;
-        }
-
-        .form-container {
-            margin-bottom: 20px;
-        }
-
-        .form-container input {
-            width: 300px;
-        }
-    </style>
+    <link href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+    
 </head>
-<body class="p-5">
+<body>
     <%@ include file="/view/dashboard/sidebar.jsp" %>
     
     <div style="margin-left: 250px; padding: 20px;">
-        <div class="container">
+        <div class="container my-5">
             <h2 class="mb-4">Category List</h2>
 
             <!-- Display Success Message -->
@@ -104,28 +48,30 @@
             <a href="category?action=create" class="btn btn-success mb-3">+ Add New</a>
 
             <!-- Category List Table -->
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Category Name</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <c:forEach var="category" items="${categories}">
+            <div class="table-responsive">
+                <table id="categoryTable" class="table table-striped table-bordered text-center">
+                    <thead>
                         <tr>
-                            <td>${category.id}</td>
-                            <td>${category.name}</td>
-                            <td>
-                                <a href="category?action=edit&id=${category.id}" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="category?action=delete&id=${category.id}" class="btn btn-danger btn-sm"
-                                   onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Category Name</th>
+                            <th>Actions</th>
                         </tr>
-                    </c:forEach>
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        <c:forEach var="category" items="${categories}">
+                            <tr>
+                                <td>${category.id}</td>
+                                <td>${category.name}</td>
+                                <td>
+                                    <a href="category?action=edit&id=${category.id}" class="btn btn-primary btn-sm">Edit</a>
+                                    <a href="category?action=delete&id=${category.id}" class="btn btn-danger btn-sm"
+                                       onclick="return confirm('Are you sure you want to delete this category?');">Delete</a>
+                                </td>
+                            </tr>
+                        </c:forEach>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <%-- Toast Message --%>
@@ -143,5 +89,18 @@
         </c:if>
 
     </div>
+
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#categoryTable').DataTable({
+                pageLength: 5
+            });
+        });
+    </script>
 </body>
 </html>
