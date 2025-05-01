@@ -130,7 +130,7 @@
                             <div class="section-title">
                                 <h5>Billing Details</h5>
                             </div>
-                            <form action="checkOut" method="post">
+                            <form action="ajaxServlet" method="post">
                                 <div class="mb-3">
                                     <label for="fullname" class="form-label">Full Name</label>
                                     <input type="text" class="form-control" id="fullname" name="fullname" 
@@ -165,6 +165,9 @@
                                         </label>
                                     </div>
                                 </div>
+<!--                                <input type="hidden" name="amount" value="500000" />-->
+                                <input type="hidden" name="language" value="vn" />
+                                <input type="hidden" name="bankCode" value="" />
                                 <button type="submit" class="btn btn-primary w-100">Place Order</button>
                             </form>
                         </div>
@@ -194,35 +197,66 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            document.querySelector("form").addEventListener("submit", function (e) {
-                const name = document.getElementById("fullname").value.trim();
-                const phone = document.getElementById("phone").value.trim();
-                const address = document.getElementById("address").value.trim();
 
-                const namePattern = /^[A-Za-zÀ-ỹ\s]+$/; // Chữ cái + khoảng trắng
-                const phonePattern = /^\d{10}$/;        // Chính xác 10 chữ số
-                const addressPattern = /^[A-Za-zÀ-ỹ0-9\s,.-]+$/; // Không ký tự đặc biệt ngoài , . -
+            document.querySelector("form").addEventListener("submit", function (e) {
+                e.preventDefault(); // Ngăn chặn gửi form mặc định
+
+                const form = e.target;
+                const formData = new FormData(form);
+                const paymentMethod = formData.get("paymentMethod");
+
+                // Kiểm tra hợp lệ input
+                const name = formData.get("fullname").trim();
+                const phone = formData.get("phone").trim();
+                const address = formData.get("address").trim();
+
+                const namePattern = /^[A-Za-zÀ-ỹ\s]+$/;
+                const phonePattern = /^\d{10}$/;
+                const addressPattern = /^[A-Za-zÀ-ỹ0-9\s,.-]+$/;
 
                 let errorMessages = [];
 
-                // Kiểm tra họ tên
                 if (!name || !namePattern.test(name)) {
                     errorMessages.push("Full Name must not contain numbers or special characters.");
                 }
-
-                // Kiểm tra số điện thoại
                 if (!phonePattern.test(phone)) {
                     errorMessages.push("Phone number must be exactly 10 digits.");
                 }
-
-                // Kiểm tra địa chỉ
                 if (!address || !addressPattern.test(address)) {
                     errorMessages.push("Address must not contain special characters (except , and -).");
                 }
 
                 if (errorMessages.length > 0) {
-                    e.preventDefault();
                     alert(errorMessages.join("\n"));
+                    return;
+                }
+
+                if (paymentMethod === "VNPAY") {
+                    $.ajax({
+                        url: "ajaxServlet",
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: "json", // 🟢 BẮT BUỘC THÊM DÒNG NÀY
+                        success: function (response) {
+                            console.log(response); // Kiểm tra phản hồi
+
+                            if (response && response.code === "00") {
+                                window.location.href = response.data;
+                            } else {
+                                alert("VNPay Error: " + (response.message || "Unknown error"));
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("XHR response:", xhr.responseText);
+                            console.error("Status:", status);
+                            console.error("Error:", error);
+                            alert("AJAX Error: " + status + " - " + error);
+                        }
+                    });
+                } else {
+                    form.submit(); // Thanh toán COD thì gửi form như bình thường
                 }
             });
         </script>

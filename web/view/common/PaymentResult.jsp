@@ -84,6 +84,9 @@
             <div class="result-message">
                 ${message}
             </div>
+            <div class="result-message">
+                ${status}
+            </div>
             <a href="home" class="btn btn-home">Return to Home</a>
         </div>
         <%@ include file="/view/components/Footer.jsp" %>

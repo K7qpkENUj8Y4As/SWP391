@@ -53,16 +53,16 @@
         <servlet-class>controller.CheckCart</servlet-class>
     </servlet>
     <servlet>
-        <servlet-name>ReturnController</servlet-name>
-        <servlet-class>controller.ReturnController</servlet-class>
-    </servlet>
-    <servlet>
         <servlet-name>LogoutController</servlet-name>
         <servlet-class>controller.LogoutController</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>AddStaff</servlet-name>
         <servlet-class>controller.AddStaff</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>VNPayReturnController</servlet-name>
+        <servlet-class>controller.VNPayReturnController</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -172,10 +172,6 @@
         <servlet-name>CheckCart</servlet-name>
         <url-pattern>/CheckCart</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ReturnController</servlet-name>
-        <url-pattern>/vnpay_return</url-pattern>
-    </servlet-mapping>
     <servlet>
         <servlet-name>default</servlet-name>
         <servlet-class>org.apache.catalina.servlets.DefaultServlet</servlet-class>
@@ -200,5 +196,9 @@
     <servlet-mapping>
         <servlet-name>AddStaff</servlet-name>
         <url-pattern>/addStaff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>VNPayReturnController</servlet-name>
+        <url-pattern>/vnpay-return</url-pattern>
     </servlet-mapping>
 </web-app>
