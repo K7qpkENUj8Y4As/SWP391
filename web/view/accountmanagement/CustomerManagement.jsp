@@ -63,7 +63,8 @@
 <script>
     $(document).ready(function () {
         $('#customerTable').DataTable({
-            pageLength: 5
+            
+        pageLength: 5
         });
     });
 </script>

@@ -6,8 +6,9 @@
 
 <%@page import="model.Account"%>
 <%@page import="java.util.List"%>
+
 <%
-    Account loggedInUser = (Account) session.getAttribute("account");
+    String username = (String) session.getAttribute("username"); 
 %>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
@@ -136,6 +137,7 @@ z-index: 999;
 
 
 <header>
+    
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <div class="logo">
@@ -150,7 +152,7 @@ z-index: 999;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto nav-links">
                     <li class="nav-item">
-                        <a class="nav-link <%= request.getRequestURI().endsWith("/homemanagement") ? "active" : ""%>" href="${pageContext.request.contextPath}/home">Home</a>
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/dashboard/dashboard.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/dashboard/dashboard.jsp">Home</a>
                     </li>
                     
                     <li class="nav-item">
@@ -163,7 +165,10 @@ z-index: 999;
                         <a class="nav-link <%= request.getRequestURI().endsWith("/view/common/FAQpage.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/common/FAQpage.jsp">FAQ</a>
                     </li>
                    
-                   
+                   <div style="position: absolute; top: 20px; right: 30px; font-size: 16px; color: #555;">
+     Welcome, <strong><%= username %></strong>!
+</div>
+
    </ul>
             </div>
 

@@ -88,6 +88,89 @@
             padding: 20px;
             overflow-x: auto;
         }
+        
+        /* Nút lọc */
+button {
+    background-color: #d6336c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #c1356d;
+}
+
+button:focus {
+    outline: none;
+}
+
+
+
+.filter-container {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background-color: #d6336c;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.dropdown-btn:hover {
+    background-color: #c32f60;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    border-radius: 5px;
+    margin-top: 5px;
+}
+
+.dropdown-content button {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    background-color: #fff;
+    border: none;
+    width: 100%;
+    text-align: left;
+}
+
+.dropdown-content button:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .dropdown-btn {
+    background-color: #c32f60;
+}
+
     </style>
 
     <!-- jQuery + DataTables JS -->
@@ -109,6 +192,23 @@
                 <p style="text-align:center; color: #888;">No orders available.</p>
             </c:when>
             <c:otherwise>
+                
+          <div class="filter-container">
+    <div class="dropdown">
+        <button class="dropdown-btn">Status</button>
+        <div class="dropdown-content">
+            <button onclick="filterStatus('All')">All Status</button>
+            <button onclick="filterStatus('Paid')">Paid</button>
+            <button onclick="filterStatus('Unpaid')">Unpaid</button>
+             <button onclick="filterDelivery('Delivered')">Delivered</button>
+            <button onclick="filterDelivery('Not Delivered')">Not Delivered</button>
+        </div>
+    </div>
+
+   
+</div>
+
+
                 <table id="ordersTable" class="display">
                     <thead>
                         <tr>
@@ -139,12 +239,20 @@
                                     </c:choose>
                                 </td>
                                 <td>${o.createAt}</td>
-                                <td>
+<!--                                <td>
                                     <select onchange="updateDeliveryStatus(${o.id}, this)">
                                         <option value="Delivered" ${o.deliveryStatus == 'Delivered' ? 'selected' : ''}>Delivered</option>
                                         <option value="Not Delivered" ${o.deliveryStatus == 'Not Delivered' ? 'selected' : ''}>Not Delivered</option>
                                     </select>
-                                </td>
+                                </td>-->
+<td data-order="${o.deliveryStatus == 'Delivered' ? 1 : 0}">
+    <span class="delivery-text" style="display:none;">${o.deliveryStatus}</span>
+    <select onchange="updateDeliveryStatus(${o.id}, this)">
+        <option value="Delivered" ${o.deliveryStatus == 'Delivered' ? 'selected' : ''}>Delivered</option>
+        <option value="Not Delivered" ${o.deliveryStatus == 'Not Delivered' ? 'selected' : ''}>Not Delivered</option>
+    </select>
+</td>
+
                                 <td>${o.note}</td>
                                 <td>
                                     <button onclick="loadOrderItems('${o.id}')">View Order Items</button>
@@ -190,9 +298,25 @@
 
 <!-- DataTables script -->
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#ordersTable').DataTable();
+//    $(document).ready(function () {
+//        $('#ordersTable').DataTable();
+//    });
+$(document).ready(function () {
+    $('#ordersTable').DataTable({
+        "columnDefs": [
+            {
+                "targets": 5, // Delivery column index
+                "render": function (data, type, row, meta) {
+                    var cell = row[5];
+                    var el = $('<div>').html(cell);
+                    return el.find('.delivery-text').text(); // lấy giá trị thực
+
+                }
+            }
+        ]
     });
+});
+
 </script>
 
 <script>
@@ -268,6 +392,26 @@
         });
     }
 </script>
+<script>
+    function filterStatus(status) {
+        const table = $('#ordersTable').DataTable();
+        if (status === "All") {
+            table.column(3).search('').draw(); // Cột Status là cột thứ 4 (index 3)
+        } else {
+            table.column(3).search('^' + status + '$', true, false).draw();
+        }
+    }
+</script>
+<script>
+  
+    function filterDelivery(deliveryStatus) {
+    const table = $('#ordersTable').DataTable();
+    if (deliveryStatus === "All") {
+        table.column(5).search('').draw(); // Lọc theo cột Delivery
+    } else {
+        table.column(5).search('^' + deliveryStatus + '$', true, false).draw(); // Tìm kiếm chính xác
+    </script>
+
 
 </body>
 </html>

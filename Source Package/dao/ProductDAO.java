@@ -478,8 +478,63 @@ public class ProductDAO {
         return product;
     }
 
+    public List<Integer> getTotalProduct() {
+    List<Integer> result = new ArrayList<>();
+    String sql = "SELECT COUNT(*) FROM Product";
+
+    try (Connection conn = new DBConnection().getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql); 
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            result.add(rs.getInt(1)); // Add the total count of flowers to the result list
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return result;
+}
+    
+    
+public List<Product> getBestSellingProducts(int limit) {
+    List<Product> list = new ArrayList<>();
+    String sql = "SELECT TOP (?) p.Id, p.Name, p.Price, p.Image, SUM(oi.Quantity) AS totalSold " +
+                 "FROM Product p " +
+                 "JOIN OrderItem oi ON p.Id = oi.ProductId " +
+                 "JOIN [Order] o ON o.Id = oi.OrderId " +
+                 "WHERE o.deliveryStatus = 'Delivered' " +
+                 "GROUP BY p.Id, p.Name, p.Price, p.Image " +
+                 "ORDER BY totalSold DESC";
+
+    try (Connection conn = new DBConnection().getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, limit);
+        try (ResultSet rs = stmt.executeQuery()) {
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("Id"));
+                p.setName(rs.getString("Name"));
+                p.setPrice(rs.getDouble("Price"));
+                p.setImage(rs.getString("Image"));
+                p.setTotalSold(rs.getInt("totalSold"));
+                list.add(p);
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+
     public static void main(String[] args) throws SQLException {
         ProductDAO dao = new ProductDAO();
         dao.countProductsByCategory(1);
     }
+    
 }

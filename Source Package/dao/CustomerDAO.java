@@ -31,7 +31,7 @@ public class CustomerDAO {
     }
     
    public Customer getCustomerByAccountId(int accountId) {
-    String sql = "SELECT * FROM Customer WHERE Id=?";
+    String sql = "SELECT * FROM Customer WHERE Account_id=?";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         ps.setInt(1, accountId);
@@ -207,6 +207,26 @@ public void updateAccountStatus(int accountId, int newStatus) {
         e.printStackTrace();
     }
 }
+
+public List<Integer> getTotalCustomers() {
+    List<Integer> result = new ArrayList<>();
+    String sql = "SELECT COUNT(*) FROM Customer";
+
+    try (Connection conn = new DBConnection().getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql); 
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            result.add(rs.getInt(1)); // Add the total count of customers to the result list
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return result;
+}
+
 
     public void updateCustomer(String fullName, String email, String phone, String address, String gender, int accountId) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody

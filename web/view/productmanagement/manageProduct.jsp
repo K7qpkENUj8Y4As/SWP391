@@ -7,10 +7,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
-<%
-    String role = (String) session.getAttribute("role");
-    String username = (String) session.getAttribute("username");
-%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -355,7 +352,6 @@ function closePopup() {
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
     String role = (String) session.getAttribute("role");
-    String username = (String) session.getAttribute("username");
 %>
 <!DOCTYPE html>
 <html>

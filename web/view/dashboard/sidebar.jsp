@@ -79,6 +79,8 @@
     </c:if>
 
     <c:if test="${sessionScope.role == 'Manager'}">
+                <a href="${pageContext.request.contextPath}/dashboard">Dashboard</a>
+
         <a href="${pageContext.request.contextPath}/product">Manage Products</a>
         <a href="${pageContext.request.contextPath}/category">Manage Categories</a>
         <a href="${pageContext.request.contextPath}/raw">Manage Raw</a>

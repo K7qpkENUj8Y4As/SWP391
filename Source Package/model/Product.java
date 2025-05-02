@@ -31,6 +31,9 @@ public class Product implements Serializable {
     private Date createAt;
     private int quantity;
     
+    
+    
+
     private List<ProductRaw> productRaws;
     
     public Product() {
@@ -64,8 +67,10 @@ public class Product implements Serializable {
         this.productRaws = new ArrayList<>();
     }
     
-    
-    
+    public int getTotalSold() { return totalSold; }
+
+    private int totalSold;
+public void setTotalSold(int totalSold) { this.totalSold = totalSold; }
  
     public int getId() {
         return id;

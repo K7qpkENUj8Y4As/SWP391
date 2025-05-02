@@ -7,8 +7,11 @@
 <%@page import="model.CartItem"%>
 <%@page import="java.util.List"%>
 <%@page import="model.Customer"%>
+
 <%
     Customer loggedInUser = (Customer) session.getAttribute("customer");
+   
+
 %>
 <%
     // L?y cart t? session
@@ -178,7 +181,7 @@
                             <img src="${pageContext.request.contextPath}/images/<%= loggedInUser.getAvatar()%>" class="rounded-circle me-2" width="32" height="32" alt="avatar" style="object-fit: cover;">
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                                 <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/updateProfile"><i class="fas fa-user me-2"></i>Profile</a></li>
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>

@@ -90,6 +90,9 @@ public class LoginController extends HttpServlet {
             if (account != null && account.getStatus() == 1) {
                 // Đăng nhập thành công, lưu thông tin vào session
                 HttpSession session = request.getSession();
+                session.invalidate(); // Xóa session cũ
+session = request.getSession(true); // Tạo session mới
+
                 session.setAttribute("account", account);
                 CustomerDAO customerDAO = new CustomerDAO();
                 Customer customer = customerDAO.getCustomerByAccountId(account.getAccountID());

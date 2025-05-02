@@ -121,6 +121,64 @@ public class OrderDAO {
         }
     }
 
+    public List<Integer> getTotalOrders() {
+    List<Integer> result = new ArrayList<>();
+    String sql = "SELECT COUNT(*) FROM [Order]";
+
+    try (Connection conn = new DBConnection().getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql); 
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            result.add(rs.getInt(1)); // Add the total count to the result list
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return result;
+}
+
+public List<Integer> getPendingOrders() {
+    List<Integer> result = new ArrayList<>();
+    String sql = "SELECT COUNT(*) FROM [Order] WHERE deliveryStatus = 'Not Delivered'";
+
+    try (Connection conn = new DBConnection().getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql); 
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            result.add(rs.getInt(1)); // Add the pending orders count to the result list
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return result;
+}
+
+public List<Double> getTotalRevenue() {
+    List<Double> result = new ArrayList<>();
+    String sql = "SELECT SUM(TotalPrice) FROM [Order] WHERE deliveryStatus = 'Delivered'";
+
+    try (Connection conn = new DBConnection().getConnection(); 
+         PreparedStatement stmt = conn.prepareStatement(sql); 
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            result.add(rs.getDouble(1)); // Add the total revenue to the result list
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return result;
+}
+
+    
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
         Date now = new Date();
