@@ -32,7 +32,7 @@
                                 <option value="Manager">Manager</option>
 
                                 <option value="Customer">Customer</option>                            
-                                <option value="Staff">Seller</option>
+                                <option value="Seller">Seller</option>
                             </select>
                         </div>
                         <div class="col-md-4">

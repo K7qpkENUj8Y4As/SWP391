@@ -32,7 +32,7 @@ public class CodOrderController extends HttpServlet {
             throws ServletException, IOException {
 
         request.setCharacterEncoding("UTF-8");
-         HttpSession session = request.getSession();
+        HttpSession session = request.getSession();
         List<CartItem> cartItems = (List<CartItem>) session.getAttribute("cart");
 
         if (cartItems == null || cartItems.isEmpty()) {
@@ -46,14 +46,20 @@ public class CodOrderController extends HttpServlet {
         }
         OrderDAO orderDAO = new OrderDAO();
         Customer customer = (Customer) session.getAttribute("customer");
+
+        CustomerDAO dao = new CustomerDAO();
         if (customer == null) {
             customer = new Customer();
             customer.setFullName(request.getParameter("fullname"));
             customer.setAddress(request.getParameter("address"));
             customer.setPhone(request.getParameter("phone"));
-            CustomerDAO dao = new CustomerDAO();
             int customerId = dao.insertCustomer(customer);
             customer.setId(customerId);
+        } else {
+            customer.setFullName(request.getParameter("fullname"));
+            customer.setAddress(request.getParameter("address"));
+            customer.setPhone(request.getParameter("phone"));
+            dao.updateCustomer(customer);
         }
         String note = request.getParameter("note"); // nếu có
 

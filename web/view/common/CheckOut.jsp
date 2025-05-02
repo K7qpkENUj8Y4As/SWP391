@@ -230,18 +230,16 @@
                     alert(errorMessages.join("\n"));
                     return;
                 }
-
                 if (paymentMethod === "VNPAY") {
+                    const formData = new URLSearchParams(new FormData(form));
+
                     $.ajax({
                         url: "ajaxServlet",
                         method: "POST",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        dataType: "json", // 🟢 BẮT BUỘC THÊM DÒNG NÀY
+                        data: formData.toString(),
+                        contentType: "application/x-www-form-urlencoded",
                         success: function (response) {
-                            console.log(response); // Kiểm tra phản hồi
-
+                            console.log(response);
                             if (response && response.code === "00") {
                                 window.location.href = response.data;
                             } else {
@@ -250,8 +248,6 @@
                         },
                         error: function (xhr, status, error) {
                             console.error("XHR response:", xhr.responseText);
-                            console.error("Status:", status);
-                            console.error("Error:", error);
                             alert("AJAX Error: " + status + " - " + error);
                         }
                     });

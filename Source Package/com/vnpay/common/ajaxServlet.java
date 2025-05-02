@@ -127,15 +127,21 @@ public class ajaxServlet extends HttpServlet {
             return;
         }
         OrderDAO orderDAO = new OrderDAO();
-         Customer customer = (Customer) session.getAttribute("customer");
+          Customer customer = (Customer) session.getAttribute("customer");
+
+        CustomerDAO dao = new CustomerDAO();
         if (customer == null) {
             customer = new Customer();
             customer.setFullName(req.getParameter("fullname"));
             customer.setAddress(req.getParameter("address"));
             customer.setPhone(req.getParameter("phone"));
-            CustomerDAO dao = new CustomerDAO();
             int customerId = dao.insertCustomer(customer);
             customer.setId(customerId);
+        } else {
+            customer.setFullName(req.getParameter("fullname"));
+            customer.setAddress(req.getParameter("address"));
+            customer.setPhone(req.getParameter("phone"));
+            dao.updateCustomer(customer);
         }
         String note = req.getParameter("note"); // nếu có
 
@@ -168,7 +174,10 @@ public class ajaxServlet extends HttpServlet {
 
 // Lưu orderId để xử lý sau
         session.setAttribute("orderId", orderId);
-
+        System.out.println("fullname = " + req.getParameter("fullname"));
+        System.out.println("address = " + req.getParameter("address"));
+        System.out.println("phone = " + req.getParameter("phone"));
+        System.out.println("note = " + req.getParameter("note"));
         JsonObject json = new JsonObject();
         json.addProperty("code", "00");
         json.addProperty("message", "success");
