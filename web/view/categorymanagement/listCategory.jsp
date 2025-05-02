@@ -38,8 +38,8 @@
                         <div class="mb-3">
                             <label for="name" class="form-label">Category Name</label>
                             <input type="text" class="form-control" name="name" value="${showForm == 'edit' ? editCategory.name : ''}" required>
-                        </div>
-                        <button type="submit" class="btn btn-success">${showForm == 'edit' ? 'Update' : 'Add New'}</button>
+                        
+                        <button type="submit" class="btn btn-success" style="margin-top: 1rem;" >${showForm == 'edit' ? 'Update' : 'Add New'}</button>
                     </form>
                 </div>
             </c:if>
@@ -98,7 +98,7 @@
     <script>
         $(document).ready(function () {
             $('#categoryTable').DataTable({
-                pageLength: 5
+                pageLength: 10
             });
         });
     </script>
