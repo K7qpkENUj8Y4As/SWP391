@@ -521,6 +521,19 @@ function closePopup() {
                     <button type="button" class="btn btn-secondary" onclick="closePopup()">Cancel</button>
                 </form>
             </div>
+<c:if test="${not empty productList}">
+    <c:forEach var="p" items="${productList}">
+        <!-- Hiển thị thông tin sản phẩm -->
+        <tr>
+          
+        </tr>
+    </c:forEach>
+</c:if>
+
+    <c:if test="${not empty error}">
+    <div class="alert alert-danger">${error}</div>
+</c:if>
+
 
             <!-- Bootstrap and JS scripts -->
             <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>

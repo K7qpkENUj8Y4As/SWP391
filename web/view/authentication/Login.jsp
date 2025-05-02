@@ -156,7 +156,7 @@
 <div class="container-login">
     <!-- Left: Form -->
     <div class="login-left">
-        <img src="/images/logo.png" alt="logo">
+        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/lotus.webp" alt="logo">
         <h4>We are The SWP Team</h4>
 
         <%-- Hiển thị thông báo lỗi nếu có --%>

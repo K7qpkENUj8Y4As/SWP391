@@ -183,6 +183,8 @@
                         </a>
                                                  <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/updateProfile"><i class="fas fa-user me-2"></i>Profile</a></li>
+                                                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/view-order"><i class="fas fa-user me-2"></i>View History Order</a></li>
+
                             <li><a class="dropdown-item" href="${pageContext.request.contextPath}/logout"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
                         </ul>
                     </li>

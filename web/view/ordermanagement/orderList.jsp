@@ -245,9 +245,16 @@ button:focus {
                                         <option value="Not Delivered" ${o.deliveryStatus == 'Not Delivered' ? 'selected' : ''}>Not Delivered</option>
                                     </select>
                                 </td>-->
-<td data-order="${o.deliveryStatus == 'Delivered' ? 1 : 0}">
+<!--<td data-order="${o.deliveryStatus == 'Delivered' ? 1 : 0}">
     <span class="delivery-text" style="display:none;">${o.deliveryStatus}</span>
     <select onchange="updateDeliveryStatus(${o.id}, this)">
+        <option value="Delivered" ${o.deliveryStatus == 'Delivered' ? 'selected' : ''}>Delivered</option>
+        <option value="Not Delivered" ${o.deliveryStatus == 'Not Delivered' ? 'selected' : ''}>Not Delivered</option>
+    </select>
+</td>-->
+<td data-order="${o.deliveryStatus == 'Delivered' ? 1 : 0}">
+    <span class="delivery-text" style="display:none;">${o.deliveryStatus}</span>
+    <select onchange="updateDeliveryStatus(${o.id}, this)" data-original-value="${o.deliveryStatus}">
         <option value="Delivered" ${o.deliveryStatus == 'Delivered' ? 'selected' : ''}>Delivered</option>
         <option value="Not Delivered" ${o.deliveryStatus == 'Not Delivered' ? 'selected' : ''}>Not Delivered</option>
     </select>
@@ -369,28 +376,91 @@ $(document).ready(function () {
         });
     }
 
-    function updateDeliveryStatus(orderId, selectElement) {
-        const newDeliveryStatus = selectElement.value;
+//    function updateDeliveryStatus(orderId, selectElement) {
+//        const newDeliveryStatus = selectElement.value;
+//
+//        const formData = new FormData();
+//        formData.append("orderId", orderId);
+//        formData.append("deliveryStatus", newDeliveryStatus);
+//
+//        fetch("orders", {
+//            method: "POST",
+//            body: formData
+//        }).then(res => {
+//            if (res.ok) {
+//                alert("Delivery status updated successfully!");
+//                location.reload();
+//            } else {
+//                alert("Failed to update delivery status.");
+//            }
+//        }).catch(err => {
+//            alert("System error!");
+//            console.error(err);
+//        });
+//    }
+ function updateDeliveryStatus(orderId, selectElement) {
+    const newDeliveryStatus = selectElement.value;
+    
+    // Lấy giá trị status từ UI hoặc sử dụng giá trị mặc định
+    // Ví dụ: giả sử bạn muốn giữ nguyên status hiện tại
+    const status = 1; // hoặc 0 tùy vào logic của bạn
 
-        const formData = new FormData();
-        formData.append("orderId", orderId);
-        formData.append("deliveryStatus", newDeliveryStatus);
+    const formData = new FormData();
+    formData.append("orderId", orderId);
+    formData.append("deliveryStatus", newDeliveryStatus);
+    formData.append("status", status);
 
-        fetch("orders", {
-            method: "POST",
-            body: formData
-        }).then(res => {
-            if (res.ok) {
-                alert("Delivery status updated successfully!");
-                location.reload();
-            } else {
-                alert("Failed to update delivery status.");
-            }
-        }).catch(err => {
-            alert("System error!");
-            console.error(err);
-        });
-    }
+    fetch("orders", {
+        method: "POST",
+        body: formData
+    }).then(res => {
+        if (res.ok) {
+            alert("Delivery status updated successfully!");
+            location.reload();
+        } else {
+            alert("Failed to update delivery status .");
+        }
+    }).catch(err => {
+        alert("System error!");
+        console.error(err);
+    });
+}
+//function updateDeliveryStatus(orderId, selectElement) {
+//    const newDeliveryStatus = selectElement.value;
+//    
+//    // Thông báo cho người dùng biết về tác động phụ
+//    let confirmMessage = "Bạn có chắc muốn thay đổi trạng thái giao hàng?";
+//    if (newDeliveryStatus === "Delivered") {
+//        confirmMessage = "Thay đổi trạng thái thành Đã giao hàng sẽ tự động đánh dấu đơn hàng là Đã thanh toán. Bạn có chắc không?";
+//    } else {
+//        confirmMessage = "Thay đổi trạng thái thành Chưa giao hàng sẽ tự động đánh dấu đơn hàng là Chưa thanh toán. Bạn có chắc không?";
+//    }
+//    
+//    if (confirm(confirmMessage)) {
+//        const formData = new FormData();
+//        formData.append("orderId", orderId);
+//        formData.append("deliveryStatus", newDeliveryStatus);
+//
+//        fetch("orders", {
+//            method: "POST",
+//            body: formData
+//        }).then(res => {
+//            if (res.ok) {
+//                alert("Cập nhật trạng thái thành công!");
+//                location.reload();
+//            } else {
+//                alert("Không thể cập nhật trạng thái.");
+//            }
+//        }).catch(err => {
+//            alert("Lỗi hệ thống!");
+//            console.error(err);
+//        });
+//    } else {
+//        // Nếu người dùng hủy, reset dropdown về giá trị cũ
+//        selectElement.value = selectElement.getAttribute("data-original-value") || 
+//                            (newDeliveryStatus === "Delivered" ? "Not Delivered" : "Delivered");
+//    }
+//}
 </script>
 <script>
     function filterStatus(status) {
@@ -403,13 +473,22 @@ $(document).ready(function () {
     }
 </script>
 <script>
-  
-    function filterDelivery(deliveryStatus) {
+//  
+//    function filterDelivery(deliveryStatus) {
+//    const table = $('#ordersTable').DataTable();
+//    if (deliveryStatus === "All") {
+//        table.column(5).search('').draw(); // Lọc theo cột Delivery
+//    } else {
+//        table.column(5).search('^' + deliveryStatus + '$', true, false).draw(); // Tìm kiếm chính xác
+
+function filterDelivery(deliveryStatus) {
     const table = $('#ordersTable').DataTable();
     if (deliveryStatus === "All") {
         table.column(5).search('').draw(); // Lọc theo cột Delivery
     } else {
         table.column(5).search('^' + deliveryStatus + '$', true, false).draw(); // Tìm kiếm chính xác
+    }
+}
     </script>
 
 

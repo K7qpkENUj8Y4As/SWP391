@@ -178,7 +178,36 @@ public List<Double> getTotalRevenue() {
     return result;
 }
 
-    
+    public List<Order> getOrdersByCustomerId(int customerId) {
+    List<Order> list = new ArrayList<>();
+
+    String sql = "SELECT Id, TotalPrice, Status, CreateAt, CustomerId, deliveryStatus, Note FROM [Order] WHERE CustomerId = ?";
+
+    try (Connection conn = new DBConnection().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, customerId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Order o = new Order();
+                o.setId(rs.getInt("Id"));
+                o.setTotalPrice(rs.getDouble("TotalPrice"));
+                o.setStatus(rs.getBoolean("Status") ? 1 : 0); // convert BIT to int
+                o.setCreateAt(rs.getTimestamp("CreateAt"));
+                o.setCustomerId(rs.getInt("CustomerId"));
+                o.setDeliveryStatus(rs.getString("deliveryStatus"));
+                o.setNote(rs.getString("Note"));
+                list.add(o);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
         dao.updateOrderStatus(1009, 1, "Delivered");

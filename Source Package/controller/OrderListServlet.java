@@ -105,6 +105,71 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response)
     }
 }
 
+    
+    
+    
+//protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//        throws ServletException, IOException {
+//    request.setCharacterEncoding("UTF-8");
+//    response.setContentType("application/json");
+//    response.setCharacterEncoding("UTF-8");
+// 
+//    try {
+//        int orderId = Integer.parseInt(request.getParameter("orderId"));
+//        String deliveryStatus = request.getParameter("deliveryStatus");
+//        
+//        // Tự động xác định status dựa trên deliveryStatus
+//        // Nếu đã giao hàng (Delivered) thì đánh dấu đã thanh toán (status = 1)
+//        // Nếu chưa giao hàng (Not Delivered) thì đánh dấu chưa thanh toán (status = 0)
+//        int status = "Delivered".equals(deliveryStatus) ? 1 : 0;
+// 
+//        OrderDAO dao = new OrderDAO();
+//        dao.updateOrderStatus(orderId, status, deliveryStatus);
+// 
+//        response.setStatus(HttpServletResponse.SC_OK);
+//        response.getWriter().write("{\"message\"Cập nhật trạng thái đơn hàng thành công.\"}");
+// 
+//    } catch (NumberFormatException e) {
+//        e.printStackTrace();
+//        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Dữ liệu không hợp lệ.");
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi xử lý phía máy chủ.");
+//    }
+//}
+//    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+//        throws ServletException, IOException {
+//    request.setCharacterEncoding("UTF-8");
+//    response.setContentType("application/json");
+//    response.setCharacterEncoding("UTF-8");
+// 
+//    try {
+//        int orderId = Integer.parseInt(request.getParameter("orderId"));
+//        String deliveryStatus = request.getParameter("deliveryStatus");
+//        
+//        // Giá trị mặc định cho status nếu không được cung cấp
+//        int status = 1; // hoặc 0 tùy vào logic của bạn
+//        
+//        // Kiểm tra xem status có được cung cấp không
+//        String statusParam = request.getParameter("status");
+//        if (statusParam != null && !statusParam.isEmpty()) {
+//            status = Integer.parseInt(statusParam);
+//        }
+// 
+//        OrderDAO dao = new OrderDAO();
+//        dao.updateOrderStatus(orderId, status, deliveryStatus);
+// 
+//        response.setStatus(HttpServletResponse.SC_OK);
+//        response.getWriter().write("{\"message\"Cập nhật trạng thái đơn hàng thành công.\"}");
+// 
+//    } catch (NumberFormatException e) {
+//        e.printStackTrace();
+//        response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Dữ liệu không hợp lệ.");
+//    } catch (Exception e) {
+//        e.printStackTrace();
+//        response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Lỗi xử lý phía máy chủ.");
+//    }
+//}
 
 //        OrderDAO dao = new OrderDAO();
 //        boolean updated = dao.updateOrderStatus(orderId, status, deliveryStatus);
