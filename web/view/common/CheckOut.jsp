@@ -165,7 +165,7 @@
                                         </label>
                                     </div>
                                 </div>
-<!--                                <input type="hidden" name="amount" value="500000" />-->
+                                <!--                                <input type="hidden" name="amount" value="500000" />-->
                                 <input type="hidden" name="language" value="vn" />
                                 <input type="hidden" name="bankCode" value="" />
                                 <button type="submit" class="btn btn-primary w-100">Place Order</button>
@@ -256,7 +256,8 @@
                         }
                     });
                 } else {
-                    form.submit(); // Thanh toán COD thì gửi form như bình thường
+                    form.action = "codOrder";
+                    form.submit();// Thanh toán COD thì gửi form như bình thường
                 }
             });
         </script>
