@@ -87,7 +87,7 @@
             <div class="result-message">
                 ${status}
             </div>
-            <a href="home" class="btn btn-home">Return to Home</a>
+            <a href="${pageContext.request.contextPath}/home" class="btn btn-home">Return to Home</a>
         </div>
         <%@ include file="/view/components/Footer.jsp" %>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

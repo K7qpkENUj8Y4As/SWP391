@@ -185,7 +185,7 @@
 
             <div class="d-flex justify-content-center align-items-center mt-3">
                 <p class="mb-0 me-2">Don't have an account?</p>
-                <a href="/register" class="btn btn-outline-danger">CREATE NEW</a>
+                <a href="${pageContext.request.contextPath}/register" class="btn btn-outline-danger">CREATE NEW</a>
             </div>
         </form>
     </div>

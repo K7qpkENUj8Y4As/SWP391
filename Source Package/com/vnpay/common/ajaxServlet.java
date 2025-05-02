@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import dao.CustomerDAO;
 import dao.OrderDAO;
+import dao.ProductDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -130,6 +131,7 @@ public class ajaxServlet extends HttpServlet {
           Customer customer = (Customer) session.getAttribute("customer");
 
         CustomerDAO dao = new CustomerDAO();
+        ProductDAO product=new ProductDAO();
         if (customer == null) {
             customer = new Customer();
             customer.setFullName(req.getParameter("fullname"));
@@ -160,6 +162,7 @@ public class ajaxServlet extends HttpServlet {
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem item : cartItems) {
             OrderItem orderItem = new OrderItem();
+            product.updateQuantity(item.getProduct().getId(), (-1)*item.getQuantity());
             orderItem.setOrderId(orderId);
             orderItem.setProductId(item.getProduct().getId());
             orderItem.setQuantity(item.getQuantity());

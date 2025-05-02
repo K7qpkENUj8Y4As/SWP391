@@ -118,7 +118,7 @@
                 <div class="col-md-6 right-panel d-flex flex-column justify-content-center align-items-center text-center p-5">
                     <div class="signin-box">
                         <h2 class="text-white mb-4">ONE OF US?</h2>
-                        <a href="Login.jsp" class="btn btn-light fw-bold">SIGN IN</a>
+                        <a href="${pageContext.request.contextPath}/login" class="btn btn-light fw-bold">SIGN IN</a>
                     </div>
                 </div>
             </div>

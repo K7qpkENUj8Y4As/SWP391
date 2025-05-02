@@ -74,7 +74,31 @@ public class AccountDAO {
 
  public List<Account> getAllAccount1() {
     List<Account> list = new ArrayList<>();
-    String query = "SELECT * FROM Account WHERE role IN ('STAFF', 'CUSTOMER')";
+    String query = "SELECT * FROM Account WHERE role = 'Seller'";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(query)) {
+        
+        ResultSet rs = ps.executeQuery();
+        while (rs.next()) {
+            Account account = new Account();
+            account.setAccountID(rs.getInt("ID"));
+            account.setUsername(rs.getString("username"));
+            account.setPassword(rs.getString("password"));
+            account.setRole(rs.getString("role"));
+            account.setStatus(rs.getInt("status"));
+            account.setIsCustomer(rs.getInt("isCustomer"));
+            
+            list.add(account);
+        }
+    } catch (SQLException e) {
+        System.out.println("Error in getAllAccount: " + e.getMessage());
+    }
+    
+    return list;
+}  
+  public List<Account> getAllAccount2() {
+    List<Account> list = new ArrayList<>();
+    String query = "SELECT * FROM Account WHERE role = 'Manager'";
     try (Connection conn = DBConnection.getConnection();
          PreparedStatement ps = conn.prepareStatement(query)) {
         
@@ -96,9 +120,6 @@ public class AccountDAO {
     
     return list;
 }
-
-
-    
   public boolean registerCustomer(String username, String password, String email, String fullName) {
         String insertAccountSQL = "INSERT INTO Account (Username, Password, Role, Status, isCustomer) VALUES (?, ?, ?, ?,1)";
         String insertCustomerSQL = "INSERT INTO Customer (Email ,FullName ,Avatar ,Account_ID ,Phone,isGuest ) VALUES (?, ?, ?, ?,?,0)";

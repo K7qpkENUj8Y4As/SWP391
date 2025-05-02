@@ -152,7 +152,7 @@ z-index: 999;
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto nav-links">
                     <li class="nav-item">
-                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/dashboard/dashboard.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/view/dashboard/dashboard.jsp">Home</a>
+                        <a class="nav-link <%= request.getRequestURI().endsWith("/view/dashboard/dashboard.jsp") ? "active" : ""%>" href="${pageContext.request.contextPath}/dashboard">Home</a>
                     </li>
                     
                     <li class="nav-item">

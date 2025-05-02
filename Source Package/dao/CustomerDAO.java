@@ -217,9 +217,9 @@ public class CustomerDAO {
         return result;
     }
 
-//    public void updateCustomer(String fullName, String email, String phone, String address, String gender, int accountId) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
+    public void updateCustomer(String fullName, String email, String phone, String address, String gender, int accountId) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
     public static void main(String[] args) throws SQLException {
         CustomerDAO dao = new CustomerDAO();
         Customer customer = new Customer();

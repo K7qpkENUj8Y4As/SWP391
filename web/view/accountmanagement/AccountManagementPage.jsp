@@ -18,23 +18,23 @@
             <div class="container my-5">
                 <div class="card shadow-sm border rounded-4 p-3">
                     <div class="row mb-3">
-                        <div class="col-md-4">
+                        <div class="col-md-8">
                             <select id="StatusFilter" class="form-select">
                                 <option value="">All Status</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
-                            <select id="roleFilter" class="form-select">
-                                <option value="">All Roles</option>
-
-                                <option value="Manager">Manager</option>
-
-                                <option value="Customer">Customer</option>                            
-                                <option value="Seller">Seller</option>
-                            </select>
-                        </div>
+                        <!--                        <div class="col-md-4">
+                                                    <select id="roleFilter" class="form-select">
+                                                        <option value="">All Roles</option>
+                        
+                                                        <option value="Manager">Manager</option>
+                        
+                                                        <option value="Customer">Customer</option>                            
+                                                        <option value="Seller">Seller</option>
+                                                    </select>
+                                                </div>-->
                         <div class="col-md-4">
                             <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
                                     data-bs-target="#addStaffModal">
@@ -54,22 +54,46 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <c:forEach var="acc" items="${accountList}">
-                                    <tr>
-                                        <td>${acc.accountID}</td>
-                                        <td>${acc.username}</td>
-                                        <td>${acc.role}</td>                                 
-                                        <td>
-                                            <form action="account" method="post" style="display:inline;">
-                                                <input type="hidden" name="accountID" value="${acc.accountID}" />
-                                                <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
-                                                <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
-                                                    ${acc.status == 1 ? 'Active' : 'Inactive'}
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                </c:forEach>
+                                <c:choose>
+                                    <c:when test="${userRole == 'Admin'}">  
+                                        <c:forEach var="acc" items="${accountList2}">
+                                            <tr>
+                                                <td>${acc.accountID}</td>
+                                                <td>${acc.username}</td>
+                                                <td>${acc.role}</td>                                 
+                                                <td>
+                                                    <form action="account" method="post" style="display:inline;">
+                                                        <input type="hidden" name="accountID" value="${acc.accountID}" />
+                                                        <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
+                                                        <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
+                                                            ${acc.status == 1 ? 'Active' : 'Inactive'}
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:forEach>  
+                                    </c:when>
+                                        <c:otherwise>
+                                              <c:forEach var="acc" items="${accountList1}">
+                                            <tr>
+                                                <td>${acc.accountID}</td>
+                                                <td>${acc.username}</td>
+                                                <td>${acc.role}</td>                                 
+                                                <td>
+                                                    <form action="account" method="post" style="display:inline;">
+                                                        <input type="hidden" name="accountID" value="${acc.accountID}" />
+                                                        <input type="hidden" name="status" value="${acc.status == 1 ? 0 : 1}" />
+                                                        <button type="submit" class="btn btn-sm ${acc.status == 1 ? 'btn-danger' : 'btn-success'}">
+                                                            ${acc.status == 1 ? 'Active' : 'Inactive'}
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        </c:forEach> 
+                                        </c:otherwise>
+                                </c:choose>
+
+
                             </tbody>
                         </table>
                     </div>                

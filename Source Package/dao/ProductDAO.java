@@ -534,7 +534,7 @@ public List<Product> getBestSellingProducts(int limit) {
 
     public static void main(String[] args) throws SQLException {
         ProductDAO dao = new ProductDAO();
-        dao.countProductsByCategory(1);
+        dao.updateQuantity(1, -2);
     }
     
 }

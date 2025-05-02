@@ -181,10 +181,6 @@ public List<Double> getTotalRevenue() {
     
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
-        Date now = new Date();
-        Order order = new Order();
-        order.setCreateAt(now);
-        order.setCustomerId(1);
-        dao.createOrder(order);
+        dao.updateOrderStatus(1009, 1, "Delivered");
     }
 }

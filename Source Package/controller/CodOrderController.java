@@ -6,6 +6,7 @@ package controller;
 
 import dao.CustomerDAO;
 import dao.OrderDAO;
+import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -48,6 +49,7 @@ public class CodOrderController extends HttpServlet {
         Customer customer = (Customer) session.getAttribute("customer");
 
         CustomerDAO dao = new CustomerDAO();
+        ProductDAO product = new ProductDAO();
         if (customer == null) {
             customer = new Customer();
             customer.setFullName(request.getParameter("fullname"));
@@ -78,6 +80,7 @@ public class CodOrderController extends HttpServlet {
         List<OrderItem> orderItems = new ArrayList<>();
         for (CartItem item : cartItems) {
             OrderItem orderItem = new OrderItem();
+            product.updateQuantity(item.getProduct().getId(), (-1)*item.getQuantity());
             orderItem.setOrderId(orderId);
             orderItem.setProductId(item.getProduct().getId());
             orderItem.setQuantity(item.getQuantity());

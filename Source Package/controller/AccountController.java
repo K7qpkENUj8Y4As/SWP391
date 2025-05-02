@@ -60,8 +60,10 @@ public class AccountController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AccountDAO account = new AccountDAO();
-        List<Account> accountList = account.getAllAccount();
-        request.setAttribute("accountList", accountList);
+        List<Account> accountList2 = account.getAllAccount2();
+        List<Account> accountList1 = account.getAllAccount1();
+        request.setAttribute("accountList2", accountList2);
+        request.setAttribute("accountList1", accountList1);
         request.getRequestDispatcher("view/accountmanagement/AccountManagementPage.jsp").forward(request, response);
     }
 
