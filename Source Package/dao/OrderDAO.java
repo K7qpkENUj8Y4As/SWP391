@@ -97,12 +97,12 @@ public class OrderDAO {
         }
     }
 
-    public void updateStatus(int orderId, int status) {
+    public void updateStatus(int id, int status) {
         String sql = "UPDATE [Order] SET Status = ? WHERE Id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, status);
-            ps.setInt(2, orderId);
+            ps.setInt(1, id);
+            ps.setInt(2, status);
 
             ps.executeUpdate();
         } catch (Exception e) {
@@ -110,17 +110,46 @@ public class OrderDAO {
         }
     }
     
-    public void updateOrderStatus(int orderId, int status, String deliveryStatus) {
-        String sql = "UPDATE [Order] SET Status = ?, deliveryStatus = ? WHERE Id = ?";
+     public void updatedeliveryStatus(int id, String deliveryStatus) {
+        String sql = "UPDATE [Order] SET Status = ? WHERE Id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, status);
+
+            ps.setInt(1, id);
             ps.setString(2, deliveryStatus);
-            ps.setInt(3, orderId);
+
             ps.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+     
+     
+//    public void updateOrderStatus(int orderId, int status, String deliveryStatus) {
+//        String sql = "UPDATE [Order] SET Status = ?, deliveryStatus = ? WHERE Id = ?";
+//        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
+//            ps.setInt(1, status);
+//            ps.setString(2, deliveryStatus);
+//            ps.setInt(3, orderId);
+//            ps.executeUpdate();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+
+    public void updateOrderStatus(int id, int status, String deliveryStatus) {
+    String sql = "UPDATE [Order] SET Status = ?, deliveryStatus = ? WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, status);
+        ps.setString(2, deliveryStatus);
+        ps.setInt(3, id);
+        ps.executeUpdate();
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 
     public List<Integer> getTotalOrders() {
     List<Integer> result = new ArrayList<>();
@@ -264,6 +293,50 @@ public List<Order> searchOrders(int customerId, String search, Integer status, S
     return list;
 }
 
+public List<Order> searchOrders1(Integer status, String deliveryStatus) {
+    List<Order> list = new ArrayList<>();
+
+    String sql = "SELECT Id, TotalPrice, Status, CreateAt, CustomerId, deliveryStatus, Note FROM [Order] WHERE 1=1";
+
+    if (status != null) {
+        sql += " AND Status = ?";
+    }
+    if (deliveryStatus != null && !deliveryStatus.trim().isEmpty()) {
+        sql += " AND deliveryStatus = ?";
+    }
+
+    try (Connection conn = new DBConnection().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        int index = 1;
+
+        if (status != null) {
+            ps.setInt(index++, status);
+        }
+        if (deliveryStatus != null && !deliveryStatus.trim().isEmpty()) {
+            ps.setString(index++, deliveryStatus.trim());
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Order o = new Order();
+                o.setId(rs.getInt("Id"));
+                o.setTotalPrice(rs.getDouble("TotalPrice"));
+                o.setStatus(rs.getBoolean("Status") ? 1 : 0);
+                o.setCreateAt(rs.getTimestamp("CreateAt"));
+                o.setCustomerId(rs.getInt("CustomerId"));
+                o.setDeliveryStatus(rs.getString("deliveryStatus"));
+                o.setNote(rs.getString("Note"));
+                list.add(o);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
 
     public boolean cancelOrder(int orderId) {
     String sql = "UPDATE [Order] SET Status = 2 WHERE Id = ?";  // Giả sử Status = 2 là trạng thái hủy đơn
