@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
 import dbConnection.DBConnection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import model.Order;
@@ -207,6 +208,79 @@ public List<Double> getTotalRevenue() {
 
     return list;
 }
+    
+public List<Order> searchOrders(int customerId, String search, Integer status, String deliveryStatus) {
+    List<Order> list = new ArrayList<>();
+
+    String sql = "SELECT Id, TotalPrice, Status, CreateAt, CustomerId, deliveryStatus, Note FROM [Order] WHERE CustomerId = ?";
+
+    if (search != null && !search.trim().isEmpty()) {
+        sql += " AND (Note LIKE ? OR CAST(Id AS VARCHAR) LIKE ?)";
+    }
+    if (status != null) {
+        sql += " AND Status = ?";
+    }
+    if (deliveryStatus != null && !deliveryStatus.trim().isEmpty()) {
+        sql += " AND deliveryStatus = ?";
+    }
+
+    try (Connection conn = new DBConnection().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        int index = 1;
+        ps.setInt(index++, customerId);
+
+        if (search != null && !search.trim().isEmpty()) {
+            ps.setString(index++, "%" + search.trim() + "%");
+            ps.setString(index++, "%" + search.trim() + "%");
+        }
+        if (status != null) {
+//            ps.setBoolean(index++, status == 1); 
+
+ ps.setInt(index++, status); 
+        }
+        if (deliveryStatus != null && !deliveryStatus.trim().isEmpty()) {
+            ps.setString(index++, deliveryStatus.trim());
+        }
+
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Order o = new Order();
+                o.setId(rs.getInt("Id"));
+                o.setTotalPrice(rs.getDouble("TotalPrice"));
+                o.setStatus(rs.getBoolean("Status") ? 1 : 0); 
+                o.setCreateAt(rs.getTimestamp("CreateAt"));
+                o.setCustomerId(rs.getInt("CustomerId"));
+                o.setDeliveryStatus(rs.getString("deliveryStatus"));
+                o.setNote(rs.getString("Note"));
+                list.add(o);
+            }
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return list;
+}
+
+
+    public boolean cancelOrder(int orderId) {
+    String sql = "UPDATE [Order] SET Status = 2 WHERE Id = ?";  // Giả sử Status = 2 là trạng thái hủy đơn
+
+    try (Connection conn = new DBConnection().getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, orderId);
+        int rowsAffected = ps.executeUpdate();
+        return rowsAffected > 0;
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+    return false;
+}
+
 
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();

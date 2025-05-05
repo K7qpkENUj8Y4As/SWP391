@@ -53,28 +53,27 @@ public class CustomerDAO {
         }
         return null;
     }
+public boolean updateCustomer(Customer c) {
+    String sql = "UPDATE Customer SET FullName = ?, Email = ?, Phone = ?, Address = ?, Gender = ?, Avatar = ? WHERE Id = ?";
+    try (Connection conn = DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        ps.setString(1, c.getFullName());
+        ps.setString(2, c.getEmail());
+        ps.setString(3, c.getPhone());
+        ps.setString(4, c.getAddress());
+        ps.setString(5, c.getGender());
+        ps.setString(6, c.getAvatar());
+        ps.setInt(7, c.getId());
 
-    public boolean updateCustomer(Customer customer) {
-        String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=? WHERE Account_id=?";
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-
-            ps.setString(1, customer.getFullName());
-            ps.setString(2, customer.getEmail());
-            ps.setString(3, customer.getPhone());
-            ps.setString(4, customer.getAddress());
-            ps.setString(5, customer.getGender());
-            ps.setInt(6, customer.getAccountId());  // Dùng Account_id thay vì Id
-
-            int rows = ps.executeUpdate();
-            return rows > 0;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
+        return ps.executeUpdate() > 0;
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-
-//   public boolean updateCustomer(Customer customer) {
-//    String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=? WHERE Id=?";
+    return false;
+}
+//
+//    public boolean updateCustomer(Customer customer) {
+//    String sql = "UPDATE Customer SET FullName=?, Email=?, Phone=?, Address=?, Gender=?, Avatar=? WHERE Id=?";
 //    try (Connection conn = DBConnection.getConnection();
 //         PreparedStatement ps = conn.prepareStatement(sql)) {
 //
@@ -83,15 +82,18 @@ public class CustomerDAO {
 //        ps.setString(3, customer.getPhone());
 //        ps.setString(4, customer.getAddress());
 //        ps.setString(5, customer.getGender());
-//        ps.setInt(6, customer.getId());
+//        ps.setString(6, customer.getAvatar());
+//        ps.setInt(7, customer.getId());
 //
-//        int rows = ps.executeUpdate();
-//        return rows > 0;
+//        return ps.executeUpdate() > 0;
+//
 //    } catch (Exception e) {
 //        e.printStackTrace();
-//        return false;
 //    }
+//    return false;
 //}
+
+
     public int insertCustomer(Customer customer) {
         String sql = "INSERT INTO Customer (FullName, Phone, Address, isGuest) VALUES (?, ?, ?, 1)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -228,4 +230,5 @@ public class CustomerDAO {
         customer.setPhone("0352701270");
         dao.insertCustomer(customer);
     }
+    
 }

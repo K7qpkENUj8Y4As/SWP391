@@ -9,6 +9,10 @@
         <servlet-class>controller.RegisterController</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>UpdateProfileController</servlet-name>
+        <servlet-class>controller.UpdateProfileController</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>RawController</servlet-name>
         <servlet-class>controller.RawController</servlet-class>
     </servlet>
@@ -45,6 +49,10 @@
         <servlet-class>controller.CheckOutController</servlet-class>
     </servlet>
     <servlet>
+    <servlet-name>ViewOrdersServlet</servlet-name>
+    <servlet-class>controller.ViewOrdersServlet</servlet-class>
+</servlet>
+    <servlet>
         <servlet-name>ViewDetailController</servlet-name>
         <servlet-class>controller.ViewDetailController</servlet-class>
     </servlet>
@@ -67,6 +75,14 @@
     <servlet>
         <servlet-name>CodOrderController</servlet-name>
         <servlet-class>controller.CodOrderController</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ViewOrderDetailsServlet</servlet-name>
+        <servlet-class>controller.ViewOrderDetailsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>CancelOrder</servlet-name>
+        <servlet-class>controller.CancelOrder</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
@@ -107,6 +123,10 @@
     <servlet-mapping>
         <servlet-name>RegisterController</servlet-name>
         <url-pattern>/register</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UpdateProfileController</servlet-name>
+        <url-pattern>/updateProfile</url-pattern>
     </servlet-mapping>
     <servlet>
         <servlet-name>CartController</servlet-name>
@@ -208,5 +228,18 @@
     <servlet-mapping>
         <servlet-name>CodOrderController</servlet-name>
         <url-pattern>/codOrder</url-pattern>
+    </servlet-mapping>
+    
+    <servlet-mapping>
+    <servlet-name>ViewOrdersServlet</servlet-name>
+    <url-pattern>/view-order</url-pattern>
+</servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ViewOrderDetailsServlet</servlet-name>
+        <url-pattern>/vieworderdetails</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>CancelOrder</servlet-name>
+        <url-pattern>/cancelorder</url-pattern>
     </servlet-mapping>
 </web-app>

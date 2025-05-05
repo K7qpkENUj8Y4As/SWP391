@@ -8,45 +8,86 @@ import dao.OrderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
-import model.Account;
+import model.Customer;
 import model.Order;
 
 /**
  *
  * @author sunny
  */
-@WebServlet(name = "ViewOrdersServlet", urlPatterns = {"/view-order"})
+
 public class ViewOrdersServlet extends HttpServlet {
 
-    @Override
+//    @Override
+//    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+//            throws ServletException, IOException {
+//
+//        HttpSession session = request.getSession();
+//        Customer loggedInUser = (Customer) session.getAttribute("customer");
+//
+//        if (loggedInUser == null) {
+//            response.sendRedirect("login");
+//            return;
+//        }
+//
+//        try {
+//            OrderDAO orderDAO = new OrderDAO();
+//            List<Order> orders = orderDAO.getOrdersByCustomerId(loggedInUser.getId());
+//
+//            request.setAttribute("orders", orders);
+//            request.getRequestDispatcher("/view/customer/view_orders.jsp").forward(request, response);
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            request.setAttribute("errorMessage", "Could not load your orders. Please try again later.");
+//            request.getRequestDispatcher("error.jsp").forward(request, response);
+//        }
+//    }
+//}
+    
+  @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
-          HttpSession session = request.getSession();
-        // Lấy tài khoản đăng nhập từ session
-        Account account = (Account) session.getAttribute("account");
+            throws ServletException, IOException {
 
-        if (account == null) {
-            response.sendRedirect("login.jsp");
+        HttpSession session = request.getSession();
+        Customer loggedInUser = (Customer) session.getAttribute("customer");
+
+        if (loggedInUser == null) {
+            response.sendRedirect("login");
             return;
         }
 
         try {
-            // Lấy đơn hàng theo accountID (chính là CustomerId trong bảng Order)
+            String search = request.getParameter("search");
+            String statusParam = request.getParameter("status");
+            String deliveryStatus = request.getParameter("deliveryStatus");
+
+            Integer status = null;
+            if (statusParam != null && !statusParam.isEmpty()) {
+                try {
+                    status = Integer.parseInt(statusParam);
+                } catch (NumberFormatException e) {
+                    status = null; 
+                }
+            }
+
             OrderDAO orderDAO = new OrderDAO();
-            List<Order> orders = orderDAO.getOrdersByCustomerId(account.getAccountID());
+            List<Order> orders = orderDAO.searchOrders(loggedInUser.getId(), search, status, deliveryStatus);
 
             request.setAttribute("orders", orders);
+            request.setAttribute("search", search);
+            request.setAttribute("status", statusParam);
+            request.setAttribute("deliveryStatus", deliveryStatus);
             request.getRequestDispatcher("/view/customer/view_orders.jsp").forward(request, response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            request.setAttribute("errorMessage", "Không thể lấy danh sách đơn hàng.");
+            request.setAttribute("errorMessage", "Could not load your orders. Please try again later.");
             request.getRequestDispatcher("error.jsp").forward(request, response);
         }
     }

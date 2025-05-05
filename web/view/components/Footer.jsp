@@ -158,7 +158,7 @@
 <footer class="footer">
     <div class="footer-container">
         <div class="footer-about">
-            <h3>QT Fresh Flower Shop</h3>
+            <h3>Five Blooms Flower Shop</h3>
             <p>We deliver beautiful, fresh flowers for all occasions. Our expert florists create stunning arrangements that will bring joy to your loved ones.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-facebook-f"></i></a>
@@ -184,15 +184,15 @@
             <h3>Contact Us</h3>
             <div class="contact-item">
                 <i class="fas fa-map-marker-alt contact-icon"></i>
-                <div>123 Rose Street, District 1, Ho Chi Minh City</div>
+                <div>123 Rose Street, District 1, Hoa Lac City</div>
             </div>
             <div class="contact-item">
                 <i class="fas fa-phone contact-icon"></i>
-                <div>+84 909 123 456</div>
+                <div> +84392522003</div>
             </div>
             <div class="contact-item">
                 <i class="fas fa-envelope contact-icon"></i>
-                <div>contact@qtflowershop.com</div>
+                <div>contact@fiveblooms.com</div>
             </div>
             <div class="contact-item">
                 <i class="fas fa-clock contact-icon"></i>
@@ -211,7 +211,7 @@
     </div>
 
     <div class="footer-bottom">
-        <p>&copy; 2025 QT Fresh Flower Shop. All rights reserved.</p>
+        <p>&copy; 2025 Five Blooms Flower Shop. All rights reserved.</p>
     </div>
 </footer>
 

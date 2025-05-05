@@ -101,16 +101,16 @@
             <div class="row mb-4">
                 <div class="col-md-12">
                     <p class="contact-info">
-                        <span class="icon"></span><strong>Email</strong> : 2Fleurs@gmail.com
+                        <span class="icon"></span><strong>Email</strong> : fiveblooms@gmail.com
                     </p>
                     <p class="contact-info">
                         <span class="icon"></span><strong>Phone Number</strong> : +84392522003
                     </p>
                     <p class="contact-info">
-                        <span class="icon"></span><strong>LinkedIn</strong> : 2Fleurs
+                        <span class="icon"></span><strong>LinkedIn</strong> : FiveBlooms
                     </p>
                     <p class="contact-info">
-                        <span class="icon"></span><strong>Instagram</strong> : @2Fleurs
+                        <span class="icon"></span><strong>Instagram</strong> : @Fiveblooms
                     </p>
                 </div>
             </div>

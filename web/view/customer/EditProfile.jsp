@@ -9,10 +9,16 @@
     <title>Edit Profile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .container {
-            max-width: 600px;
-            margin-top: 50px;
-        }
+          .page-container {
+                max-width: 1100px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+/*        .container {
+            max-width:600px;
+            margin-top:20px;
+        }*/
         .form-control {
             margin-bottom: 15px;
         }
@@ -24,19 +30,43 @@
             font-size: 16px;
         }
        
-
+@media (max-width: 768px) {
+                .content-container,
+                .values-container,
+                .contact-info {
+                    flex-direction: column;
+                }
+            }
     </style>
 </head>
 <body>
         <%@ include file="/view/components/Header.jsp" %>
 
-<div class="container">
+<div class="page-container">
     <h2 class="mb-4">Edit Profile</h2>
 
     <c:choose>
         <c:when test="${not empty customer}">
-            <form action="updateProfile" method="post">
+<!--                        <form action="updateProfile" method="post" enctype="multipart/form-data">-->
+
+            <form action="updateProfile" method="post" >
                 <input type="hidden" name="id" value="${customer.id}" />
+
+
+
+<%--
+    <div class="mb-3">
+        <label for="avatar" class="form-label">Avatar</label>
+        <input type="file" class="form-control" id="avatar" name="avatar"/>
+    </div>
+
+    <c:if test="${not empty customer.avatar}">
+        <div class="mb-3">
+            <img src="${pageContext.request.contextPath}/images/avatar/${customer.avatar}" alt="Avatar" width="150"/>
+        </div>
+    </c:if>
+--%>
+   
 
                 <div class="mb-3">
                     <label for="fullName" class="form-label">Full Name</label>
@@ -45,7 +75,7 @@
 
                 <div class="mb-3">
                     <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" value="${customer.email}" required/>
+                    <input type="email" class="form-control" id="email" name="email" value="${customer.email}"/>
                 </div>
 
                 <div class="mb-3">
@@ -76,6 +106,35 @@
 
     <p class="message text-success">${message != null ? message : ''}</p>
 </div>
+<script>
+function validateForm() {
+    const fullName = document.forms["updateForm"]["fullName"].value.trim();
+    const email = document.forms["updateForm"]["email"].value.trim();
+    const phone = document.forms["updateForm"]["phone"].value.trim();
+
+    if (fullName === "" || phone === "") {
+        alert("Please enter both your full name and phone number.");
+        return false;
+    }
+
+    // Validate email format only if email is not empty
+    if (email !== "") {
+        const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+        if (!emailRegex.test(email)) {
+            alert("Invalid email format.");
+            return false;
+        }
+    }
+
+    const phoneRegex = /^[0-9]{10}$/; // Exactly 10 digits
+    if (!phoneRegex.test(phone)) {
+        alert("Phone number must be exactly 10 digits.");
+        return false;
+    }
+
+    return true;
+}
+</script>
         <%@ include file="/view/components/Footer.jsp" %>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

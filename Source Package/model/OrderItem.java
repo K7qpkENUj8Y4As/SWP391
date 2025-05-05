@@ -17,6 +17,14 @@ public class OrderItem {
     private double price;
     private String productName;
 
+    private String imageUrl;
+
+public String getImageUrl() {
+    return imageUrl;
+}
+
+
+
     public OrderItem() {
     }
 
@@ -28,7 +36,9 @@ public class OrderItem {
         this.createAt = createAt;
         this.price = price;
     }
-
+public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
+}
     public int getId() {
         return id;
     }

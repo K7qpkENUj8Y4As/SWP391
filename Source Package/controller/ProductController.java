@@ -790,14 +790,14 @@ private void updateQuantity(HttpServletRequest request, HttpServletResponse resp
         }
         
         // Always redirect back to the product page
-        response.sendRedirect(request.getContextPath() + "product?action=list");
+        response.sendRedirect(request.getContextPath() + "/product?action=list");
         
     } catch (Exception e) {
         e.printStackTrace();
         // Store error in session and redirect
         HttpSession session = request.getSession();
         session.setAttribute("error", "Lỗi hệ thống: " + e.getMessage());
-        response.sendRedirect(request.getContextPath() + "product?action=list");
+        response.sendRedirect(request.getContextPath() + "/product?action=list");
     }
 
 }

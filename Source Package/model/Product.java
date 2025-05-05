@@ -225,7 +225,20 @@ public void setTotalSold(int totalSold) { this.totalSold = totalSold; }
         return expiredRaws;
     }
     
-    
+//date of product
+public Date getExpiryDate() {
+    Date earliest = null;
+    for (ProductRaw pr : productRaws) {
+        Raw raw = pr.getRaw();
+        if (raw != null && raw.getExpriseDate() != null) {
+            if (earliest == null || raw.getExpriseDate().before(earliest)) {
+                earliest = raw.getExpriseDate();
+            }
+        }
+    }
+    return earliest;
+}
+
   
     
     @Override

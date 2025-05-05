@@ -80,6 +80,38 @@ public List<OrderItem> getOrderItemsByOrderId(int orderId) throws SQLException {
     return orderItems;
 }
 
+public List<OrderItem> getOrderItemsByOrderId1(int orderId) {
+    List<OrderItem> items = new ArrayList<>();
+    String sql = "SELECT oi.Id, p.Name, oi.Quantity, oi.Price, oi.CreateAt, p.Image " +
+                 "FROM OrderItem oi " +
+                 "JOIN Product p ON oi.ProductId = p.Id " +
+                 "WHERE oi.OrderId = ?";
+
+    try (Connection conn =  DBConnection.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+        ps.setInt(1, orderId);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                OrderItem item = new OrderItem();
+                item.setId(rs.getInt("Id"));
+                item.setProductName(rs.getString("Name"));  // từ bảng Product
+                item.setQuantity(rs.getInt("Quantity"));
+                item.setPrice(rs.getDouble("Price"));
+                item.setCreateAt(rs.getTimestamp("CreateAt"));
+                item.setImageUrl(rs.getString("Image")); // mới thêm
+
+                items.add(item);
+            }
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return items;
+}
+
     public boolean deleteOrderItemsByProductId(int productId) {
     String query = "DELETE FROM OrderItem WHERE ProductId = ?";
     try (Connection conn = DBConnection.getConnection();
