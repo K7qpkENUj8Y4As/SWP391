@@ -110,17 +110,17 @@
                                                 <!-- Delete -->
                                                 <form action="deleteRaw" method="get" onsubmit="return confirmDelete()">
                                                     <input type="hidden" name="id" value="${flower.id}" />
-                                                    <button class="btn btn-outline-danger" title="Delete">
-                                                        <i class="fas fa-trash"></i>
+                                                    <button class="btn btn-danger" title="Delete">
+                                                        Delete
                                                     </button>
                                                 </form>
 
                                                 <!-- Update -->
-                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                         data-bs-target="#updateFlowerModal" data-id="${flower.id}" data-name="${flower.name}"
                                                         data-quantity="${flower.quantity}" data-exprise="${flower.expriseDate}"
                                                         data-import="${flower.createAt}"  title="Update">
-                                                    <i class="fas fa-pen"></i>
+                                                    Edit
                                                 </button>
 
                                                 <!-- View Detail -->

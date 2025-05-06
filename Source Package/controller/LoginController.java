@@ -105,9 +105,15 @@ session = request.getSession(true); // Tạo session mới
                 switch (role) {
 
                     case "Admin":
+                        response.sendRedirect("account");
+                        break;
+                        
                     case "Manager":
-                    case "Seller":
                         response.sendRedirect("dashboard");
+                        break;
+                        
+                    case "Seller":
+                        response.sendRedirect("orders");
                         break;
 
                     case "Customer":
