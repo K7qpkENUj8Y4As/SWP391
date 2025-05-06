@@ -178,7 +178,7 @@
                     <% } else {%>
                     <li class="nav-item dropdown me-2">
                         <a class="nav-link dropdown-toggle no-caret d-flex align-items-center" href="#" role="button" data-bs-toggle="dropdown">
-                            <img src="${pageContext.request.contextPath}/images/<%= loggedInUser.getAvatar()%>" class="rounded-circle me-2" width="32" height="32" alt="avatar" style="object-fit: cover;">
+<!--                            <img src="${pageContext.request.contextPath}/images/<%= loggedInUser.getAvatar()%>" class="rounded-circle me-2" width="32" height="32" alt="avatar" style="object-fit: cover;">-->
                             <span><%= loggedInUser.getFullName()%></span>
                         </a>
                                                  <ul class="dropdown-menu dropdown-menu-end shadow-sm">

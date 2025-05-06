@@ -29,46 +29,27 @@
         <div style="margin-left: 250px; padding: 20px;">
 
             <div class="container my-5">
-<!--                <div class="card shadow-sm border rounded-4 p-3">-->
+                <div class="card shadow-sm border rounded-4 p-3">
                     <h2 class="fw-bold mb-4">Manager Flower</h2>
                     <!-- Date Filters -->
-                    <!-- Filters -->
                     <div class="row mb-4">
-                        <!-- Import Date -->
+                        <div class="col-md-2">
+                            <label for="createDate" class="form-label">Import Date:</label>    
+                        </div>
                         <div class="col-md-4">
-                            <label for="createDate" class="form-label">Import Date:</label>
                             <input type="date" class="form-control" id="createDate" />
                         </div>
-
-                        <!-- Expired Date -->
+                        <div class="col-md-2">
+                            <label for="expireDate" class="form-label">Expired Date:</label>    
+                        </div>
                         <div class="col-md-4">
-                            <label for="expireDate" class="form-label">Expired Date:</label>
                             <input type="date" class="form-control" id="expireDate" />
                         </div>
-
-                        <!-- Status Filter -->
-                        <div class="col-md-4">
-                            <label for="statusFilter" class="form-label">Status:</label>
-                            <select id="statusFilter" class="form-select">
-                                <option value="">All</option>
-                                <option value="In stock">In stock</option>
-                                <option value="Out of stock">Out of stock</option>
-                                <option value="Expired">Expired</option>
-                            </select>
-                        </div>
                     </div>
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" id="flowerNameSearch" placeholder="Enter flower name..." />
-                        </div>
-                        <div class="col-md-4">
-                            <button id="resetFilters" class="btn btn-secondary w-100">Reset Filters</button>
-                        </div>
-                        <div class="col-md-4 ">
-                            <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createFlowerModal" style="margin-bottom: 10px;">
-                                Create Flower
-                            </button>
-                        </div>
+                    <div class="col-md-6 ">
+                        <button class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createFlowerModal" style="margin-bottom: 10px;">
+                            Create Flower
+                        </button>
                     </div>
                     <!-- Table -->
                     <div class="table-responsive">
@@ -76,6 +57,7 @@
                             <thead>
                                 <tr>
                                     <th>#</th>
+                                    <th>Flower Image</th>
                                     <th>Flower Name</th>
                                     <th>Quantity</th>
                                     <th>Expired Date</th>
@@ -88,6 +70,7 @@
                                 <c:forEach var="flower" items="${flowerList}" varStatus="status">
                                     <tr>
                                         <td>${status.index + 1}</td>
+                                        <td><img src="${flower.image}" alt="${flower.name}" class="flower-img" /></td>
                                         <td>${flower.name}</td>
                                         <td>${flower.quantity}</td>
                                         <td><fmt:formatDate value="${flower.expriseDate}" pattern="MM/dd/yyyy" /></td>
@@ -110,25 +93,25 @@
                                                 <!-- Delete -->
                                                 <form action="deleteRaw" method="get" onsubmit="return confirmDelete()">
                                                     <input type="hidden" name="id" value="${flower.id}" />
-                                                    <button class="btn btn-danger" title="Delete">
-                                                        Delete
+                                                    <button class="btn btn-outline-danger" title="Delete">
+                                                        <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
 
                                                 <!-- Update -->
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                                                         data-bs-target="#updateFlowerModal" data-id="${flower.id}" data-name="${flower.name}"
                                                         data-quantity="${flower.quantity}" data-exprise="${flower.expriseDate}"
                                                         data-import="${flower.createAt}"  title="Update">
-                                                    Edit
+                                                    <i class="fas fa-pen"></i>
                                                 </button>
 
                                                 <!-- View Detail -->
 
-                                                <!--                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
-                                                                                                    data-bs-target="#viewDetailModal" data-id="${acc.accountID}" title="View detail">
-                                                                                                <i class="fas fa-eye"></i>
-                                                                                            </button> -->
+<!--                                                <button type="button" class="btn btn-outline-warning" data-bs-toggle="modal"
+                                                        data-bs-target="#viewDetailModal" data-id="${acc.accountID}" title="View detail">
+                                                    <i class="fas fa-eye"></i>
+                                                </button> -->
 
                                             </div>
                                         </td>
@@ -137,7 +120,7 @@
                             </tbody>
                         </table>
                     </div>
-<!--                </div>-->
+                </div>
             </div>
             <!-- Modal -->
             <div class="modal fade" id="createFlowerModal" tabindex="-1" aria-labelledby="createFlowerModalLabel"
@@ -158,10 +141,10 @@
                                     <label for="createFlowerQuantity" class="form-label">Quantity</label>
                                     <input type="number" class="form-control" id="createFlowerQuantity" name="quantity" required />
                                 </div>
-                                <!--                            <div class="mb-3">
-                                                                <label for="createFlowerImage" class="form-label">Flower Image</label>-->
-                                <input type="hidden" class="form-control" id="createFlowerImage" name="image" required />
-                                <!--                            </div>-->
+                                <div class="mb-3">
+                                    <label for="createFlowerImage" class="form-label">Flower Image</label>
+                                    <input type="file" class="form-control" id="createFlowerImage" name="image" required />
+                                </div>
                                 <div class="mb-3">
                                     <label for="createExpriseDate" class="form-label">Expired Date</label>
                                     <input type="date" class="form-control" id="createExpriseDate" name="expriseDate" required />
@@ -215,80 +198,91 @@
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
 
         <script>
-                                                    function confirmDelete() {
-                                                        return confirm('Are you sure you want to delete this flower?');
+                                                function confirmDelete() {
+                                                    return confirm('Are you sure you want to delete this flower?');
+                                                }
+                                                $(document).ready(function () {
+                                                    $('#updateFlowerModal').on('show.bs.modal', function (event) {
+                                                        var button = $(event.relatedTarget); // Button that triggered the modal
+
+                                                        // Get data from button attributes
+                                                        var id = button.data('id');
+                                                        var name = button.data('name');
+                                                        var quantity = button.data('quantity');
+                                                        var exprise = button.data('exprise');
+                                                        var importDate = button.data('import');
+
+                                                        // Format date strings if necessary
+                                                        const formatDate = (dateStr) => {
+                                                            const date = new Date(dateStr);
+                                                            return date.toISOString().split('T')[0];
+                                                        };
+
+                                                        // Update modal fields
+                                                        var modal = $(this);
+                                                        modal.find('#updateFlowerId').val(id);
+                                                        modal.find('#updateFlowerName').val(name);
+                                                        modal.find('#updateFlowerQuantity').val(quantity);
+                                                        modal.find('#updateExpriseDate').val(formatDate(exprise));
+                                                        modal.find('#updateCreateDate').val(formatDate(importDate));
+                                                    });
+                                                });
+                                                $(document).ready(function () {
+                                                    var table = $('#flowerTable').DataTable({
+                                                        pageLength: 5
+                                                    });
+
+                                                    // Custom search filter by Import Date
+                                                    $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                                                        const importDate = new Date(data[5]).toISOString().split('T')[0]; // Import Date
+                                                        const expiredDate = new Date(data[4]).toISOString().split('T')[0]; // Expired Date
+
+                                                        const selectedImportDate = $('#createDate').val();
+                                                        const selectedExpiredDate = $('#expireDate').val();
+
+                                                        const matchImport = !selectedImportDate || importDate === selectedImportDate;
+                                                        const matchExpired = !selectedExpiredDate || expiredDate === selectedExpiredDate;
+
+                                                        return matchImport && matchExpired;
+                                                    });
+
+                                                    // Trigger table redraw on date change
+                                                    $('#createDate, #expireDate').on('change', function () {
+                                                        table.draw();
+                                                    });
+                                                });
+                                                function validateForm(formId) {
+                                                    const form = document.getElementById(formId);
+                                                    const quantity = form.querySelector('[name="quantity"]');
+                                                    const expriseDate = form.querySelector('[name="expriseDate"]');
+
+                                                    const today = new Date().toISOString().split('T')[0];
+
+                                                    if (parseInt(quantity.value) <= 0) {
+                                                        alert("Quantity must be greater than 0.");
+                                                        return false;
                                                     }
-                                                    $(document).ready(function () {
-                                                        const table = $('#flowerTable').DataTable({
-                                                            pageLength: 5,
-                                                            dom: 'rt<"bottom"lip>', // Ẩn search mặc định
-                                                        });
 
-                                                        // Custom search filter (Import Date + Expired Date + Status + Name)
-                                                        $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                                            const importDate = new Date(data[4]).toISOString().split('T')[0];
-                                                            const expiredDate = new Date(data[3]).toISOString().split('T')[0];
-                                                            const status = data[5];
-                                                            const flowerName = data[1].toLowerCase();
-
-                                                            const selectedImport = $('#createDate').val();
-                                                            const selectedExpired = $('#expireDate').val();
-                                                            const selectedStatus = $('#statusFilter').val();
-                                                            const searchName = $('#flowerNameSearch').val().toLowerCase();
-
-                                                            const matchImport = !selectedImport || importDate === selectedImport;
-                                                            const matchExpired = !selectedExpired || expiredDate === selectedExpired;
-                                                            const matchStatus = !selectedStatus || status.includes(selectedStatus);
-                                                            const matchName = !searchName || flowerName.includes(searchName);
-
-                                                            return matchImport && matchExpired && matchStatus && matchName;
-                                                        });
-
-                                                        // Trigger filter when inputs change
-                                                        $('#createDate, #expireDate, #statusFilter, #flowerNameSearch').on('input change', function () {
-                                                            table.draw();
-                                                        });
-
-                                                        // Reset all filters
-                                                        $('#resetFilters').on('click', function () {
-                                                            $('#createDate, #expireDate, #flowerNameSearch').val('');
-                                                            $('#statusFilter').val('');
-                                                            table.search('').draw();
-                                                            table.draw();
-                                                        });
-                                                    });
-
-                                                    function validateForm(formId) {
-                                                        const form = document.getElementById(formId);
-                                                        const quantity = form.querySelector('[name="quantity"]');
-                                                        const expriseDate = form.querySelector('[name="expriseDate"]');
-
-                                                        const today = new Date().toISOString().split('T')[0];
-
-                                                        if (parseInt(quantity.value) <= 0) {
-                                                            alert("Quantity must be greater than 0.");
-                                                            return false;
-                                                        }
-
-                                                        if (expriseDate.value < today) {
-                                                            alert("Expired date must not be in the past.");
-                                                            return false;
-                                                        }
-
-                                                        return true;
+                                                    if (expriseDate.value < today) {
+                                                        alert("Expired date must not be in the past.");
+                                                        return false;
                                                     }
 
-                                                    document.getElementById("createFlowerModal").addEventListener("submit", function (e) {
-                                                        if (!validateForm("createFlowerModal"))
-                                                            e.preventDefault();
-                                                    });
+                                                    return true;
+                                                }
 
-                                                    document.getElementById("updateFlowerModal").addEventListener("submit", function (e) {
-                                                        if (!validateForm("updateFlowerModal"))
-                                                            e.preventDefault();
-                                                    });
+                                                document.getElementById("createFlowerModal").addEventListener("submit", function (e) {
+                                                    if (!validateForm("createFlowerModal"))
+                                                        e.preventDefault();
+                                                });
+
+                                                document.getElementById("updateFlowerModal").addEventListener("submit", function (e) {
+                                                    if (!validateForm("updateFlowerModal"))
+                                                        e.preventDefault();
+                                                });
         </script>
 
     </body>
 
 </html>
+

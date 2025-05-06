@@ -101,8 +101,8 @@ public class OrderDAO {
         String sql = "UPDATE [Order] SET Status = ? WHERE Id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            ps.setInt(1, id);
-            ps.setInt(2, status);
+            ps.setInt(2, id);
+            ps.setInt(1, status);
 
             ps.executeUpdate();
         } catch (Exception e) {
@@ -357,6 +357,6 @@ public List<Order> searchOrders1(Integer status, String deliveryStatus) {
 
     public static void main(String[] args) {
         OrderDAO dao = new OrderDAO();
-        dao.updateOrderStatus(1009, 1, "Delivered");
+        dao.updateStatus(4024, 1);
     }
 }

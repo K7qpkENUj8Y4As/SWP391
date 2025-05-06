@@ -217,8 +217,8 @@
                             <img src="${product.image}" alt="${product.name}" class="main-image" id="mainImage">
                             <div class="thumbnail-container">
                                 <img src="${product.image}" alt="Thumbnail 1" class="thumbnail active" onclick="changeImage(this)">
-                                <img src="https://via.placeholder.com/80x80" alt="Thumbnail 2" class="thumbnail" onclick="changeImage(this)">
-                                <img src="https://via.placeholder.com/80x80" alt="Thumbnail 3" class="thumbnail" onclick="changeImage(this)">
+<!--                                <img src="https://via.placeholder.com/80x80" alt="Thumbnail 2" class="thumbnail" onclick="changeImage(this)">
+                                <img src="https://via.placeholder.com/80x80" alt="Thumbnail 3" class="thumbnail" onclick="changeImage(this)">-->
                             </div>
                         </div>
                     </div>
