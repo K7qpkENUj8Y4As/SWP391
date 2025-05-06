@@ -17,24 +17,18 @@
             <%@ include file="/view/dashboard/sidebar.jsp" %>
             <div class="container my-5">
                 <div class="card shadow-sm border rounded-4 p-3">
+                    <h2 class="mb-4">Manager ${userRole == 'Admin' ? 'Manager' : 'Seller'}</h2>
                     <div class="row mb-3">
-                        <div class="col-md-8">
+                        <div class="col-md-4">
+                            <input type="text" id="usernameSearch" class="form-control" placeholder="Search Username...">
+                        </div>
+                        <div class="col-md-4">
                             <select id="StatusFilter" class="form-select">
                                 <option value="">All Status</option>
                                 <option value="Active">Active</option>
                                 <option value="Inactive">Inactive</option>
                             </select>
                         </div>
-                        <!--                        <div class="col-md-4">
-                                                    <select id="roleFilter" class="form-select">
-                                                        <option value="">All Roles</option>
-                        
-                                                        <option value="Manager">Manager</option>
-                        
-                                                        <option value="Customer">Customer</option>                            
-                                                        <option value="Seller">Seller</option>
-                                                    </select>
-                                                </div>-->
                         <div class="col-md-4">
                             <button class="btn btn-outline-success w-100" data-bs-toggle="modal"
                                     data-bs-target="#addStaffModal">
@@ -73,8 +67,8 @@
                                             </tr>
                                         </c:forEach>  
                                     </c:when>
-                                        <c:otherwise>
-                                              <c:forEach var="acc" items="${accountList1}">
+                                    <c:otherwise>
+                                        <c:forEach var="acc" items="${accountList1}">
                                             <tr>
                                                 <td>${acc.accountID}</td>
                                                 <td>${acc.username}</td>
@@ -90,7 +84,7 @@
                                                 </td>
                                             </tr>
                                         </c:forEach> 
-                                        </c:otherwise>
+                                    </c:otherwise>
                                 </c:choose>
 
 
@@ -136,24 +130,28 @@
         <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
         <script>
             $(document).ready(function () {
-                var table = $('#accountTable').DataTable({
-                    pageLength: 5
+                const table = $('#accountTable').DataTable({
+                    pageLength: 5,
+                    dom: 'rt<"bottom"lip>' // Ẩn ô search mặc định
                 });
 
                 $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                    const username = data[1].toLowerCase();
                     const role = data[2].trim();
                     const status = $(table.row(dataIndex).node()).find('td:eq(3)').text().trim();
 
+                    const selectedUsername = $('#usernameSearch').val().toLowerCase();
                     const selectedRole = $('#roleFilter').val();
                     const selectedStatus = $('#StatusFilter').val();
 
-                    const roleMatch = !selectedRole || role === selectedRole;
-                    const statusMatch = !selectedStatus || status === selectedStatus;
+                    const matchUsername = !selectedUsername || username.includes(selectedUsername);
+                    const matchRole = !selectedRole || role === selectedRole;
+                    const matchStatus = !selectedStatus || status === selectedStatus;
 
-                    return roleMatch && statusMatch;
+                    return matchUsername && matchRole && matchStatus;
                 });
 
-                $('#roleFilter, #StatusFilter').on('change', function () {
+                $('#usernameSearch, #roleFilter, #StatusFilter').on('input change', function () {
                     table.draw();
                 });
             });
