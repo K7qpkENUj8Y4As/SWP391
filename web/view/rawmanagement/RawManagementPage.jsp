@@ -29,7 +29,7 @@
         <div style="margin-left: 250px; padding: 20px;">
 
             <div class="container my-5">
-                <div class="card shadow-sm border rounded-4 p-3">
+<!--                <div class="card shadow-sm border rounded-4 p-3">-->
                     <h2 class="fw-bold mb-4">Manager Flower</h2>
                     <!-- Date Filters -->
                     <!-- Filters -->
@@ -137,7 +137,7 @@
                             </tbody>
                         </table>
                     </div>
-                </div>
+<!--                </div>-->
             </div>
             <!-- Modal -->
             <div class="modal fade" id="createFlowerModal" tabindex="-1" aria-labelledby="createFlowerModalLabel"

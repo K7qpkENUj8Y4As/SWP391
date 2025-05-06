@@ -14,7 +14,7 @@
      <div style="margin-left: 250px; padding: 20px;">
             <%@ include file="/view/dashboard/sidebar.jsp" %>
 <div class="container my-5">
-    <div class="card shadow-sm border rounded-4 p-4">
+<!--    <div class="card shadow-sm border rounded-4 p-4">-->
         <h2 class="mb-4">Customer Accounts</h2>
 
         <div class="table-responsive">
@@ -53,7 +53,7 @@
                 </tbody>
             </table>
         </div>
-    </div>
+<!--    </div>-->
 </div>
      </div>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>

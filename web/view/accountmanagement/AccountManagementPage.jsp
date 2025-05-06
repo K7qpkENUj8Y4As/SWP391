@@ -16,7 +16,7 @@
         <div style="margin-left: 250px; padding: 20px;">
             <%@ include file="/view/dashboard/sidebar.jsp" %>
             <div class="container my-5">
-                <div class="card shadow-sm border rounded-4 p-3">
+<!--                <div class="card shadow-sm border rounded-4 p-3">-->
                     <h2 class="mb-4">Manager ${userRole == 'Admin' ? 'Manager' : 'Seller'}</h2>
                     <div class="row mb-3">
                         <div class="col-md-4">
@@ -91,7 +91,7 @@
                             </tbody>
                         </table>
                     </div>                
-                </div>      
+<!--                </div>      -->
                 <!-- Modal -->
                 <div class="modal fade" id="addStaffModal" tabindex="-1" aria-labelledby="addStaffLabel" aria-hidden="true">
                     <div class="modal-dialog">
